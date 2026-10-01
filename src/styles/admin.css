@@ -1,0 +1,188 @@
+/* Admin Panel Dedicated CSS */
+.admin-wrapper {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--ivory);
+}
+
+.admin-sidebar {
+  width: 260px;
+  background-color: var(--olive-deep);
+  color: var(--ivory);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  transition: width 0.3s ease;
+  border-right: 1px solid rgba(220, 207, 180, 0.2);
+}
+
+.admin-sidebar.collapsed {
+  width: 70px;
+}
+
+.admin-sidebar-header {
+  padding: 20px;
+  border-bottom: 1px solid rgba(220, 207, 180, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-sidebar-brand {
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+.admin-nav {
+  padding: 16px 0;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.admin-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  color: #C8D1BE;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+}
+
+.admin-nav-item:hover, .admin-nav-item.active {
+  color: var(--ivory);
+  background-color: rgba(255, 255, 255, 0.06);
+  border-left-color: var(--gold);
+}
+
+.admin-main {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.admin-topbar {
+  height: 70px;
+  background-color: var(--white);
+  border-bottom: 1px solid var(--line);
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-body {
+  padding: 24px;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.admin-card {
+  background-color: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.admin-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.admin-card-title {
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--espresso);
+}
+
+/* Data Table Component */
+.data-table-wrapper {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background-color: var(--white);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: var(--text-sm);
+}
+
+.data-table th {
+  background-color: var(--parchment);
+  color: var(--espresso);
+  font-weight: 700;
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+.data-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+  color: var(--espresso);
+  vertical-align: middle;
+}
+
+.data-table tr:hover td {
+  background-color: rgba(247, 241, 229, 0.4);
+}
+
+/* Status Badges */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.status-pill.delivered, .status-pill.active, .status-pill.paid, .status-pill.approved {
+  background-color: #E6F4EA;
+  color: #137333;
+}
+
+.status-pill.shipped, .status-pill.confirmed {
+  background-color: #E8F0FE;
+  color: #1A73E8;
+}
+
+.status-pill.pending, .status-pill.packed {
+  background-color: #FEF7E0;
+  color: #B06000;
+}
+
+.status-pill.cancelled, .status-pill.blocked, .status-pill.rejected {
+  background-color: #FCE8E6;
+  color: #C5221F;
+}
+
+/* Responsive Admin Table */
+@media (max-width: 768px) {
+  .admin-sidebar {
+    position: fixed;
+    z-index: 1100;
+    height: 100vh;
+    left: -260px;
+  }
+  .admin-sidebar.open {
+    left: 0;
+  }
+  .admin-body {
+    padding: 16px;
+  }
+}

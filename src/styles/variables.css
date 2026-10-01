@@ -1,0 +1,53 @@
+:root {
+  /* Italian Artisan Palette - Flat Solid Colors Only */
+  --ivory: #F7F1E5;
+  --parchment: #EFE6D2;
+  --olive: #4B5A34;
+  --olive-deep: #2F3A20;
+  --terracotta: #B4552D;
+  --espresso: #2A211A;
+  --gold: #B38B3F;
+  --sage: #A9B48C;
+  --line: #DCCFB4;
+  --white: #FFFFFF;
+  --shadow-subtle: 0 4px 20px rgba(42, 33, 26, 0.05);
+  --shadow-md: 0 8px 30px rgba(42, 33, 26, 0.08);
+
+  /* Typography */
+  --font-heading: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Font Sizes */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: clamp(1.5rem, 2vw, 1.875rem);
+  --text-3xl: clamp(1.875rem, 3vw, 2.5rem);
+  --text-4xl: clamp(2.5rem, 4vw, 3.5rem);
+  --text-5xl: clamp(3rem, 5vw, 4.5rem);
+
+  /* Spacing (8px grid system) */
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-5: 40px;
+  --space-6: 48px;
+  --space-8: 64px;
+  --space-10: 80px;
+
+  /* Borders & Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+  --radius-arch: 160px 160px 0 0;
+
+  /* Layout */
+  --container-max: 1280px;
+  --header-height: 80px;
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+}

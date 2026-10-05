@@ -9,6 +9,7 @@ export const Header = () => {
   const [showMegaMenu, setShowMegaMenu] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchOpen, setSearchOpen] = useState(false);
   const [showSearchDropdown, setShowSearchDropdown] = useState(false);
   const [showAccountMenu, setShowAccountMenu] = useState(false);
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ export const Header = () => {
     if (searchQuery.trim()) {
       navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
       setShowSearchDropdown(false);
+      setSearchOpen(false);
     }
   };
 
@@ -75,72 +77,21 @@ export const Header = () => {
 
         {/* Actions (Search, Wishlist, Cart, User) */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
-          
-          {/* Live Search */}
-          <div style={{ position: 'relative' }}>
-            <form onSubmit={handleSearchSubmit} style={{ display: 'flex', alignItems: 'center' }}>
-              <input
-                type="text"
-                placeholder="Search fungi..."
-                value={searchQuery}
-                onChange={(e) => {
-                  setSearchQuery(e.target.value);
-                  setShowSearchDropdown(true);
-                }}
-                onFocus={() => setShowSearchDropdown(true)}
-                style={{
-                  width: '160px',
-                  padding: '6px 12px 6px 30px',
-                  borderRadius: 'var(--radius-full)',
-                  border: '1px solid var(--line)',
-                  fontSize: '0.8rem',
-                  background: 'var(--parchment)'
-                }}
-              />
-              <Search size={14} style={{ position: 'absolute', left: '10px', color: '#888' }} />
-            </form>
 
-            {/* Live Suggestions Dropdown */}
-            {showSearchDropdown && searchResults.length > 0 && (
-              <div
-                style={{
-                  position: 'absolute',
-                  top: '100%',
-                  right: 0,
-                  width: '280px',
-                  background: 'var(--white)',
-                  border: '1px solid var(--line)',
-                  borderRadius: 'var(--radius-md)',
-                  boxShadow: 'var(--shadow-md)',
-                  marginTop: '8px',
-                  zIndex: 999,
-                  overflow: 'hidden'
-                }}
-              >
-                {searchResults.map((item) => (
-                  <Link
-                    key={item.id}
-                    to={`/product/${item.slug}`}
-                    onClick={() => { setShowSearchDropdown(false); setSearchQuery(''); }}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '10px',
-                      padding: '10px 14px',
-                      borderBottom: '1px solid var(--line)',
-                      fontSize: '0.85rem'
-                    }}
-                  >
-                    <img src={item.images[0]} alt={item.name} style={{ width: '36px', height: '36px', objectFit: 'cover', borderRadius: '4px' }} />
-                    <div>
-                      <div style={{ fontWeight: 600, color: 'var(--espresso)' }}>{item.name}</div>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--gold)' }}>₹{item.price}</div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
+          {/* Search Toggle — opens the search bar below the navbar row */}
+          <button
+            onClick={() => { setSearchOpen((v) => !v); setShowSearchDropdown(false); }}
+            style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              cursor: 'pointer', color: 'var(--espresso)', background: 'none',
+              border: 'none', padding: '4px'
+            }}
+            title="Search"
+            aria-label="Search"
+            aria-expanded={searchOpen}
+          >
+            {searchOpen ? <X size={22} /> : <Search size={22} />}
+          </button>
 
           {/* Wishlist Icon */}
           <Link to="/wishlist" style={{ position: 'relative', color: 'var(--espresso)' }} title="Wishlist">
@@ -283,6 +234,98 @@ export const Header = () => {
           </div>
         </div>
       </div>
+
+      {/* Close search when clicking outside */}
+      {searchOpen && (
+        <div
+          onClick={() => { setSearchOpen(false); setShowSearchDropdown(false); }}
+          style={{ position: 'fixed', inset: 0, zIndex: -1 }}
+        />
+      )}
+
+      {/* Search Bar Panel — opens below the navbar row on icon click */}
+      {searchOpen && (
+        <div style={{ borderTop: '1px solid var(--line)', background: 'var(--ivory)', padding: '14px 0 16px' }}>
+          <div className="container" style={{ position: 'relative' }}>
+            <form onSubmit={handleSearchSubmit} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <input
+                type="text"
+                autoFocus
+                placeholder="Search mushrooms, spawn, recipes…"
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setShowSearchDropdown(true);
+                }}
+                onFocus={() => setShowSearchDropdown(true)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Escape') { setSearchOpen(false); setShowSearchDropdown(false); }
+                }}
+                style={{
+                  flex: 1,
+                  padding: '11px 16px',
+                  borderRadius: 'var(--radius-full)',
+                  border: '1px solid var(--line)',
+                  fontSize: '0.9rem',
+                  background: 'var(--white)'
+                }}
+              />
+              <button
+                type="submit"
+                style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  width: '42px', height: '42px', flexShrink: 0,
+                  borderRadius: '50%', border: 'none', cursor: 'pointer',
+                  background: 'var(--olive)', color: '#fff'
+                }}
+                aria-label="Submit search"
+              >
+                <Search size={17} />
+              </button>
+            </form>
+
+            {/* Live Suggestions */}
+            {showSearchDropdown && searchResults.length > 0 && (
+              <div
+                style={{
+                  position: 'absolute',
+                  top: 'calc(100% + 6px)',
+                  left: 0,
+                  width: 'min(480px, 100%)',
+                  background: 'var(--white)',
+                  border: '1px solid var(--line)',
+                  borderRadius: 'var(--radius-md)',
+                  boxShadow: 'var(--shadow-md)',
+                  zIndex: 999,
+                  overflow: 'hidden'
+                }}
+              >
+                {searchResults.map((item) => (
+                  <Link
+                    key={item.id}
+                    to={`/product/${item.slug}`}
+                    onClick={() => { setShowSearchDropdown(false); setSearchOpen(false); setSearchQuery(''); }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '10px',
+                      padding: '10px 14px',
+                      borderBottom: '1px solid var(--line)',
+                      fontSize: '0.85rem'
+                    }}
+                  >
+                    <img src={item.images[0]} alt={item.name} style={{ width: '36px', height: '36px', objectFit: 'cover', borderRadius: '4px' }} />
+                    <div>
+                      <div style={{ fontWeight: 600, color: 'var(--espresso)' }}>{item.name}</div>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--gold)' }}>₹{item.price}</div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (

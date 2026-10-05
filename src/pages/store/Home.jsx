@@ -27,8 +27,17 @@ export const Home = () => {
     <div style={{ overflow: 'hidden' }}>
       
       {/* 1. HERO SECTION */}
-      <section className="rel-section paper-grain" style={{ backgroundColor: 'var(--parchment)', padding: '64px 0 80px', borderBottom: '1px solid var(--line)' }}>
-        <BotanicalBackdrop variant="hero" />
+      <section
+        className="rel-section"
+        style={{
+          backgroundImage: "linear-gradient(rgba(247,243,232,0.25), rgba(247,243,232,0.25)), url('/images/hero-bg.webp')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundColor: 'var(--parchment)',
+          padding: '64px 0 80px',
+          borderBottom: '1px solid var(--line)'
+        }}
+      >
         <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '48px', alignItems: 'center' }}>
           
           <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}>

@@ -12,8 +12,8 @@ export const Recipes = () => {
     <div className="section-padding">
       <div className="container">
         
-        <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-          <span className="eyebrow">Recipes &amp; Kitchen Notes</span>
+      <div className="page-hero page-hero-card" style={{ textAlign: 'center', marginBottom: '48px' }}>
+        <span className="eyebrow">Recipes &amp; Kitchen Notes</span>
           <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-4xl)' }}>
             The Fungi Culinary Journal
           </h1>

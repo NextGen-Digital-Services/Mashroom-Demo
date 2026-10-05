@@ -13,8 +13,8 @@ export const WishlistPage = () => {
     <div className="section-padding">
       <div className="container">
         
-        <div style={{ marginBottom: '32px' }}>
-          <span className="eyebrow">Saved Harvest Favorites</span>
+      <div className="page-hero page-hero-card" style={{ marginBottom: '32px' }}>
+        <span className="eyebrow">Saved Harvest Favorites</span>
           <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-4xl)' }}>
             Your Wishlist
           </h1>

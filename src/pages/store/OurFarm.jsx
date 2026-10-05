@@ -12,8 +12,8 @@ export const OurFarm = () => {
       <BotanicalBackdrop variant="farm" />
       <div className="container">
         
-        <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-          <span className="eyebrow">Our Farm</span>
+      <div className="page-hero page-hero-card" style={{ textAlign: 'center', marginBottom: '48px' }}>
+        <span className="eyebrow">Our Farm</span>
           <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-5xl)', lineHeight: 1.1 }}>
             A Place Where Experience Meets Cultivation
           </h1>

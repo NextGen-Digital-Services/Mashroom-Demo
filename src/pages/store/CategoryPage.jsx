@@ -21,7 +21,7 @@ export const CategoryPage = () => {
   return (
     <div>
       {/* Category Hero Banner */}
-      <div style={{ backgroundColor: 'var(--parchment)', padding: '48px 0', borderBottom: '1px solid var(--line)' }}>
+      <div className="page-hero" style={{ backgroundColor: 'var(--parchment)', padding: '48px 0', borderBottom: '1px solid var(--line)' }}>
         <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '24px' }}>
           <div>
             <span className="eyebrow"><Link to="/shop">Pantry Catalog</Link> / Category</span>

@@ -28,12 +28,8 @@ export const Home = () => {
       
       {/* 1. HERO SECTION */}
       <section
-        className="rel-section"
+        className="rel-section page-hero"
         style={{
-          backgroundImage: "linear-gradient(rgba(247,243,232,0.25), rgba(247,243,232,0.25)), url('/images/hero-bg.webp')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundColor: 'var(--parchment)',
           padding: '64px 0 80px',
           borderBottom: '1px solid var(--line)'
         }}

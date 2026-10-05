@@ -61,9 +61,9 @@ export const Shop = () => {
     <div className="section-padding">
       <div className="container">
         
-        {/* Header Title */}
-        <div style={{ marginBottom: '32px' }}>
-          <span className="eyebrow">Pantry Catalog</span>
+      {/* Header Title */}
+      <div className="page-hero page-hero-card" style={{ marginBottom: '32px' }}>
+        <span className="eyebrow">Pantry Catalog</span>
           <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-4xl)' }}>
             Gourmet Mushroom Shop
           </h1>

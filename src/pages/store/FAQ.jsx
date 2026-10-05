@@ -11,8 +11,8 @@ export const FAQ = () => {
   return (
     <div className="section-padding">
       <div className="container" style={{ maxWidth: '800px' }}>
-        <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-          <span className="eyebrow">Customer Guidance</span>
+      <div className="page-hero page-hero-card" style={{ textAlign: 'center', marginBottom: '48px' }}>
+        <span className="eyebrow">Customer Guidance</span>
           <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-4xl)' }}>
             Frequently Asked Questions
           </h1>

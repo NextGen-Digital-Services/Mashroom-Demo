@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useStore } from '../../context/StoreContext';
 import { Search, Heart, ShoppingBag, User, Menu, X, ChevronDown } from 'lucide-react';
@@ -13,6 +13,27 @@ export const Header = () => {
   const [showSearchDropdown, setShowSearchDropdown] = useState(false);
   const [showAccountMenu, setShowAccountMenu] = useState(false);
   const navigate = useNavigate();
+  const searchWrapRef = useRef(null);
+
+  // Close the compact search popup on outside click or Escape.
+  useEffect(() => {
+    if (!searchOpen) return;
+    const onDocDown = (e) => {
+      if (searchWrapRef.current && !searchWrapRef.current.contains(e.target)) {
+        setSearchOpen(false);
+        setShowSearchDropdown(false);
+      }
+    };
+    const onEsc = (e) => {
+      if (e.key === 'Escape') { setSearchOpen(false); setShowSearchDropdown(false); }
+    };
+    document.addEventListener('mousedown', onDocDown);
+    document.addEventListener('keydown', onEsc);
+    return () => {
+      document.removeEventListener('mousedown', onDocDown);
+      document.removeEventListener('keydown', onEsc);
+    };
+  }, [searchOpen]);
 
   const totalCartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -78,20 +99,100 @@ export const Header = () => {
         {/* Actions (Search, Wishlist, Cart, User) */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
 
-          {/* Search Toggle — opens the search bar below the navbar row */}
-          <button
-            onClick={() => { setSearchOpen((v) => !v); setShowSearchDropdown(false); }}
-            style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              cursor: 'pointer', color: 'var(--espresso)', background: 'none',
-              border: 'none', padding: '4px'
-            }}
-            title="Search"
-            aria-label="Search"
-            aria-expanded={searchOpen}
+          {/* Search — hover/tap the icon to pop a small search bar below */}
+          <div
+            ref={searchWrapRef}
+            onMouseEnter={() => setSearchOpen(true)}
+            onMouseLeave={() => { setSearchOpen(false); setShowSearchDropdown(false); }}
+            style={{ position: 'relative' }}
           >
-            {searchOpen ? <X size={22} /> : <Search size={22} />}
-          </button>
+            <button
+              onClick={() => { setSearchOpen((v) => !v); setShowSearchDropdown(false); }}
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                cursor: 'pointer', color: 'var(--espresso)', background: 'none',
+                border: 'none', padding: '4px'
+              }}
+              title="Search"
+              aria-label="Search"
+              aria-expanded={searchOpen}
+            >
+              <Search size={22} />
+            </button>
+
+            {searchOpen && (
+              <div
+                style={{
+                  position: 'absolute',
+                  top: 'calc(100% + 10px)',
+                  right: 0,
+                  width: 'min(320px, calc(100vw - 40px))',
+                  background: 'var(--white)',
+                  border: '1px solid var(--line)',
+                  borderRadius: 'var(--radius-md)',
+                  boxShadow: 'var(--shadow-md)',
+                  padding: '8px',
+                  zIndex: 999
+                }}
+              >
+                <form onSubmit={handleSearchSubmit} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <input
+                    type="text"
+                    autoFocus
+                    placeholder="Search…"
+                    value={searchQuery}
+                    onChange={(e) => { setSearchQuery(e.target.value); setShowSearchDropdown(true); }}
+                    onFocus={() => setShowSearchDropdown(true)}
+                    style={{
+                      flex: 1, minWidth: 0,
+                      padding: '8px 12px',
+                      borderRadius: 'var(--radius-full)',
+                      border: '1px solid var(--line)',
+                      fontSize: '0.85rem',
+                      background: 'var(--parchment)'
+                    }}
+                  />
+                  <button
+                    type="submit"
+                    style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      width: '32px', height: '32px', flexShrink: 0,
+                      borderRadius: '50%', border: 'none', cursor: 'pointer',
+                      background: 'var(--olive)', color: '#fff'
+                    }}
+                    aria-label="Submit search"
+                  >
+                    <Search size={15} />
+                  </button>
+                </form>
+
+                {showSearchDropdown && searchResults.length > 0 && (
+                  <div style={{ marginTop: '8px', overflow: 'hidden' }}>
+                    {searchResults.map((item) => (
+                      <Link
+                        key={item.id}
+                        to={`/product/${item.slug}`}
+                        onClick={() => { setSearchOpen(false); setShowSearchDropdown(false); setSearchQuery(''); }}
+                        style={{
+                          display: 'flex', alignItems: 'center', gap: '8px',
+                          padding: '7px 8px', borderRadius: 'var(--radius-sm, 6px)',
+                          fontSize: '0.82rem'
+                        }}
+                        onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--parchment)'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
+                      >
+                        <img src={item.images[0]} alt={item.name} style={{ width: '30px', height: '30px', objectFit: 'cover', borderRadius: '4px' }} />
+                        <div style={{ minWidth: 0 }}>
+                          <div style={{ fontWeight: 600, color: 'var(--espresso)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.name}</div>
+                          <div style={{ fontSize: '0.72rem', color: 'var(--gold)' }}>₹{item.price}</div>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
 
           {/* Wishlist Icon */}
           <Link to="/wishlist" style={{ position: 'relative', color: 'var(--espresso)' }} title="Wishlist">
@@ -234,98 +335,6 @@ export const Header = () => {
           </div>
         </div>
       </div>
-
-      {/* Close search when clicking outside */}
-      {searchOpen && (
-        <div
-          onClick={() => { setSearchOpen(false); setShowSearchDropdown(false); }}
-          style={{ position: 'fixed', inset: 0, zIndex: -1 }}
-        />
-      )}
-
-      {/* Search Bar Panel — opens below the navbar row on icon click */}
-      {searchOpen && (
-        <div style={{ borderTop: '1px solid var(--line)', background: 'var(--ivory)', padding: '14px 0 16px' }}>
-          <div className="container" style={{ position: 'relative' }}>
-            <form onSubmit={handleSearchSubmit} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <input
-                type="text"
-                autoFocus
-                placeholder="Search mushrooms, spawn, recipes…"
-                value={searchQuery}
-                onChange={(e) => {
-                  setSearchQuery(e.target.value);
-                  setShowSearchDropdown(true);
-                }}
-                onFocus={() => setShowSearchDropdown(true)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Escape') { setSearchOpen(false); setShowSearchDropdown(false); }
-                }}
-                style={{
-                  flex: 1,
-                  padding: '11px 16px',
-                  borderRadius: 'var(--radius-full)',
-                  border: '1px solid var(--line)',
-                  fontSize: '0.9rem',
-                  background: 'var(--white)'
-                }}
-              />
-              <button
-                type="submit"
-                style={{
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  width: '42px', height: '42px', flexShrink: 0,
-                  borderRadius: '50%', border: 'none', cursor: 'pointer',
-                  background: 'var(--olive)', color: '#fff'
-                }}
-                aria-label="Submit search"
-              >
-                <Search size={17} />
-              </button>
-            </form>
-
-            {/* Live Suggestions */}
-            {showSearchDropdown && searchResults.length > 0 && (
-              <div
-                style={{
-                  position: 'absolute',
-                  top: 'calc(100% + 6px)',
-                  left: 0,
-                  width: 'min(480px, 100%)',
-                  background: 'var(--white)',
-                  border: '1px solid var(--line)',
-                  borderRadius: 'var(--radius-md)',
-                  boxShadow: 'var(--shadow-md)',
-                  zIndex: 999,
-                  overflow: 'hidden'
-                }}
-              >
-                {searchResults.map((item) => (
-                  <Link
-                    key={item.id}
-                    to={`/product/${item.slug}`}
-                    onClick={() => { setShowSearchDropdown(false); setSearchOpen(false); setSearchQuery(''); }}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '10px',
-                      padding: '10px 14px',
-                      borderBottom: '1px solid var(--line)',
-                      fontSize: '0.85rem'
-                    }}
-                  >
-                    <img src={item.images[0]} alt={item.name} style={{ width: '36px', height: '36px', objectFit: 'cover', borderRadius: '4px' }} />
-                    <div>
-                      <div style={{ fontWeight: 600, color: 'var(--espresso)' }}>{item.name}</div>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--gold)' }}>₹{item.price}</div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      )}
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (

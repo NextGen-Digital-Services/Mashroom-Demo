@@ -60,7 +60,7 @@ export const OrderTracking = () => {
     <div className="section-padding">
       <div className="container" style={{ maxWidth: '850px' }}>
         
-        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+        <div className="page-hero page-hero-card" style={{ textAlign: 'center', marginBottom: '40px' }}>
           <span className="eyebrow">Real-Time Dispatch Tracking</span>
           <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-4xl)' }}>
             Track Your Order

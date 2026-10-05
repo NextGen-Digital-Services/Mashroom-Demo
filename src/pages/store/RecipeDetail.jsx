@@ -16,7 +16,7 @@ export const RecipeDetail = () => {
   return (
     <div className="section-padding">
       <div className="container" style={{ maxWidth: '800px' }}>
-        <div style={{ marginBottom: '24px' }}>
+        <div className="page-hero page-hero-card" style={{ marginBottom: '24px' }}>
           <Link to="/recipes" style={{ fontSize: '0.85rem', color: 'var(--gold)', fontWeight: 600 }}>← Back to Journal</Link>
           <span className="eyebrow" style={{ marginTop: '12px' }}>{blog.category}</span>
           <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-4xl)', marginBottom: '12px' }}>

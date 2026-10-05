@@ -118,8 +118,8 @@ export const AboutUs = () => {
     <div className="section-padding rel-section paper-grain">
       <BotanicalBackdrop variant="corner" />
       <div className="container" style={{ maxWidth: '900px' }}>
-        <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-          <span className="eyebrow">About Us</span>
+      <div className="page-hero page-hero-card" style={{ textAlign: 'center', marginBottom: '48px' }}>
+        <span className="eyebrow">About Us</span>
           <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-5xl)', lineHeight: 1.1, marginBottom: '16px' }}>
             15 Years Of Experience. One Passion.
           </h1>

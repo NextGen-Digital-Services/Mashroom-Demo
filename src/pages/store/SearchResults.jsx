@@ -25,8 +25,8 @@ export const SearchResults = () => {
     <div className="section-padding">
       <div className="container">
         
-        <div style={{ marginBottom: '32px' }}>
-          <span className="eyebrow">Search Results</span>
+      <div className="page-hero page-hero-card" style={{ marginBottom: '32px' }}>
+        <span className="eyebrow">Search Results</span>
           <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-4xl)' }}>
             Showing results for "{query}"
           </h1>

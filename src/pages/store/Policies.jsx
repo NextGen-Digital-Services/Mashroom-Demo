@@ -17,8 +17,8 @@ export const PolicyPage = ({ type }) => {
   return (
     <div className="section-padding">
       <div className="container" style={{ maxWidth: '800px' }}>
-        <div style={{ marginBottom: '32px' }}>
-          <span className="eyebrow">{config.name} Policies</span>
+      <div className="page-hero page-hero-card" style={{ marginBottom: '32px' }}>
+        <span className="eyebrow">{config.name} Policies</span>
           <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-4xl)' }}>
             {titles[type]}
           </h1>

@@ -1,0 +1,1 @@
+const n="TRK-IN-",a="mock",s=t=>new Promise(e=>setTimeout(e,t)),o=async t=>{await s(150);const e=`${n}${Math.floor(1e6+Math.random()*9e6)}`;return{provider:a,awb:e,status:"in_transit",orderId:t==null?void 0:t.id,expectedDelivery:new Date(Date.now()+1728e5).toISOString()}};export{o as c};

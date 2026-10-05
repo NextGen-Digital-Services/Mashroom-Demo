@@ -5,7 +5,8 @@ import { images } from '../../data/images';
 import { ArrowRight } from 'lucide-react';
 
 export const MegaMenu = ({ onClose, onMouseEnter }) => {
-  const { categories } = useStore();
+  const { categories, products, config } = useStore();
+  const combo = products.find((p) => p.slug === 'farm-combo-pack');
 
   return (
     <div
@@ -59,40 +60,40 @@ export const MegaMenu = ({ onClose, onMouseEnter }) => {
               </Link>
             </li>
             <li style={{ marginBottom: '10px' }}>
-              <Link to="/shop?tag=Organic" onClick={onClose} style={{ fontSize: '0.9rem', color: 'var(--espresso)', fontWeight: 500, display: 'inline-block', whiteSpace: 'nowrap' }}>
-                🌱 100% Certified Organic
+              <Link to="/category/fresh-mushrooms" onClick={onClose} style={{ fontSize: '0.9rem', color: 'var(--espresso)', fontWeight: 500, display: 'inline-block', whiteSpace: 'nowrap' }}>
+                🌱 Fresh From Our Farm
               </Link>
             </li>
             <li style={{ marginBottom: '10px' }}>
               <Link to="/shop?tag=New" onClick={onClose} style={{ fontSize: '0.9rem', color: 'var(--espresso)', fontWeight: 500, display: 'inline-block', whiteSpace: 'nowrap' }}>
-                ✨ New Season Harvest
+                ✨ New In The Range
               </Link>
             </li>
             <li style={{ marginBottom: '10px' }}>
               <Link to="/recipes" onClick={onClose} style={{ fontSize: '0.9rem', color: 'var(--espresso)', fontWeight: 500, display: 'inline-block', whiteSpace: 'nowrap' }}>
-                📖 Italian Culinary Journal
+                📖 Mushroom Culinary Journal
               </Link>
             </li>
           </ul>
         </div>
 
-        {/* Column 3: Featured Gift Bundle (~50%) */}
+        {/* Column 3: Featured Combo Pack (~50%) */}
         <div style={{ background: 'var(--parchment)', padding: '24px', borderRadius: 'var(--radius-md)', border: '1px solid var(--line)', display: 'flex', gap: '20px', alignItems: 'center' }}>
           <img
             src={images.products.comboMaster[0]}
-            alt="Estate Grand Reserve Combo"
+            alt="Farm Combo Pack"
             style={{ width: '130px', height: '130px', objectFit: 'cover', borderRadius: 'var(--radius-md)', flexShrink: 0, border: '1px solid var(--line)' }}
           />
           <div style={{ flex: 1 }}>
-            <span className="eyebrow" style={{ color: 'var(--gold)', display: 'block', marginBottom: '4px' }}>Featured Gift Bundle</span>
+            <span className="eyebrow" style={{ color: 'var(--gold)', display: 'block', marginBottom: '4px' }}>Featured Combo</span>
             <h4 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.35rem', marginBottom: '8px', color: 'var(--espresso)', lineHeight: 1.2 }}>
-              Estate Grand Reserve Combo
+              Farm Combo Pack
             </h4>
             <p style={{ fontSize: '0.84rem', color: '#555', marginBottom: '16px', lineHeight: 1.5 }}>
-              Curated trio of Lion's Mane Powder, Spiced Oyster Pickle & Sun-Dried Shiitake.
+              Selected mushroom products together in one convenient package — an easy way to explore more of our range.
             </p>
-            <Link to="/product/estate-grand-reserve-combo-pack" onClick={onClose} className="btn btn-primary btn-sm">
-              View Reserve Bundle <ArrowRight size={14} />
+            <Link to="/product/farm-combo-pack" onClick={onClose} className="btn btn-primary btn-sm">
+              {combo ? `View Combo (${config.currencySymbol}${combo.price.toLocaleString('en-IN')})` : 'View Combo'} <ArrowRight size={14} />
             </Link>
           </div>
         </div>

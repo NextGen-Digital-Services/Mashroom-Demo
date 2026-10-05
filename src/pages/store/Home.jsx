@@ -7,31 +7,34 @@ import { Button } from '../../components/common/Button';
 import { ProductCard } from '../../components/product/ProductCard';
 import { ArchMaskImage } from '../../components/common/ArchMaskImage';
 import { images } from '../../data/images';
-import { ArrowRight, ShieldCheck, Sun, Award, Truck, Star } from 'lucide-react';
+import { BotanicalBackdrop } from '../../components/common/BotanicalBackdrop';
+import { ArrowRight, ShieldCheck, Sun, Award, Truck } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const Home = () => {
   const { config, products, categories, blogs } = useStore();
-  useDocumentTitle('Artisan Mushroom Delicacies & Gourmet Cultivation');
+  useDocumentTitle('Fresh Mushrooms, Spawn & Mushroom Products');
 
   const bestsellers = products.filter(p => p.tags && p.tags.includes('Bestseller')).slice(0, 4);
   const featuredBlogs = blogs.slice(0, 3);
+  const comboProduct = products.find(p => p.slug === 'farm-combo-pack');
 
-  const farmerCount = useCounter(120, 2500);
-  const harvestCount = useCounter(15000, 2500);
-  const reviewCount = useCounter(4800, 2500);
+  const experienceCount = useCounter(15, 2500);
+  const productCount = useCounter(products.length, 2500);
+  const registeredCount = useCounter(2026, 2500);
 
   return (
     <div style={{ overflow: 'hidden' }}>
       
       {/* 1. HERO SECTION */}
-      <section style={{ backgroundColor: 'var(--parchment)', padding: '64px 0 80px', position: 'relative', borderBottom: '1px solid var(--line)' }}>
+      <section className="rel-section paper-grain" style={{ backgroundColor: 'var(--parchment)', padding: '64px 0 80px', borderBottom: '1px solid var(--line)' }}>
+        <BotanicalBackdrop variant="hero" />
         <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '48px', alignItems: 'center' }}>
           
           <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}>
-            <span className="eyebrow">Estate-Grown & Foraged Fine Fungi</span>
-            <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-5xl)', lineHeight: 1.1, marginBottom: '20px', color: 'var(--espresso)' }}>
-              Artisan Delicacies from Mountain Log to Gourmet Table.
+            <span className="eyebrow">Fresh Mushrooms · Healthy Life</span>
+            <h1 className="hero-title" style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-5xl)', lineHeight: 1.1, marginBottom: '20px', color: 'var(--espresso)' }}>
+              From Our Farm in Odisha to Tables Across India.
             </h1>
             <p style={{ fontSize: 'var(--text-lg)', color: '#555', marginBottom: '32px', maxWidth: '520px', lineHeight: 1.6 }}>
               {config.farmStory}
@@ -44,10 +47,14 @@ export const Home = () => {
                 Our Cultivation Story
               </Link>
             </div>
+            <div className="hero-trustline">
+              <span>Supplying Across India With Trust</span>
+              <span>Guaranteed Freshness &amp; Quality</span>
+            </div>
           </motion.div>
 
           <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, delay: 0.2 }}>
-            <ArchMaskImage src={images.hero[0]} alt="Artisan Mushroom Dish" height="520px" />
+            <ArchMaskImage src={images.hero[0]} alt="Fresh Mushrooms" height="520px" />
           </motion.div>
 
         </div>
@@ -57,26 +64,26 @@ export const Home = () => {
       <section style={{ backgroundColor: 'var(--olive-deep)', color: 'var(--ivory)', padding: '32px 0' }}>
         <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '24px', textAlign: 'center' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
-            <Sun color="var(--gold)" size={24} />
-            <div style={{ textAlign: 'left' }}>
-              <div style={{ fontWeight: 700, fontSize: '0.9rem' }}>Solar Slow-Dried</div>
-              <div style={{ fontSize: '0.75rem', color: '#C8D1BE' }}>Preserves natural umami</div>
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
             <ShieldCheck color="var(--gold)" size={24} />
             <div style={{ textAlign: 'left' }}>
-              <div style={{ fontWeight: 700, fontSize: '0.9rem' }}>100% Organic & Pure</div>
-              <div style={{ fontSize: '0.75rem', color: '#C8D1BE' }}>Zero synthetic chemicals</div>
+              <div style={{ fontWeight: 700, fontSize: '0.9rem' }}>Guaranteed Freshness &amp; Quality</div>
+              <div style={{ fontSize: '0.75rem', color: '#C8D1BE' }}>Careful cultivation &amp; handling</div>
             </div>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
             <Award color="var(--gold)" size={24} />
             <div style={{ textAlign: 'left' }}>
-              <div style={{ fontWeight: 700, fontSize: '0.9rem' }}>Lab Tested Potency</div>
-              <div style={{ fontSize: '0.75rem', color: '#C8D1BE' }}>Bioactive batch reports</div>
+              <div style={{ fontWeight: 700, fontSize: '0.9rem' }}>15 Years of Experience</div>
+              <div style={{ fontSize: '0.75rem', color: '#C8D1BE' }}>Hands-on mushroom cultivation</div>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
+            <Sun color="var(--gold)" size={24} />
+            <div style={{ textAlign: 'left' }}>
+              <div style={{ fontWeight: 700, fontSize: '0.9rem' }}>Supplying Across India</div>
+              <div style={{ fontSize: '0.75rem', color: '#C8D1BE' }}>A brand customers can trust</div>
             </div>
           </div>
 
@@ -84,19 +91,20 @@ export const Home = () => {
             <Truck color="var(--gold)" size={24} />
             <div style={{ textAlign: 'left' }}>
               <div style={{ fontWeight: 700, fontSize: '0.9rem' }}>Complimentary Delivery</div>
-              <div style={{ fontSize: '0.75rem', color: '#C8D1BE' }}>On all orders above ₹999</div>
+              <div style={{ fontSize: '0.75rem', color: '#C8D1BE' }}>On all orders above ₹{config.freeShippingThreshold}</div>
             </div>
           </div>
         </div>
       </section>
 
       {/* 3. CATEGORY TILES */}
-      <section className="section-padding">
+      <section className="section-padding rel-section">
+        <BotanicalBackdrop variant="light" />
         <div className="container">
           <div style={{ textAlign: 'center', marginBottom: '48px' }}>
             <span className="eyebrow">Explore By Pantry Type</span>
             <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-4xl)' }}>
-              Artisanal Fungi Categories
+              Our Product Range
             </h2>
           </div>
 
@@ -105,8 +113,8 @@ export const Home = () => {
               <Link
                 key={cat.id}
                 to={`/category/${cat.slug}`}
+                className="category-tile"
                 style={{
-                  position: 'relative',
                   height: '280px',
                   borderRadius: 'var(--radius-md)',
                   overflow: 'hidden',
@@ -120,7 +128,7 @@ export const Home = () => {
                 <img
                   src={cat.image}
                   alt={cat.name}
-                  style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 1, filter: 'brightness(0.7)', transition: 'transform 0.4s ease' }}
+                  style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
                 />
                 <div style={{ position: 'relative', zIndex: 2, color: 'var(--white)' }}>
                   <h4 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.4rem', color: 'var(--ivory)', marginBottom: '4px' }}>
@@ -158,47 +166,50 @@ export const Home = () => {
       </section>
 
       {/* 5. FARM TO TABLE STORY & STATS COUNTER */}
-      <section className="section-padding">
+      <section className="section-padding rel-section">
+        <BotanicalBackdrop variant="corner" />
         <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '48px', alignItems: 'center' }}>
           <div>
-            <span className="eyebrow">Centuries of Fungi Wisdom</span>
+            <span className="eyebrow">From Our Roots In Odisha</span>
             <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-4xl)', marginBottom: '20px' }}>
-              Cultivated in High-Altitude Himalayan Mist.
+              Cultivated With Patience, Packed With Care.
             </h2>
-            <p style={{ color: '#555', fontSize: '1rem', lineHeight: 1.7, marginBottom: '24px' }}>
-              Our estate logs rest under dense oak foliage where cool air currents encourage deep mushroom cap density. Every jar of our pickle and powder contains pure mountain vitality harvested at peak maturity.
+            <p style={{ color: '#555', fontSize: '1rem', lineHeight: 1.7, marginBottom: '24px', maxWidth: '62ch' }}>
+              Our journey began with 15 years of hands-on mushroom cultivation. Every cultivation cycle
+              requires attention and proper care — from preparing the growing environment to monitoring
+              mushroom growth and handling the final produce — so quality stays consistent from farm to table.
             </p>
 
             {/* Counter stats */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', borderTop: '1px solid var(--line)', paddingTop: '24px' }}>
               <div>
                 <div style={{ fontFamily: 'var(--font-heading)', fontSize: '2.2rem', fontWeight: 700, color: 'var(--olive-deep)' }}>
-                  {farmerCount}+
+                  {experienceCount}+
                 </div>
                 <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--gold)', fontWeight: 700 }}>
-                  Artisan Growers
+                  Years Of Experience
                 </div>
               </div>
               <div>
                 <div style={{ fontFamily: 'var(--font-heading)', fontSize: '2.2rem', fontWeight: 700, color: 'var(--olive-deep)' }}>
-                  {harvestCount.toLocaleString()}+
+                  {productCount}
                 </div>
                 <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--gold)', fontWeight: 700 }}>
-                  Jars Shipped
+                  Products In Range
                 </div>
               </div>
               <div>
                 <div style={{ fontFamily: 'var(--font-heading)', fontSize: '2.2rem', fontWeight: 700, color: 'var(--olive-deep)' }}>
-                  {reviewCount.toLocaleString()}+
+                  {registeredCount}
                 </div>
                 <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--gold)', fontWeight: 700 }}>
-                  5-Star Ratings
+                  Registered Pvt. Ltd.
                 </div>
               </div>
             </div>
           </div>
 
-          <ArchMaskImage src={images.farm[0]} alt="Himalayan Mushroom Farm" height="480px" />
+          <ArchMaskImage src={images.farm[0]} alt="Mushroom Farm In Odisha" height="480px" />
         </div>
       </section>
 
@@ -218,20 +229,21 @@ export const Home = () => {
             }}
           >
             <div>
-              <span className="eyebrow" style={{ color: 'var(--gold)' }}>Exclusive Tasting Bundle</span>
+              <span className="eyebrow" style={{ color: 'var(--gold)' }}>One Package, More To Explore</span>
               <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-4xl)', color: 'var(--ivory)', marginBottom: '16px' }}>
-                The Estate Grand Reserve Gift Box
+                The Farm Combo Pack
               </h2>
-              <p style={{ color: '#C8D1BE', marginBottom: '24px', fontSize: '0.95rem' }}>
-                Includes Lion's Mane Powder, Spiced Oyster Pickle, Sun-Dried Shiitake, and a custom hand-carved wood tasting spoon.
+              <p style={{ color: '#C8D1BE', marginBottom: '24px', fontSize: '0.95rem', maxWidth: '52ch' }}>
+                Selected mushroom products brought together in one convenient package — designed for
+                customers who want to explore more than one product from our range.
               </p>
-              <Link to="/product/estate-grand-reserve-combo-pack" className="btn btn-accent btn-lg">
-                Order Tasting Bundle (₹1,899)
+              <Link to="/product/farm-combo-pack" className="btn btn-accent btn-lg">
+                Order Combo Pack{comboProduct ? ` (${config.currencySymbol}${comboProduct.price.toLocaleString('en-IN')})` : ''}
               </Link>
             </div>
             <img
               src={images.products.comboMaster[0]}
-              alt="Grand Reserve Combo"
+              alt="Farm Combo Pack"
               style={{ width: '100%', height: '300px', objectFit: 'cover', borderRadius: 'var(--radius-md)' }}
             />
           </div>
@@ -242,7 +254,7 @@ export const Home = () => {
       <section className="section-padding">
         <div className="container">
           <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-            <span className="eyebrow">Italian Fungi Culture</span>
+            <span className="eyebrow">Cultivation &amp; Kitchen Notes</span>
             <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-4xl)' }}>
               From Our Culinary Journal
             </h2>
@@ -274,9 +286,9 @@ export const Home = () => {
       <section className="section-padding" style={{ backgroundColor: 'var(--parchment)', borderTop: '1px solid var(--line)' }}>
         <div className="container">
           <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-            <span className="eyebrow">@BrandName Estate</span>
+            <span className="eyebrow">@{config.logoText}</span>
             <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-3xl)' }}>
-              Follow The Tuscan Fungi Journey
+              From Our Farm To Your Feed
             </h3>
           </div>
 

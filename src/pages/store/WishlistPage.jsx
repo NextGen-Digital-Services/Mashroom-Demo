@@ -16,7 +16,7 @@ export const WishlistPage = () => {
         <div style={{ marginBottom: '32px' }}>
           <span className="eyebrow">Saved Harvest Favorites</span>
           <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-4xl)' }}>
-            Your Artisan Wishlist
+            Your Wishlist
           </h1>
         </div>
 

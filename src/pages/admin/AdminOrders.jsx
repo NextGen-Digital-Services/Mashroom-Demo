@@ -3,25 +3,38 @@ import { Link } from 'react-router-dom';
 import { useStore } from '../../context/StoreContext';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 import { DataTable } from '../../components/common/DataTable';
-import { StatusBadge } from '../../components/admin/AdminLayout';
 import { formatCurrency, formatDate } from '../../utils/formatters';
-import { Eye, Printer } from 'lucide-react';
+import { createShipment } from '../../lib/shipments';
+import { Eye } from 'lucide-react';
+
+export const ORDER_STATUSES = ['Pending Payment', 'Placed', 'Confirmed', 'Packed', 'Shipped', 'Delivered', 'Cancelled'];
 
 export const AdminOrders = () => {
   useDocumentTitle('Order Fulfillment & Management');
   const { orders, setOrders, addToast } = useStore();
   const [statusFilter, setStatusFilter] = useState('All');
 
-  const handleStatusChange = (orderId, newStatus) => {
+  const handleStatusChange = async (orderId, newStatus) => {
+    const target = orders.find((o) => o.id === orderId);
+    let trackingNumber = target?.trackingNumber || '';
+
+    // Dispatching for the first time without an AWB -> mock courier
+    // adapter (see src/lib/shipments.js — Shiprocket-ready interface)
+    if (newStatus === 'Shipped' && !trackingNumber.trim() && target) {
+      const shipment = await createShipment(target);
+      trackingNumber = shipment.awb;
+    }
+
+    const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     const updated = orders.map((o) => {
       if (o.id === orderId) {
         const updatedTimeline = o.timeline ? o.timeline.map((step) => {
           if (step.status.toLowerCase() === newStatus.toLowerCase()) {
-            return { ...step, done: true, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) };
+            return { ...step, done: true, time: now };
           }
           return step;
         }) : [];
-        return { ...o, status: newStatus, timeline: updatedTimeline };
+        return { ...o, status: newStatus, trackingNumber, timeline: updatedTimeline };
       }
       return o;
     });
@@ -42,12 +55,15 @@ export const AdminOrders = () => {
     {
       header: 'Customer',
       accessor: 'customer',
-      render: (row) => (
-        <div>
-          <div style={{ fontWeight: 600 }}>{row.customer.name}</div>
-          <div style={{ fontSize: '0.75rem', color: '#777' }}>{row.customer.city}</div>
-        </div>
-      )
+      render: (row) => {
+        const customer = row.customer || {};
+        return (
+          <div>
+            <div style={{ fontWeight: 600 }}>{customer.name || '—'}</div>
+            <div style={{ fontSize: '0.75rem', color: '#777' }}>{customer.city || customer.email || ''}</div>
+          </div>
+        );
+      }
     },
     {
       header: 'Items',
@@ -67,7 +83,7 @@ export const AdminOrders = () => {
           className="form-select"
           style={{ width: 'auto', padding: '4px 8px', fontSize: '0.8rem', fontWeight: 600 }}
         >
-          {['Placed', 'Confirmed', 'Packed', 'Shipped', 'Delivered', 'Cancelled'].map((st) => (
+          {(ORDER_STATUSES.includes(row.status) ? ORDER_STATUSES : [row.status, ...ORDER_STATUSES]).map((st) => (
             <option key={st} value={st}>{st}</option>
           ))}
         </select>
@@ -97,7 +113,7 @@ export const AdminOrders = () => {
         </div>
 
         <div style={{ display: 'flex', gap: '8px' }}>
-          {['All', 'Placed', 'Confirmed', 'Packed', 'Shipped', 'Delivered'].map((st) => (
+          {['All', ...ORDER_STATUSES].map((st) => (
             <button
               key={st}
               onClick={() => setStatusFilter(st)}

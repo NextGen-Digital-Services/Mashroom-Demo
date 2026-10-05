@@ -1,15 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStore } from '../../context/StoreContext';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 import { FormField } from '../../components/common/FormField';
 import { Button } from '../../components/common/Button';
 import { formatCurrency, generateOrderId } from '../../utils/formatters';
-import { ShieldCheck, Truck, CreditCard, CheckCircle } from 'lucide-react';
+import { STORAGE_KEYS } from '../../utils/storage';
+import { backend } from '../../lib/backend';
+import { computeTotals } from '../../lib/pricing';
+import {
+  isPaymentsEnabled,
+  createRazorpayOrder,
+  openRazorpayCheckout,
+  verifyRazorpayPayment
+} from '../../lib/api';
+import { ShieldCheck, Truck, CreditCard, CheckCircle, Tag } from 'lucide-react';
 
 export const CheckoutPage = () => {
   useDocumentTitle('Checkout & Shipping');
-  const { cart, config, createOrder, userAuth, addToast } = useStore();
+  const {
+    cart,
+    config,
+    shippingTax,
+    appliedCoupon,
+    applyCoupon,
+    removeCoupon,
+    createOrder,
+    patchOrderLocal,
+    userAuth,
+    addToast
+  } = useStore();
   const navigate = useNavigate();
 
   // Form states
@@ -21,14 +41,56 @@ export const CheckoutPage = () => {
   const [state, setState] = useState('Himachal Pradesh');
   const [pincode, setPincode] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('UPI');
+  const [paying, setPaying] = useState(false);
+  const [couponInput, setCouponInput] = useState('');
 
-  const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const freeShippingThreshold = config.freeShippingThreshold || 999;
-  const shippingFee = subtotal >= freeShippingThreshold || subtotal === 0 ? 0 : (config.defaultShippingFee || 99);
-  const tax = Math.round(subtotal * ((config.gstPercentage || 5) / 100));
-  const total = subtotal + shippingFee + tax;
+  // Prefill shipping fields from the signed-in user's default saved address
+  // (Account Dashboard -> Addresses). Only untouched/empty fields are filled.
+  useEffect(() => {
+    if (!userAuth || !userAuth.id) return;
+    let saved = null;
+    try {
+      const raw = localStorage.getItem(`${STORAGE_KEYS.ADDRESSES_PREFIX}${userAuth.id}`);
+      saved = raw ? JSON.parse(raw) : null;
+    } catch {
+      saved = null;
+    }
+    if (!Array.isArray(saved) || saved.length === 0) return;
 
-  const handlePlaceOrder = (e) => {
+    const def = saved.find((a) => a && a.isDefault) || saved[0];
+    if (!def) return;
+
+    const fill = (current, value) => (current ? current : value || '');
+
+    setStreet((prev) => fill(prev, def.street));
+    setCity((prev) => fill(prev, def.city));
+    // `state` starts with a placeholder default — treat it as untouched too.
+    setState((prev) => (prev === '' || prev === 'Himachal Pradesh' ? def.state || prev : prev));
+    setPincode((prev) => fill(prev, def.pincode));
+    setName((prev) => fill(prev, def.name));
+    setEmail((prev) => fill(prev, def.email));
+    setPhone((prev) => fill(prev, def.phone));
+  }, [userAuth]);
+
+  // Online checkout only runs when Supabase (order persistence) and
+  // Razorpay keys are both configured — otherwise the demo path applies.
+  const onlinePayment = backend.isSupabase && isPaymentsEnabled();
+
+  const totals = computeTotals({ cart, config, shippingTax, coupon: appliedCoupon });
+  const { subtotal, discount, shippingFee, tax, total } = totals;
+
+  const handleApplyCoupon = (e) => {
+    e.preventDefault();
+    const res = applyCoupon(couponInput);
+    if (res.ok) {
+      addToast(res.message);
+      setCouponInput('');
+    } else {
+      addToast(res.message, 'error');
+    }
+  };
+
+  const handlePlaceOrder = async (e) => {
     e.preventDefault();
     if (!name || !email || !phone || !street || !city || !pincode) {
       addToast('Please complete all required shipping fields', 'error');
@@ -57,7 +119,8 @@ export const CheckoutPage = () => {
         image: item.image
       })),
       subtotal,
-      discount: 0,
+      discount,
+      ...(discount > 0 && appliedCoupon ? { couponCode: appliedCoupon.code } : {}),
       tax,
       shippingFee,
       total,
@@ -74,9 +137,56 @@ export const CheckoutPage = () => {
       ]
     };
 
-    createOrder(newOrder);
-    addToast(`Order ${orderId} placed successfully!`);
-    navigate(`/order-success/${orderId}`);
+    const useRazorpay = onlinePayment && paymentMethod !== 'Cash on Delivery';
+
+    if (!useRazorpay) {
+      try {
+        await createOrder(newOrder);
+        addToast(`Order ${orderId} placed successfully!`);
+        navigate(`/order-success/${orderId}`);
+      } catch (err) {
+        addToast(`Could not place order: ${err.message}`, 'error');
+      }
+      return;
+    }
+
+    // Online payment: persist as pending -> Razorpay checkout -> verify
+    setPaying(true);
+    try {
+      newOrder.status = 'Pending Payment';
+      newOrder.paymentStatus = 'Pending';
+      const placed = await createOrder(newOrder);
+
+      const { razorpayOrderId } = await createRazorpayOrder(total, placed.id);
+      const payment = await openRazorpayCheckout({
+        amount: total,
+        razorpayOrderId,
+        order: placed,
+        config
+      });
+      await verifyRazorpayPayment({
+        razorpay_order_id: payment.razorpay_order_id,
+        razorpay_payment_id: payment.razorpay_payment_id,
+        razorpay_signature: payment.razorpay_signature,
+        appOrderId: placed.id
+      });
+
+      // Server already persisted the paid state — sync memory only.
+      patchOrderLocal(placed.id, {
+        status: 'Placed',
+        paymentStatus: 'Paid',
+        razorpay: {
+          orderId: payment.razorpay_order_id,
+          paymentId: payment.razorpay_payment_id
+        }
+      });
+      addToast(`Payment successful — order ${placed.id} confirmed!`);
+      navigate(`/order-success/${placed.id}`);
+    } catch (err) {
+      addToast(err.message || 'Payment failed. Please try again.', 'error');
+    } finally {
+      setPaying(false);
+    }
   };
 
   if (cart.length === 0) {
@@ -130,13 +240,13 @@ export const CheckoutPage = () => {
             {/* Payment Method Selector */}
             <div style={{ background: 'var(--white)', padding: '24px', borderRadius: 'var(--radius-md)', border: '1px solid var(--line)' }}>
               <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.4rem', marginBottom: '16px', borderBottom: '1px solid var(--line)', paddingBottom: '10px' }}>
-                2. Select Payment Option (Demo Mode)
+                2. Select Payment Option{onlinePayment ? '' : ' (Demo Mode)'}
               </h3>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {[
-                  { id: 'UPI', label: 'UPI / GPay / PhonePe (Instant Approval)', desc: 'Scan & Pay via any UPI application' },
-                  { id: 'Credit Card', label: 'Credit / Debit Card', desc: 'Visa, MasterCard, RuPay, Amex' },
+                  { id: 'UPI', label: 'UPI / GPay / PhonePe (Instant Approval)', desc: onlinePayment ? 'Processed securely via Razorpay' : 'Scan & Pay via any UPI application' },
+                  { id: 'Credit Card', label: 'Credit / Debit Card', desc: onlinePayment ? 'Visa, MasterCard, RuPay, Amex via Razorpay' : 'Visa, MasterCard, RuPay, Amex' },
                   { id: 'Cash on Delivery', label: 'Cash on Delivery (COD)', desc: 'Pay cash upon courier delivery' }
                 ].map((pm) => (
                   <label
@@ -188,13 +298,59 @@ export const CheckoutPage = () => {
               ))}
             </div>
 
+            {/* Coupon */}
+            <form onSubmit={handleApplyCoupon} style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+              <input
+                type="text"
+                placeholder="Coupon code"
+                value={couponInput}
+                onChange={(e) => setCouponInput(e.target.value)}
+                className="form-input"
+                style={{ textTransform: 'uppercase', fontSize: '0.8rem' }}
+              />
+              <Button type="submit" size="sm" variant="secondary">
+                <Tag size={12} />
+              </Button>
+            </form>
+
+            {appliedCoupon && (
+              <div
+                style={{
+                  background: totals.couponValid ? '#E6F4EA' : '#FDECEA',
+                  color: totals.couponValid ? '#137333' : '#B3261E',
+                  padding: '6px 12px',
+                  borderRadius: '4px',
+                  fontSize: '0.75rem',
+                  marginBottom: '16px',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  gap: '8px'
+                }}
+              >
+                <span>
+                  {totals.couponValid ? (
+                    <>Applied: <strong>{appliedCoupon.code}</strong> (-{formatCurrency(discount)})</>
+                  ) : (
+                    <strong>{totals.couponReason}</strong>
+                  )}
+                </span>
+                <button onClick={removeCoupon} style={{ border: 'none', background: 'none', cursor: 'pointer', color: 'inherit', fontWeight: 700 }}>✕</button>
+              </div>
+            )}
+
             <div style={{ fontSize: '0.9rem', lineHeight: 2, borderTop: '1px solid var(--line)', paddingTop: '12px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span>Subtotal</span>
                 <span>{formatCurrency(subtotal)}</span>
               </div>
+              {discount > 0 && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--terracotta)' }}>
+                  <span>Coupon Discount</span>
+                  <span>-{formatCurrency(discount)}</span>
+                </div>
+              )}
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span>GST Tax ({config.gstPercentage}%)</span>
+                <span>GST Tax ({totals.gstPercentage}%)</span>
                 <span>{formatCurrency(tax)}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -207,8 +363,8 @@ export const CheckoutPage = () => {
               </div>
             </div>
 
-            <Button type="submit" variant="primary" fullWidth size="lg" style={{ marginTop: '24px' }}>
-              Confirm & Place Order <CheckCircle size={18} />
+            <Button type="submit" variant="primary" fullWidth size="lg" style={{ marginTop: '24px' }} disabled={paying}>
+              {paying ? 'Processing Payment…' : (<>Confirm & Place Order <CheckCircle size={18} /></>)}
             </Button>
           </div>
 

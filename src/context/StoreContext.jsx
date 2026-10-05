@@ -1,40 +1,140 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { getStorageData, setStorageData, initializeLocalStorage, STORAGE_KEYS, resetDemoData } from '../utils/storage';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
+import { getStorageData, setStorageData, STORAGE_KEYS, seedData } from '../utils/storage';
+import { backend } from '../lib/backend';
+import { validateCoupon, computeDiscount } from '../lib/pricing';
 
 const StoreContext = createContext();
 
 export const StoreProvider = ({ children }) => {
-  // Initialize default localStorage data on first run
-  useEffect(() => {
-    initializeLocalStorage();
-  }, []);
+  // ---- Persistent content state ---------------------------------
+  // Initial paint uses localStorage cache (or seed data), then hydrates
+  // from the backend (Supabase when configured, localStorage otherwise).
+  const [config, setConfig] = useState(() => getStorageData(STORAGE_KEYS.SITE_CONFIG, seedData.site_config));
+  const [products, setProducts] = useState(() => getStorageData(STORAGE_KEYS.PRODUCTS, seedData.products));
+  const [categories, setCategories] = useState(() => getStorageData(STORAGE_KEYS.CATEGORIES, seedData.categories));
+  const [orders, setOrders] = useState(() => getStorageData(STORAGE_KEYS.ORDERS, seedData.orders));
+  const [customers, setCustomers] = useState(() => getStorageData(STORAGE_KEYS.CUSTOMERS, seedData.customers));
+  const [coupons, setCoupons] = useState(() => getStorageData(STORAGE_KEYS.COUPONS, seedData.coupons));
+  const [reviews, setReviews] = useState(() => getStorageData(STORAGE_KEYS.REVIEWS, seedData.reviews));
+  const [blogs, setBlogs] = useState(() => getStorageData(STORAGE_KEYS.BLOGS, seedData.blogs));
+  const [banners, setBanners] = useState(() => getStorageData(STORAGE_KEYS.BANNERS, seedData.banners));
+  const [faqs, setFaqs] = useState(() => getStorageData(STORAGE_KEYS.FAQS, seedData.faqs));
+  const [messages, setMessages] = useState(() => getStorageData(STORAGE_KEYS.MESSAGES, seedData.messages));
+  const [subscribers, setSubscribers] = useState(() => getStorageData(STORAGE_KEYS.SUBSCRIBERS, seedData.subscribers));
+  const [shippingTax, setShippingTax] = useState(() => getStorageData(STORAGE_KEYS.SHIPPING_TAX, seedData.shipping_tax));
 
-  // Main persistent states
-  const [config, setConfig] = useState(() => getStorageData(STORAGE_KEYS.SITE_CONFIG, {}));
-  const [products, setProducts] = useState(() => getStorageData(STORAGE_KEYS.PRODUCTS, []));
-  const [categories, setCategories] = useState(() => getStorageData(STORAGE_KEYS.CATEGORIES, []));
-  const [orders, setOrders] = useState(() => getStorageData(STORAGE_KEYS.ORDERS, []));
-  const [customers, setCustomers] = useState(() => getStorageData(STORAGE_KEYS.CUSTOMERS, []));
-  const [coupons, setCoupons] = useState(() => getStorageData(STORAGE_KEYS.COUPONS, []));
-  const [reviews, setReviews] = useState(() => getStorageData(STORAGE_KEYS.REVIEWS, []));
-  const [blogs, setBlogs] = useState(() => getStorageData(STORAGE_KEYS.BLOGS, []));
-  const [banners, setBanners] = useState(() => getStorageData(STORAGE_KEYS.BANNERS, []));
-  const [faqs, setFaqs] = useState(() => getStorageData(STORAGE_KEYS.FAQS, []));
-  const [messages, setMessages] = useState(() => getStorageData(STORAGE_KEYS.MESSAGES, []));
-  const [subscribers, setSubscribers] = useState(() => getStorageData(STORAGE_KEYS.SUBSCRIBERS, []));
-  const [shippingTax, setShippingTax] = useState(() => getStorageData(STORAGE_KEYS.SHIPPING_TAX, {}));
-
-  // User & Cart states
+  // ---- User & Cart (device-local) --------------------------------
   const [cart, setCart] = useState(() => getStorageData(STORAGE_KEYS.CART, []));
   const [wishlist, setWishlist] = useState(() => getStorageData(STORAGE_KEYS.WISHLIST, []));
-  const [userAuth, setUserAuth] = useState(() => getStorageData(STORAGE_KEYS.AUTH, null));
-  const [adminAuth, setAdminAuth] = useState(() => getStorageData(STORAGE_KEYS.ADMIN_AUTH, null));
-  
-  // UI States
+  // Shared across drawer / cart page / checkout so a discount applied in
+  // one place survives navigation and lands on the persisted order.
+  const [appliedCoupon, setAppliedCouponState] = useState(() =>
+    getStorageData(STORAGE_KEYS.APPLIED_COUPON, null)
+  );
+  const [userAuth, setUserAuth] = useState(null);
+  const [adminAuth, setAdminAuth] = useState(null);
+  const [authReady, setAuthReady] = useState(false);
+
+  // ---- UI States -------------------------------------------------
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [toasts, setToasts] = useState([]);
 
-  // Toast Helper
+  // Fresh mirror of list state for computing save diffs at call time
+  const contentRef = useRef({});
+  contentRef.current = {
+    config,
+    products,
+    categories,
+    orders,
+    customers,
+    coupons,
+    reviews,
+    blogs,
+    banners,
+    faqs,
+    messages,
+    subscribers,
+    shippingTax
+  };
+
+  // ---- Hydration + auth bootstrap --------------------------------
+  // Content is applied from a snapshot object; every list defaults to []
+  // so a partial/failed hydrate can never push `undefined` into state
+  // (which used to white-screen the admin shell in Supabase mode).
+  const applyContent = (content) => {
+    if (!content) return;
+    setConfig(content.config || seedData.site_config);
+    setShippingTax(content.shippingTax || seedData.shipping_tax);
+    setProducts(content.products || []);
+    setCategories(content.categories || []);
+    setOrders(content.orders || []);
+    setCustomers(content.customers || []);
+    setCoupons(content.coupons || []);
+    setReviews(content.reviews || []);
+    setBlogs(content.blogs || []);
+    setBanners(content.banners || []);
+    setFaqs(content.faqs || []);
+    setMessages(content.messages || []);
+    setSubscribers(content.subscribers || []);
+  };
+
+  useEffect(() => {
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const content = await backend.loadContent();
+        if (!cancelled) applyContent(content);
+      } catch (e) {
+        console.error('[store] content hydration failed', e);
+      }
+
+      try {
+        const session = await backend.auth.getSession();
+        if (!cancelled) {
+          setUserAuth(session.userAuth);
+          setAdminAuth(session.adminAuth);
+        }
+      } catch (e) {
+        console.error('[store] session restore failed', e);
+      } finally {
+        if (!cancelled) setAuthReady(true);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Keep auth state in sync with the backend session. Signing in also
+  // re-hydrates content: tables like customers/messages/subscribers and
+  // orders are RLS-gated, so the anonymous boot fetch returned [] for them.
+  useEffect(() => {
+    const unsubscribe = backend.auth.onChange(async (event) => {
+      if (event === 'SIGNED_OUT') {
+        setUserAuth(null);
+        setAdminAuth(null);
+        return;
+      }
+      try {
+        if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED') {
+          const content = await backend.loadContent();
+          applyContent(content);
+        }
+        const session = await backend.auth.getSession();
+        setUserAuth(session.userAuth);
+        setAdminAuth(session.adminAuth);
+      } catch (e) {
+        console.error('[store] auth change sync failed', e);
+      }
+    });
+    return unsubscribe;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // ---- Toast Helper ----------------------------------------------
   const addToast = (message, type = 'success') => {
     const id = Date.now();
     setToasts((prev) => [...prev, { id, message, type }]);
@@ -47,74 +147,47 @@ export const StoreProvider = ({ children }) => {
     setToasts((prev) => prev.filter((t) => t.id !== id));
   };
 
-  // Sync state helpers to localStorage
+  // ---- Generic list / settings sync -------------------------------
+  // Each setter updates memory immediately (optimistic) and pushes the
+  // diff to the backend. Failures surface as toasts; the UI keeps the
+  // optimistic state so the demo never hard-breaks.
+  const syncList = (table, setter) => (newItems) => {
+    const prev = contentRef.current[table];
+    setter(newItems);
+    backend.saveList(table, newItems, prev, { canDelete: Boolean(adminAuth) }).catch((e) => {
+      addToast(`Sync failed: ${e.message}`, 'error');
+    });
+  };
+
+  const updateProducts = syncList('products', setProducts);
+  const updateCategories = syncList('categories', setCategories);
+  const updateOrders = syncList('orders', setOrders);
+  const updateCustomers = syncList('customers', setCustomers);
+  const updateCoupons = syncList('coupons', setCoupons);
+  const updateReviews = syncList('reviews', setReviews);
+  const updateBlogs = syncList('blogs', setBlogs);
+  const updateBanners = syncList('banners', setBanners);
+  const updateFaqs = syncList('faqs', setFaqs);
+  const updateMessages = syncList('messages', setMessages);
+  const updateSubscribers = syncList('subscribers', setSubscribers);
+
   const updateConfig = (newConfig) => {
     setConfig(newConfig);
-    setStorageData(STORAGE_KEYS.SITE_CONFIG, newConfig);
-    addToast('Site configuration updated successfully');
-  };
-
-  const updateProducts = (newProducts) => {
-    setProducts(newProducts);
-    setStorageData(STORAGE_KEYS.PRODUCTS, newProducts);
-  };
-
-  const updateCategories = (newCategories) => {
-    setCategories(newCategories);
-    setStorageData(STORAGE_KEYS.CATEGORIES, newCategories);
-  };
-
-  const updateOrders = (newOrders) => {
-    setOrders(newOrders);
-    setStorageData(STORAGE_KEYS.ORDERS, newOrders);
-  };
-
-  const updateCustomers = (newCustomers) => {
-    setCustomers(newCustomers);
-    setStorageData(STORAGE_KEYS.CUSTOMERS, newCustomers);
-  };
-
-  const updateCoupons = (newCoupons) => {
-    setCoupons(newCoupons);
-    setStorageData(STORAGE_KEYS.COUPONS, newCoupons);
-  };
-
-  const updateReviews = (newReviews) => {
-    setReviews(newReviews);
-    setStorageData(STORAGE_KEYS.REVIEWS, newReviews);
-  };
-
-  const updateBlogs = (newBlogs) => {
-    setBlogs(newBlogs);
-    setStorageData(STORAGE_KEYS.BLOGS, newBlogs);
-  };
-
-  const updateBanners = (newBanners) => {
-    setBanners(newBanners);
-    setStorageData(STORAGE_KEYS.BANNERS, newBanners);
-  };
-
-  const updateFaqs = (newFaqs) => {
-    setFaqs(newFaqs);
-    setStorageData(STORAGE_KEYS.FAQS, newFaqs);
-  };
-
-  const updateMessages = (newMsgs) => {
-    setMessages(newMsgs);
-    setStorageData(STORAGE_KEYS.MESSAGES, newMsgs);
-  };
-
-  const updateSubscribers = (newSubs) => {
-    setSubscribers(newSubs);
-    setStorageData(STORAGE_KEYS.SUBSCRIBERS, newSubs);
+    backend
+      .saveSettings('site_config', newConfig)
+      .then(() => addToast('Site configuration updated successfully'))
+      .catch((e) => addToast(`Sync failed: ${e.message}`, 'error'));
   };
 
   const updateShippingTax = (newST) => {
     setShippingTax(newST);
-    setStorageData(STORAGE_KEYS.SHIPPING_TAX, newST);
+    backend
+      .saveSettings('shipping_tax', newST)
+      .then(() => addToast('Shipping & Tax settings saved — live on cart and checkout'))
+      .catch((e) => addToast(`Sync failed: ${e.message}`, 'error'));
   };
 
-  // Cart Operations
+  // ---- Cart Operations ---------------------------------------------
   const addToCart = (product, selectedVariant = null, quantity = 1) => {
     const variantObj = selectedVariant || (product.variants && product.variants[0]) || { name: 'Standard', price: product.price };
     const cartItemId = `${product.id}-${variantObj.name}`;
@@ -176,7 +249,7 @@ export const StoreProvider = ({ children }) => {
     setStorageData(STORAGE_KEYS.CART, []);
   };
 
-  // Wishlist Operations
+  // ---- Wishlist Operations ------------------------------------------
   const toggleWishlist = (product) => {
     setWishlist((prevWishlist) => {
       const exists = prevWishlist.some((item) => item.id === product.id);
@@ -197,67 +270,238 @@ export const StoreProvider = ({ children }) => {
     return wishlist.some((item) => item.id === productId);
   };
 
-  // User Auth Operations
-  const loginUser = (email, password) => {
-    const user = {
-      id: "cust-user-1",
-      name: email.split('@')[0],
-      email: email
-    };
-    setUserAuth(user);
-    setStorageData(STORAGE_KEYS.AUTH, user);
-    addToast(`Welcome back, ${user.name}!`);
-    return true;
+  // ---- Coupons -------------------------------------------------------
+  const persistCoupon = (coupon) => {
+    setAppliedCouponState(coupon);
+    setStorageData(STORAGE_KEYS.APPLIED_COUPON, coupon);
   };
 
-  const logoutUser = () => {
+  const applyCoupon = (rawCode) => {
+    const code = String(rawCode || '').trim().toUpperCase();
+    if (!code) return { ok: false, message: 'Enter a coupon code.' };
+    const coupon = coupons.find((c) => c.code === code);
+    const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    if (!coupon) return { ok: false, message: `Coupon "${code}" is not valid.` };
+    const check = validateCoupon(coupon, subtotal);
+    if (!check.valid) return { ok: false, message: check.reason };
+    persistCoupon(coupon);
+    return { ok: true, message: `Coupon "${code}" applied!` };
+  };
+
+  const removeCoupon = () => persistCoupon(null);
+
+  const clearCouponIfInvalid = () => {
+    if (!appliedCoupon) return;
+    const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    if (!validateCoupon(appliedCoupon, subtotal).valid) persistCoupon(null);
+  };
+
+  // ---- Auth Operations ------------------------------------------------
+  const loginUser = async (email, password) => {
+    const res = await backend.auth.signIn(email, password);
+    if (res.success) {
+      setUserAuth(res.user);
+      addToast(`Welcome back, ${res.user.name}!`);
+    } else {
+      addToast(res.error || 'Sign in failed', 'error');
+    }
+    return res;
+  };
+
+  const registerUser = async (email, password, name) => {
+    const res = await backend.auth.signUp(email, password, name);
+    if (res.success) {
+      if (res.needsConfirm) {
+        addToast('Almost there — check your inbox to confirm your email, then sign in.', 'info');
+      } else if (res.user) {
+        setUserAuth(res.user);
+        addToast(`Welcome, ${res.user.name}! Your account is ready.`);
+      }
+    } else {
+      addToast(res.error || 'Registration failed', 'error');
+    }
+    return res;
+  };
+
+  const logoutUser = async () => {
+    await backend.auth.signOut('user');
     setUserAuth(null);
-    localStorage.removeItem(STORAGE_KEYS.AUTH);
+    if (backend.isSupabase) setAdminAuth(null);
     addToast('Logged out of storefront session', 'info');
   };
 
-  // Admin Auth Operations
-  const loginAdmin = (email, password) => {
-    if (email === 'admin@brand.com' && password === 'Admin@123') {
-      const adminSession = {
-        name: 'Master Admin',
-        email: email,
-        token: 'demo-admin-token-' + Date.now()
-      };
-      setAdminAuth(adminSession);
-      setStorageData(STORAGE_KEYS.ADMIN_AUTH, adminSession);
+  // Mobile OTP login — demo mode shows the code on screen, Supabase mode
+  // sends a real SMS once the Phone provider is enabled on the project.
+  const sendOtp = async (phone) => {
+    try {
+      const res = await backend.auth.sendOtp(phone);
+      if (res.success) {
+        if (res.demoCode) {
+          addToast(`Demo OTP for ${res.phone}: ${res.demoCode}`, 'info');
+        } else {
+          addToast(`OTP sent to ${res.phone}`, 'success');
+        }
+      } else {
+        addToast(res.error || 'Could not send OTP', 'error');
+      }
+      return res;
+    } catch (e) {
+      addToast(e.message || 'Could not send OTP', 'error');
+      return { success: false, error: e.message };
+    }
+  };
+
+  const verifyOtp = async (phone, code) => {
+    try {
+      const res = await backend.auth.verifyOtp(phone, code);
+      if (res.success) {
+        setUserAuth(res.user);
+        addToast(`Welcome, ${res.user.name}!`);
+      } else {
+        addToast(res.error || 'OTP verification failed', 'error');
+      }
+      return res;
+    } catch (e) {
+      addToast(e.message || 'OTP verification failed', 'error');
+      return { success: false, error: e.message };
+    }
+  };
+
+  const updateProfile = async (patch) => {
+    try {
+      const res = await backend.auth.updateProfile(patch);
+      if (res.success) {
+        setUserAuth(res.user);
+        if (adminAuth && res.user?.name) {
+          setAdminAuth({ ...adminAuth, name: res.user.name, email: res.user.email || adminAuth.email });
+        }
+        addToast('Profile updated successfully');
+      } else {
+        addToast(res.error || 'Profile update failed', 'error');
+      }
+      return res;
+    } catch (e) {
+      addToast(e.message || 'Profile update failed', 'error');
+      return { success: false, error: e.message };
+    }
+  };
+
+  const changePassword = async (newPassword) => {
+    try {
+      const res = await backend.auth.changePassword(newPassword);
+      if (res.success) addToast('Password changed successfully');
+      else addToast(res.error || 'Password change failed', 'error');
+      return res;
+    } catch (e) {
+      addToast(e.message || 'Password change failed', 'error');
+      return { success: false, error: e.message };
+    }
+  };
+
+  const resetPassword = async (email) => {
+    try {
+      const res = await backend.auth.resetPassword(email);
+      addToast(res.message || res.error || 'Reset link sent', res.success ? 'success' : 'error');
+      return res;
+    } catch (e) {
+      addToast(e.message || 'Could not send reset link', 'error');
+      return { success: false, error: e.message };
+    }
+  };
+
+  const loginAdmin = async (email, password) => {
+    const res = await backend.auth.adminSignIn(email, password);
+    if (res.success) {
+      setAdminAuth(res.admin);
       addToast('Authenticated as Brand Administrator');
       return { success: true };
     }
-    return { success: false, error: 'Invalid admin credentials. Use demo: admin@brand.com / Admin@123' };
+    return { success: false, error: res.error };
   };
 
-  const logoutAdmin = () => {
+  const logoutAdmin = async () => {
+    await backend.auth.signOut('admin');
     setAdminAuth(null);
-    localStorage.removeItem(STORAGE_KEYS.ADMIN_AUTH);
+    if (backend.isSupabase) setUserAuth(null);
     addToast('Logged out of Admin Portal', 'info');
   };
 
-  // Place Order Action
-  const createOrder = (orderData) => {
-    const newOrders = [orderData, ...orders];
-    updateOrders(newOrders);
+  // ---- Orders ----------------------------------------------------------
+  // Places an order end-to-end: persists it (Supabase RPC does insert +
+  // stock decrement atomically; local mode mirrors the original demo),
+  // updates in-memory state and clears the cart.
+  const createOrder = async (orderData) => {
+    const finalOrder = { ...orderData, userId: userAuth ? userAuth.id : null };
 
-    // Update product stock
-    const updatedProducts = products.map((prod) => {
-      const orderedItem = orderData.items.find((item) => item.id === prod.id);
-      if (orderedItem) {
-        return {
-          ...prod,
-          stock: Math.max(0, prod.stock - orderedItem.quantity)
-        };
-      }
-      return prod;
-    });
-    updateProducts(updatedProducts);
+    // Attach the shared coupon economics if the caller didn't already.
+    const itemsSubtotal = (finalOrder.items || []).reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
+    );
+    const couponCheck = appliedCoupon ? validateCoupon(appliedCoupon, itemsSubtotal) : null;
+    const couponDiscount = couponCheck?.valid ? computeDiscount(appliedCoupon, itemsSubtotal) : 0;
+    if (finalOrder.discount === undefined || finalOrder.discount === null) {
+      finalOrder.discount = couponDiscount;
+    }
+    if (couponDiscount > 0 && !finalOrder.couponCode) {
+      finalOrder.couponCode = appliedCoupon.code;
+    }
 
+    const decrementStock = (list) =>
+      list.map((prod) => {
+        const orderedItem = finalOrder.items.find((item) => item.id === prod.id);
+        if (orderedItem) {
+          return { ...prod, stock: Math.max(0, (prod.stock || 0) - orderedItem.quantity) };
+        }
+        return prod;
+      });
+
+    if (backend.isSupabase) {
+      await backend.createOrder(finalOrder); // throws on failure
+      setOrders((prev) => [finalOrder, ...prev]);
+      setProducts(decrementStock); // DB stock already updated by the RPC
+    } else {
+      updateOrders([finalOrder, ...contentRef.current.orders]);
+      updateProducts(decrementStock(contentRef.current.products));
+    }
+
+    // Count the redemption. Anonymous clients can't UPDATE coupons under
+    // RLS, so in Supabase mode only admins record usage (demo/local always).
+    if (finalOrder.discount > 0 && appliedCoupon && (!backend.isSupabase || adminAuth)) {
+      updateCoupons(
+        contentRef.current.coupons.map((c) =>
+          c.id === appliedCoupon.id ? { ...c, usedCount: (c.usedCount || 0) + 1 } : c
+        )
+      );
+    }
+
+    persistCoupon(null);
     clearCart();
-    return orderData;
+    return finalOrder;
+  };
+
+  // Local-state-only order patch (used after the server has already
+  // persisted the change, e.g. Razorpay verification).
+  const patchOrderLocal = (orderId, patch) => {
+    setOrders((prev) => prev.map((o) => (o.id === orderId ? { ...o, ...patch } : o)));
+  };
+
+  // Guest-safe tracking lookup (RPC in Supabase mode).
+  const trackOrder = async (orderId, phone) => {
+    try {
+      return await backend.trackOrder(orderId, phone);
+    } catch (e) {
+      addToast(`Tracking lookup failed: ${e.message}`, 'error');
+      return null;
+    }
+  };
+
+  const resetDemoData = async () => {
+    try {
+      await backend.resetDemo(); // reloads the page on completion
+    } catch (e) {
+      addToast(`Reset failed: ${e.message}`, 'error');
+    }
   };
 
   return (
@@ -296,16 +540,29 @@ export const StoreProvider = ({ children }) => {
         clearCart,
         isCartOpen,
         setIsCartOpen,
-        wishlist,
-        toggleWishlist,
-        isWishlisted,
-        userAuth,
-        loginUser,
-        logoutUser,
+      wishlist,
+      toggleWishlist,
+      isWishlisted,
+      appliedCoupon,
+      applyCoupon,
+      removeCoupon,
+      clearCouponIfInvalid,
+      userAuth,
+      loginUser,
+      registerUser,
+      sendOtp,
+      verifyOtp,
+      logoutUser,
+      updateProfile,
+      changePassword,
+      resetPassword,
         adminAuth,
         loginAdmin,
         logoutAdmin,
+        authReady,
         createOrder,
+        patchOrderLocal,
+        trackOrder,
         toasts,
         addToast,
         removeToast,

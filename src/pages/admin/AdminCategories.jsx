@@ -10,13 +10,17 @@ import { Plus, Edit, Trash2 } from 'lucide-react';
 
 export const AdminCategories = () => {
   useDocumentTitle('Category Management');
-  const { categories, setCategories, addToast } = useStore();
+  const { categories, setCategories, products, setProducts, addToast } = useStore();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [image, setImage] = useState('');
+
+  // Live product count — never reads the seeded itemCount field
+  const countFor = (cat) =>
+    products.filter((p) => p.categorySlug === cat.slug || p.category === cat.name).length;
 
   const openCreateModal = () => {
     setEditingId(null);
@@ -36,31 +40,54 @@ export const AdminCategories = () => {
 
   const handleSave = (e) => {
     e.preventDefault();
-    if (!name) return;
-    const slug = slugify(name);
+    if (!name || !name.trim()) {
+      addToast('Category name is required', 'error');
+      return;
+    }
+    const trimmed = name.trim();
+    const slug = slugify(trimmed);
 
     if (editingId) {
-      setCategories(categories.map(c => c.id === editingId ? { ...c, name, slug, description, image } : c));
-      addToast(`Updated category "${name}"`);
+      setCategories(categories.map(c => c.id === editingId ? { ...c, name: trimmed, slug, description, image } : c));
+      addToast(`Updated category "${trimmed}"`);
     } else {
       const newCat = {
         id: `cat-${Date.now()}`,
-        name,
+        name: trimmed,
         slug,
         description,
         image: image || "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?q=80&w=800&auto=format&fit=crop",
         featured: false,
-        itemCount: 0
+        itemCount: products.filter((p) => p.categorySlug === slug || p.category === trimmed).length
       };
       setCategories([...categories, newCat]);
-      addToast(`Created category "${name}"`);
+      addToast(`Created category "${trimmed}"`);
     }
     setIsModalOpen(false);
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = (cat) => {
+    const count = countFor(cat);
+
+    if (count > 0) {
+      const confirmed = window.confirm(
+        `"${cat.name}" contains ${count} product${count === 1 ? '' : 's'}.\n\n` +
+        'OK — delete the category and leave those products uncategorized.\n' +
+        'Cancel — keep the category.'
+      );
+      if (!confirmed) return;
+      setProducts(products.map((p) =>
+        p.categorySlug === cat.slug || p.category === cat.name
+          ? { ...p, category: '', categorySlug: '' }
+          : p
+      ));
+      setCategories(categories.filter(c => c.id !== cat.id));
+      addToast(`Category removed — ${count} product${count === 1 ? '' : 's'} left uncategorized`);
+      return;
+    }
+
     if (window.confirm('Delete category?')) {
-      setCategories(categories.filter(c => c.id !== id));
+      setCategories(categories.filter(c => c.id !== cat.id));
       addToast('Category removed');
     }
   };
@@ -81,11 +108,22 @@ export const AdminCategories = () => {
     },
     { header: 'Description', accessor: 'description' },
     {
+      header: 'Products',
+      render: (row) => {
+        const count = countFor(row);
+        return (
+          <span style={{ color: count > 0 ? 'var(--olive-deep)' : '#999', fontWeight: 700 }}>
+            {count}
+          </span>
+        );
+      }
+    },
+    {
       header: 'Actions',
       render: (row) => (
         <div style={{ display: 'flex', gap: '8px' }}>
           <button onClick={() => openEditModal(row)} style={{ cursor: 'pointer', padding: '4px' }}><Edit size={16} color="var(--olive)" /></button>
-          <button onClick={() => handleDelete(row.id)} style={{ cursor: 'pointer', padding: '4px' }}><Trash2 size={16} color="var(--terracotta)" /></button>
+          <button onClick={() => handleDelete(row)} style={{ cursor: 'pointer', padding: '4px' }}><Trash2 size={16} color="var(--terracotta)" /></button>
         </div>
       )
     }
@@ -100,7 +138,7 @@ export const AdminCategories = () => {
         </Button>
       </div>
 
-      <DataTable columns={columns} data={categories} />
+      <DataTable columns={columns} data={categories} rowKey="id" />
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={editingId ? 'Edit Category' : 'Create Category'}>
         <form onSubmit={handleSave}>

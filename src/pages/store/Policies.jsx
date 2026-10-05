@@ -28,7 +28,7 @@ export const PolicyPage = ({ type }) => {
           {type === 'shipping' && (
             <div>
               <h3>Dispatch & Shipping Thresholds</h3>
-              <p>All orders placed before 2:00 PM IST are processed and dispatched on the same day from our estate facility. Orders exceeding <strong>₹{config.freeShippingThreshold || 999}</strong> qualify for complimentary express delivery across India.</p>
+              <p>All orders placed before 2:00 PM IST are processed and dispatched on the same day from our facility. Orders exceeding <strong>₹{config.freeShippingThreshold || 999}</strong> qualify for complimentary express delivery across India.</p>
               <h3>Transit Times</h3>
               <p>Metro cities: 2-3 business days. Regional & tier-2 cities: 3-5 business days. Remote pin-codes: via India Post Speed Post.</p>
             </div>
@@ -37,14 +37,14 @@ export const PolicyPage = ({ type }) => {
           {type === 'returns' && (
             <div>
               <h3>Harvest Guarantee & Returns</h3>
-              <p>We pride ourselves on flawless artisan quality. If any glass jar, seal, or grow log arrives damaged or compromised, please contact our concierge within 48 hours of receipt for a hassle-free replacement or full refund.</p>
+              <p>If any jar, pouch, kit, or pack arrives damaged or compromised, please contact our team within 48 hours of receipt for a hassle-free replacement or full refund.</p>
             </div>
           )}
 
           {type === 'privacy' && (
             <div>
               <h3>Data Protection</h3>
-              <p>Your personal data and address information are strictly used for order fulfillment and customer concierge updates. We never sell or share user data with third-party advertising networks.</p>
+              <p>Your personal data and address information are strictly used for order fulfillment and customer support updates. We never sell or share user data with third-party advertising networks.</p>
             </div>
           )}
 

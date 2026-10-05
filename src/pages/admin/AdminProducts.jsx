@@ -6,7 +6,7 @@ import { Modal } from '../../components/common/Modal';
 import { Button } from '../../components/common/Button';
 import { FormField } from '../../components/common/FormField';
 import { formatCurrency, slugify } from '../../utils/formatters';
-import { Plus, Edit, Copy, Trash2, Image } from 'lucide-react';
+import { Plus, Edit, Copy, Trash2 } from 'lucide-react';
 
 export const AdminProducts = () => {
   useDocumentTitle('Product Catalog Management');
@@ -22,11 +22,27 @@ export const AdminProducts = () => {
   const [compareAtPrice, setCompareAtPrice] = useState('');
   const [stock, setStock] = useState('');
   const [sku, setSku] = useState('');
-  const [tag, setTag] = useState('Organic');
+  const [tagsText, setTagsText] = useState('Organic');
+  const [applyToVariants, setApplyToVariants] = useState(true);
   const [shortDesc, setShortDesc] = useState('');
   const [longDesc, setLongDesc] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [imagePreview, setImagePreview] = useState('');
+
+  const parseTags = (text) => String(text || '').split(',').map((t) => t.trim()).filter(Boolean);
+
+  // Only ever create slugs for new products; existing ones are reused so
+  // shared links keep resolving. Duplicates get a -2 / -3 suffix.
+  const uniqueSlug = (base, ignoreId = null) => {
+    const baseSlug = slugify(base) || 'product';
+    let candidate = baseSlug;
+    let suffix = 2;
+    while (products.some((p) => p.slug === candidate && p.id !== ignoreId)) {
+      candidate = `${baseSlug}-${suffix}`;
+      suffix += 1;
+    }
+    return candidate;
+  };
 
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
@@ -47,7 +63,8 @@ export const AdminProducts = () => {
     setCompareAtPrice('');
     setStock('25');
     setSku(`SKU-${Math.floor(1000 + Math.random() * 9000)}`);
-    setTag('Organic');
+    setTagsText('Organic');
+    setApplyToVariants(true);
     setShortDesc('');
     setLongDesc('');
     setImageUrl('');
@@ -63,7 +80,8 @@ export const AdminProducts = () => {
     setCompareAtPrice(product.compareAtPrice || '');
     setStock(product.stock);
     setSku(product.sku);
-    setTag(product.tags?.[0] || 'Organic');
+    setTagsText((product.tags || []).join(', '));
+    setApplyToVariants(true);
     setShortDesc(product.shortDescription);
     setLongDesc(product.longDescription);
     setImageUrl(product.images?.[0] || '');
@@ -84,20 +102,29 @@ export const AdminProducts = () => {
     if (editingId) {
       const updated = products.map((p) => {
         if (p.id === editingId) {
+          const oldBasePrice = Number(p.price);
+          const newBasePrice = Number(price);
+          let variants = p.variants;
+          if (applyToVariants && variants && newBasePrice !== oldBasePrice) {
+            // Variants priced at the old base follow the new base price;
+            // deliberately-priced variants are left untouched.
+            variants = variants.map((v) => (Number(v.price) === oldBasePrice ? { ...v, price: newBasePrice } : v));
+          }
           return {
             ...p,
             name,
-            slug: slugify(name),
+            slug: p.slug || uniqueSlug(name, p.id),
             category: catObj ? catObj.name : p.category,
             categorySlug,
-            price: Number(price),
+            price: newBasePrice,
             compareAtPrice: compareAtPrice ? Number(compareAtPrice) : null,
             stock: Number(stock),
             sku,
-            tags: [tag],
+            tags: parseTags(tagsText),
             shortDescription: shortDesc,
             longDescription: longDesc,
-            images: [finalImage, ...(p.images ? p.images.slice(1) : [])]
+            images: [finalImage, ...(p.images ? p.images.slice(1) : [])],
+            ...(variants ? { variants } : {})
           };
         }
         return p;
@@ -107,7 +134,7 @@ export const AdminProducts = () => {
     } else {
       const newProd = {
         id: `prod-${Date.now()}`,
-        slug: slugify(name),
+        slug: uniqueSlug(name),
         name,
         category: catObj ? catObj.name : 'Mushroom Powder',
         categorySlug,
@@ -117,13 +144,13 @@ export const AdminProducts = () => {
         sku,
         rating: 5.0,
         reviewCount: 0,
-        shortDescription: shortDesc || 'Artisan estate harvest',
+        shortDescription: shortDesc || 'Fresh from our farm',
         longDescription: longDesc || 'Crafted with traditional mountain log methods.',
         ingredients: '100% Organic Fungi',
-        benefits: ['High purity', 'Artisanal harvest'],
+        benefits: ['Fresh from our farm', 'Carefully handled'],
         usage: 'Consume daily with warm tonic.',
         shelfLife: '24 Months',
-        tags: [tag],
+        tags: parseTags(tagsText),
         images: [finalImage],
         status: 'active'
       };
@@ -138,7 +165,7 @@ export const AdminProducts = () => {
       ...product,
       id: `prod-${Date.now()}`,
       name: `${product.name} (Copy)`,
-      slug: slugify(`${product.name}-copy`),
+      slug: uniqueSlug(`${product.name}-copy`),
       sku: `${product.sku}-COPY`
     };
     setProducts([dup, ...products]);
@@ -221,14 +248,7 @@ export const AdminProducts = () => {
                 ))}
               </select>
             </div>
-            <div className="form-group">
-              <label className="form-label">Tag Badge</label>
-              <select className="form-select" value={tag} onChange={(e) => setTag(e.target.value)}>
-                <option value="Organic">Organic</option>
-                <option value="Bestseller">Bestseller</option>
-                <option value="New">New Season</option>
-              </select>
-            </div>
+            <FormField label="Tags (comma separated)" placeholder="Organic, Bestseller" value={tagsText} onChange={(e) => setTagsText(e.target.value)} />
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' }}>
@@ -236,6 +256,20 @@ export const AdminProducts = () => {
             <FormField label="Compare Price (₹)" type="number" value={compareAtPrice} onChange={(e) => setCompareAtPrice(e.target.value)} />
             <FormField label="Stock Units *" type="number" value={stock} onChange={(e) => setStock(e.target.value)} required />
           </div>
+
+          {editingId && (
+            <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <input
+                type="checkbox"
+                id="apply-base-price"
+                checked={applyToVariants}
+                onChange={(e) => setApplyToVariants(e.target.checked)}
+              />
+              <label htmlFor="apply-base-price" className="form-label" style={{ marginBottom: 0 }}>
+                Apply base price to all variants
+              </label>
+            </div>
+          )}
 
           <FormField label="SKU Code" value={sku} onChange={(e) => setSku(e.target.value)} />
           <FormField label="Short Description" value={shortDesc} onChange={(e) => setShortDesc(e.target.value)} />

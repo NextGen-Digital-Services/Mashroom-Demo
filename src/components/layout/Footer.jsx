@@ -15,7 +15,7 @@ export const Footer = () => {
     }
     const newSubscriber = { id: `sub-${Date.now()}`, email, date: new Date().toISOString().split('T')[0] };
     setSubscribers([newSubscriber, ...subscribers]);
-    addToast('Thank you for subscribing to our Tuscan Harvest Journal!');
+    addToast('Thank you for subscribing to our Mushroom Journal!');
     setEmail('');
   };
 
@@ -44,14 +44,16 @@ export const Footer = () => {
           {/* Direct Shop Navigation */}
           <div>
             <h4 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.2rem', color: 'var(--gold)', marginBottom: '16px' }}>
-              Artisan Collections
+              Shop Our Range
             </h4>
             <ul style={{ listStyle: 'none', fontSize: '0.85rem', lineHeight: 2.2, color: '#C8D1BE' }}>
-              <li><Link to="/category/mushroom-powder">Mushroom Powders</Link></li>
-              <li><Link to="/category/mushroom-pickle">Mountain Pickles</Link></li>
-              <li><Link to="/category/sun-dried-mushrooms">Sun-Dried Wild Fungi</Link></li>
-              <li><Link to="/category/home-growing-kit">Home Cultivation Logs</Link></li>
-              <li><Link to="/category/farm-combo-pack">Reserve Gift Sets</Link></li>
+              <li><Link to="/category/fresh-mushrooms">Fresh Mushrooms</Link></li>
+              <li><Link to="/category/mushroom-spawn">Mushroom Spawn</Link></li>
+              <li><Link to="/category/mushroom-powder">Mushroom Powder</Link></li>
+              <li><Link to="/category/mushroom-pickle">Mushroom Pickle</Link></li>
+              <li><Link to="/category/sun-dried-mushrooms">Sun-Dried Mushrooms</Link></li>
+              <li><Link to="/category/home-growing-kit">Home Growing Kit</Link></li>
+              <li><Link to="/category/farm-combo-pack">Farm Combo Pack</Link></li>
             </ul>
           </div>
 
@@ -77,7 +79,7 @@ export const Footer = () => {
               Harvest Gazette
             </h4>
             <p style={{ fontSize: '0.82rem', color: '#C8D1BE', marginBottom: '16px' }}>
-              Subscribe for seasonal harvest releases, recipes from our estate chef, and exclusive offerings.
+              Subscribe for new arrivals, recipes, and updates from our farm.
             </p>
             <form onSubmit={handleSubscribe} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <input
@@ -95,7 +97,7 @@ export const Footer = () => {
                 }}
               />
               <button type="submit" className="btn btn-accent btn-sm" style={{ width: '100%' }}>
-                Join Estate Club <ArrowRight size={14} />
+                Join The Club <ArrowRight size={14} />
               </button>
             </form>
           </div>
@@ -116,7 +118,7 @@ export const Footer = () => {
 
         {/* Bottom Copyright */}
         <div style={{ textAlign: 'center', marginTop: '24px', fontSize: '0.75rem', color: '#A0AB94' }}>
-          © {new Date().getFullYear()} {config.name}. All Rights Reserved. Handcrafted Tuscan Fungi Heritage.
+          © {new Date().getFullYear()} {config.name}. All Rights Reserved. From Our Farm. With Experience. With Care.
         </div>
       </div>
     </footer>

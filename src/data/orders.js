@@ -13,28 +13,28 @@ export const initialOrders = [
     },
     items: [
       {
-        id: "prod-101",
-        name: "Artisanal Lion's Mane Focus Powder",
-        variant: "100g Glass Jar",
-        price: 799,
+        id: "prod-105",
+        name: "Mushroom Powder",
+        variant: "100g Pouch",
+        price: 449,
         quantity: 2,
         image: "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?q=80&w=800&auto=format&fit=crop"
       },
       {
-        id: "prod-104",
-        name: "Himachali Spiced Oyster Mushroom Pickle",
-        variant: "250g Glass Mason Jar",
+        id: "prod-106",
+        name: "Oyster Mushroom Pickle",
+        variant: "250g Jar",
         price: 349,
         quantity: 1,
         image: "https://images.unsplash.com/photo-1534483509719-3feaee7c30da?q=80&w=800&auto=format&fit=crop"
       }
     ],
-    subtotal: 1947,
+    subtotal: 1247,
     discount: 100,
     couponCode: "WELCOME10",
-    tax: 92,
+    tax: 57,
     shippingFee: 0,
-    total: 1939,
+    total: 1204,
     status: "Delivered",
     paymentMethod: "UPI",
     paymentStatus: "Paid",
@@ -61,9 +61,9 @@ export const initialOrders = [
     },
     items: [
       {
-        id: "prod-113",
-        name: "Pink Pearl Oyster Mushroom Home Grow Log",
-        variant: "Single Grow Kit Box",
+        id: "prod-112",
+        name: "Oyster Mushroom Home Growing Kit",
+        variant: "Single Grow Kit",
         price: 699,
         quantity: 1,
         image: "https://images.unsplash.com/photo-1518977676601-b53f82aba655?q=80&w=800&auto=format&fit=crop"
@@ -101,20 +101,20 @@ export const initialOrders = [
     },
     items: [
       {
-        id: "prod-107",
-        name: "Wild Foraged Himalayan Morel (Guchhi)",
-        variant: "50g Luxury Box",
-        price: 3499,
+        id: "prod-109",
+        name: "Sun-Dried Shiitake Mushrooms",
+        variant: "100g Pouch",
+        price: 499,
         quantity: 1,
         image: "https://images.unsplash.com/photo-1504544750208-dc0358e63f7f?q=80&w=800&auto=format&fit=crop"
       }
     ],
-    subtotal: 3499,
-    discount: 350,
-    couponCode: "FUNGI15",
-    tax: 157,
-    shippingFee: 0,
-    total: 3306,
+    subtotal: 499,
+    discount: 0,
+    couponCode: "",
+    tax: 25,
+    shippingFee: 99,
+    total: 623,
     status: "Confirmed",
     paymentMethod: "Cash on Delivery",
     paymentStatus: "Pending",

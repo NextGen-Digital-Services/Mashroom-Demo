@@ -10,7 +10,10 @@ export const OrderSuccess = () => {
   const { id } = useParams();
   const { orders } = useStore();
 
-  const order = orders.find((o) => o.id === id) || orders[0];
+  // Never fall back to an unrelated order: in Supabase mode the placed
+  // order may be RLS-hidden on a later visit, so degrade to a generic
+  // confirmation keyed on the URL id instead of showing someone else's bill.
+  const order = orders.find((o) => o.id === id);
   useDocumentTitle(order ? `Order ${order.id} Confirmed` : 'Order Placed');
 
   const handlePrint = () => {
@@ -19,14 +22,32 @@ export const OrderSuccess = () => {
 
   if (!order) {
     return (
-      <div className="section-padding" style={{ textAlign: 'center' }}>
-        <div className="container">
-          <h2>Order Not Found</h2>
-          <Link to="/">Return Home</Link>
+      <div className="section-padding">
+        <div className="container" style={{ maxWidth: '640px', textAlign: 'center' }}>
+          <div style={{ backgroundColor: 'var(--parchment)', padding: '40px 24px', borderRadius: 'var(--radius-lg)', border: '1px solid var(--line)' }}>
+            <CheckCircle size={56} color="var(--olive)" style={{ marginBottom: '16px' }} />
+            <span className="eyebrow">Thank You For Your Order</span>
+            <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-3xl)', marginBottom: '8px' }}>
+              Order #{id} Received!
+            </h1>
+            <p style={{ color: '#555', fontSize: '0.92rem', marginBottom: '24px' }}>
+              Your order is confirmed. Use the order id below to track delivery anytime — no login required.
+            </p>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', flexWrap: 'wrap' }}>
+              <Link to={`/track-order?orderId=${id}`} className="btn btn-primary btn-sm">
+                <Package size={14} /> Track Order Progress
+              </Link>
+              <Link to="/shop" className="btn btn-secondary btn-sm">
+                Continue Shopping <ArrowRight size={14} />
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     );
   }
+
+  const customer = order.customer || {};
 
   return (
     <div className="section-padding">
@@ -70,14 +91,14 @@ export const OrderSuccess = () => {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '24px', fontSize: '0.88rem' }}>
             <div>
               <strong style={{ color: 'var(--gold)', textTransform: 'uppercase', fontSize: '0.75rem', letterSpacing: '0.08em', display: 'block', marginBottom: '4px' }}>Customer</strong>
-              <div>{order.customer.name}</div>
-              <div>{order.customer.phone}</div>
-              <div>{order.customer.email}</div>
+              <div>{customer.name}</div>
+              <div>{customer.phone}</div>
+              <div>{customer.email}</div>
             </div>
             <div>
               <strong style={{ color: 'var(--gold)', textTransform: 'uppercase', fontSize: '0.75rem', letterSpacing: '0.08em', display: 'block', marginBottom: '4px' }}>Shipping Address</strong>
-              <div>{order.customer.address}</div>
-              <div>{order.customer.city}, {order.customer.state} - {order.customer.pincode}</div>
+              <div>{customer.address}</div>
+              <div>{customer.city}, {customer.state} - {customer.pincode}</div>
             </div>
           </div>
 
@@ -106,6 +127,11 @@ export const OrderSuccess = () => {
           {/* Financial summary */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', fontSize: '0.9rem', gap: '6px' }}>
             <div>Subtotal: <strong>{formatCurrency(order.subtotal)}</strong></div>
+            {order.discount > 0 && (
+              <div style={{ color: 'var(--terracotta)' }}>
+                Coupon {order.couponCode ? `(${order.couponCode})` : ''}: <strong>-{formatCurrency(order.discount)}</strong>
+              </div>
+            )}
             <div>GST Tax: <strong>{formatCurrency(order.tax)}</strong></div>
             <div>Shipping: <strong>{order.shippingFee === 0 ? 'FREE' : formatCurrency(order.shippingFee)}</strong></div>
             <div style={{ fontSize: '1.2rem', color: 'var(--olive-deep)', fontWeight: 700, borderTop: '1px solid var(--line)', paddingTop: '8px', marginTop: '4px' }}>

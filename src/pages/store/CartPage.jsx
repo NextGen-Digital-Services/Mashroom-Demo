@@ -1,22 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useStore } from '../../context/StoreContext';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 import { Button } from '../../components/common/Button';
 import { EmptyState } from '../../components/common/EmptyState';
 import { formatCurrency } from '../../utils/formatters';
-import { Plus, Minus, Trash2, ArrowRight, ShoppingBag } from 'lucide-react';
+import { computeTotals } from '../../lib/pricing';
+import { Plus, Minus, Trash2, ArrowRight, ShoppingBag, Tag } from 'lucide-react';
 
 export const CartPage = () => {
   useDocumentTitle('Shopping Basket');
-  const { cart, updateCartQuantity, removeFromCart, clearCart, config, setIsCartOpen } = useStore();
+  const {
+    cart,
+    updateCartQuantity,
+    removeFromCart,
+    clearCart,
+    config,
+    shippingTax,
+    appliedCoupon,
+    applyCoupon,
+    removeCoupon,
+    addToast,
+    setIsCartOpen
+  } = useStore();
   const navigate = useNavigate();
+  const [couponInput, setCouponInput] = useState('');
 
-  const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const freeShippingThreshold = config.freeShippingThreshold || 999;
-  const shippingFee = subtotal >= freeShippingThreshold || subtotal === 0 ? 0 : (config.defaultShippingFee || 99);
-  const tax = Math.round(subtotal * ((config.gstPercentage || 5) / 100));
-  const total = subtotal + shippingFee + tax;
+  const totals = computeTotals({ cart, config, shippingTax, coupon: appliedCoupon });
+  const { subtotal, discount, shippingFee, tax, total } = totals;
+
+  const handleApplyCoupon = (e) => {
+    e.preventDefault();
+    const res = applyCoupon(couponInput);
+    if (res.ok) {
+      addToast(res.message);
+      setCouponInput('');
+    } else {
+      addToast(res.message, 'error');
+    }
+  };
 
   if (cart.length === 0) {
     return (
@@ -91,13 +113,59 @@ export const CartPage = () => {
               Order Breakdown
             </h3>
 
+            {/* Coupon */}
+            <form onSubmit={handleApplyCoupon} style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+              <input
+                type="text"
+                placeholder="Coupon code"
+                value={couponInput}
+                onChange={(e) => setCouponInput(e.target.value)}
+                className="form-input"
+                style={{ textTransform: 'uppercase', fontSize: '0.8rem' }}
+              />
+              <Button type="submit" size="sm" variant="secondary">
+                <Tag size={12} /> Apply
+              </Button>
+            </form>
+
+            {appliedCoupon && (
+              <div
+                style={{
+                  background: totals.couponValid ? '#E6F4EA' : '#FDECEA',
+                  color: totals.couponValid ? '#137333' : '#B3261E',
+                  padding: '6px 12px',
+                  borderRadius: '4px',
+                  fontSize: '0.75rem',
+                  marginBottom: '16px',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  gap: '8px'
+                }}
+              >
+                <span>
+                  {totals.couponValid ? (
+                    <>Applied: <strong>{appliedCoupon.code}</strong> (-{formatCurrency(discount)})</>
+                  ) : (
+                    <strong>{totals.couponReason}</strong>
+                  )}
+                </span>
+                <button onClick={removeCoupon} style={{ border: 'none', background: 'none', cursor: 'pointer', color: 'inherit', fontWeight: 700 }}>✕</button>
+              </div>
+            )}
+
             <div style={{ fontSize: '0.9rem', lineHeight: 2 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span>Subtotal</span>
                 <span>{formatCurrency(subtotal)}</span>
               </div>
+              {discount > 0 && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--terracotta)' }}>
+                  <span>Coupon Discount</span>
+                  <span>-{formatCurrency(discount)}</span>
+                </div>
+              )}
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span>Estimated GST ({config.gstPercentage}%)</span>
+                <span>Estimated GST ({totals.gstPercentage}%)</span>
                 <span>{formatCurrency(tax)}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>

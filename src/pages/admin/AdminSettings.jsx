@@ -9,12 +9,13 @@ export const AdminSettings = () => {
   useDocumentTitle('Store Settings & Data Reset');
   const { config, updateConfig, resetDemoData, addToast } = useStore();
 
-  const [name, setName] = useState(config.name || '[BRAND_NAME]');
+  const [name, setName] = useState(config.name || 'MANASI');
   const [tagline, setTagline] = useState(config.tagline || '');
   const [email, setEmail] = useState(config.email || '');
   const [phone, setPhone] = useState(config.phone || '');
   const [address, setAddress] = useState(config.address || '');
   const [announcementText, setAnnouncementText] = useState(config.announcementText || '');
+  const [resetting, setResetting] = useState(false);
 
   const handleSaveConfig = (e) => {
     e.preventDefault();
@@ -29,16 +30,21 @@ export const AdminSettings = () => {
     });
   };
 
-  const handleResetData = () => {
+  const handleResetData = async () => {
     if (window.confirm('WARNING: This will reset all products, orders, customers and settings back to clean initial demo data. Continue?')) {
-      resetDemoData();
+      setResetting(true);
+      try {
+        await resetDemoData();
+      } finally {
+        setResetting(false);
+      }
     }
   };
 
   return (
     <div style={{ maxWidth: '750px' }}>
       <div style={{ marginBottom: '24px' }}>
-        <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.8rem' }}>Estate Store Settings</h1>
+        <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.8rem' }}>Store Settings</h1>
         <p style={{ fontSize: '0.85rem', color: '#666' }}>Update store identity, contact info, and reset demo data store.</p>
       </div>
 
@@ -68,14 +74,14 @@ export const AdminSettings = () => {
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
             <FormField
-              label="Concierge Email *"
+              label="Contact Email *"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
             <FormField
-              label="Concierge Phone *"
+              label="Contact Phone *"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               required
@@ -83,7 +89,7 @@ export const AdminSettings = () => {
           </div>
 
           <FormField
-            label="Estate Physical Address"
+            label="Physical Address"
             type="textarea"
             rows={2}
             value={address}
@@ -107,8 +113,8 @@ export const AdminSettings = () => {
           Restores all initial dummy products, categories, orders, customers, coupons, reviews and settings from data files.
         </p>
 
-        <Button onClick={handleResetData} variant="accent" size="sm">
-          <RefreshCw size={14} /> Reset Demo Data Store
+        <Button onClick={handleResetData} variant="accent" size="sm" disabled={resetting}>
+          <RefreshCw size={14} /> {resetting ? 'Resetting…' : 'Reset Demo Data Store'}
         </Button>
       </div>
 

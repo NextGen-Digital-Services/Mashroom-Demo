@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStore } from '../../context/StoreContext';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 import { FormField } from '../../components/common/FormField';
@@ -7,12 +7,21 @@ import { Save } from 'lucide-react';
 
 export const AdminShippingTax = () => {
   useDocumentTitle('Shipping Rates & GST Tax Configuration');
-  const { shippingTax, setShippingTax, addToast } = useStore();
+  const { shippingTax, setShippingTax } = useStore();
 
   const [gstPercentage, setGstPercentage] = useState(shippingTax.gstPercentage || 5);
   const [freeShippingThreshold, setFreeShippingThreshold] = useState(shippingTax.freeShippingThreshold || 999);
   const [flatShippingFee, setFlatShippingFee] = useState(shippingTax.flatShippingFee || 99);
   const [pincodeList, setPincodeList] = useState(shippingTax.pincodes ? shippingTax.pincodes.join(', ') : '');
+
+  // Re-sync once async hydration lands (otherwise the form shows stale
+  // pre-hydration values while the rest of the app already updated).
+  useEffect(() => {
+    setGstPercentage(shippingTax.gstPercentage ?? 5);
+    setFreeShippingThreshold(shippingTax.freeShippingThreshold ?? 999);
+    setFlatShippingFee(shippingTax.flatShippingFee ?? 99);
+    setPincodeList(Array.isArray(shippingTax.pincodes) ? shippingTax.pincodes.join(', ') : '');
+  }, [shippingTax]);
 
   const handleSave = (e) => {
     e.preventDefault();
@@ -23,7 +32,6 @@ export const AdminShippingTax = () => {
       pincodes: pincodeList.split(',').map(p => p.trim()).filter(Boolean)
     };
     setShippingTax(updated);
-    addToast('Shipping & Tax settings updated live!');
   };
 
   return (

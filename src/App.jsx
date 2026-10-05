@@ -4,6 +4,7 @@ import { StoreProvider } from './context/StoreContext';
 import { StoreLayout } from './components/layout/StoreLayout';
 import { ScrollToTop } from './components/common/ScrollToTop';
 import { Skeleton } from './components/common/Skeleton';
+import { ErrorBoundary } from './components/common/ErrorBoundary';
 
 // Storefront pages code-split
 const Home = lazy(() => import('./pages/store/Home').then(m => ({ default: m.Home })));
@@ -57,7 +58,8 @@ export default function App() {
     <StoreProvider>
       <Router>
         <ScrollToTop />
-        <Suspense fallback={<LoadingFallback />}>
+        <ErrorBoundary>
+          <Suspense fallback={<LoadingFallback />}>
           <Routes>
             
             {/* Admin Login Route */}
@@ -114,7 +116,8 @@ export default function App() {
               }
             />
           </Routes>
-        </Suspense>
+          </Suspense>
+        </ErrorBoundary>
       </Router>
     </StoreProvider>
   );

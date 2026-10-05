@@ -109,7 +109,7 @@ export const ReviewsSection = ({ productId, productName }) => {
 
       {/* Reviews List */}
       {productReviews.length === 0 ? (
-        <p style={{ color: '#777', fontStyle: 'italic', fontSize: '0.9rem' }}>Be the first to leave an artisan review for this harvest!</p>
+        <p style={{ color: '#777', fontStyle: 'italic', fontSize: '0.9rem' }}>Be the first to leave a review for this product!</p>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           {productReviews.map((rev) => (

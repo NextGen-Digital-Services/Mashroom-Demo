@@ -9,33 +9,42 @@ import { formatCurrency } from '../../utils/formatters';
 
 export const OrderTracking = () => {
   useDocumentTitle('Track Your Shipment');
-  const { orders } = useStore();
+  const { trackOrder } = useStore();
   const [searchParams] = useSearchParams();
 
   const [orderIdInput, setOrderIdInput] = useState(searchParams.get('orderId') || '');
   const [phoneInput, setPhoneInput] = useState('');
   const [trackedOrder, setTrackedOrder] = useState(null);
   const [searched, setSearched] = useState(false);
+  const [busy, setBusy] = useState(false);
 
   useEffect(() => {
     const paramId = searchParams.get('orderId');
     if (paramId) {
-      const match = orders.find(o => o.id.toLowerCase() === paramId.toLowerCase());
-      if (match) {
-        setTrackedOrder(match);
-        setSearched(true);
-      }
+      let cancelled = false;
+      (async () => {
+        const match = await trackOrder(paramId, '');
+        if (!cancelled && match) {
+          setTrackedOrder(match);
+          setSearched(true);
+        }
+      })();
+      return () => {
+        cancelled = true;
+      };
     }
-  }, [searchParams, orders]);
+  }, [searchParams]);
 
-  const handleTrack = (e) => {
+  const handleTrack = async (e) => {
     e.preventDefault();
+    setBusy(true);
     setSearched(true);
-    const idToFind = orderIdInput.trim().toUpperCase();
-    const match = orders.find(
-      (o) => o.id.toUpperCase() === idToFind || (phoneInput && o.customer.phone.includes(phoneInput.trim()))
-    );
-    setTrackedOrder(match || null);
+    try {
+      const match = await trackOrder(orderIdInput, phoneInput);
+      setTrackedOrder(match || null);
+    } finally {
+      setBusy(false);
+    }
   };
 
   const steps = ["Placed", "Confirmed", "Packed", "Shipped", "Delivered"];
@@ -54,7 +63,7 @@ export const OrderTracking = () => {
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
           <span className="eyebrow">Real-Time Dispatch Tracking</span>
           <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-4xl)' }}>
-            Track Your Mountain Harvest
+            Track Your Order
           </h1>
           <p style={{ color: '#666', fontSize: '0.95rem' }}>
             Enter your 5-digit Order ID (e.g., ORD-89241) or phone number below.
@@ -77,8 +86,8 @@ export const OrderTracking = () => {
               onChange={(e) => setPhoneInput(e.target.value)}
             />
             <div style={{ marginBottom: '16px' }}>
-              <Button type="submit" variant="primary" size="md">
-                <Search size={16} /> Track Order
+              <Button type="submit" variant="primary" size="md" disabled={busy}>
+                <Search size={16} /> {busy ? 'Searching…' : 'Track Order'}
               </Button>
             </div>
           </div>

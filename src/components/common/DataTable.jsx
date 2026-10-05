@@ -8,21 +8,34 @@ export const DataTable = ({
   searchable = true,
   searchPlaceholder = "Search records...",
   pageSize = 8,
-  actions
+  actions,
+  rowKey
 }) => {
   const [search, setSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
 
+  // Nested fields (customer, items, address…) must be searchable too —
+  // String({}) would just produce "[object Object]".
+  const searchableText = (value, depth = 0) => {
+    if (value === null || value === undefined || depth > 3) return '';
+    if (Array.isArray(value)) return value.map((v) => searchableText(v, depth + 1)).join(' ');
+    if (typeof value === 'object') {
+      return Object.values(value).map((v) => searchableText(v, depth + 1)).join(' ');
+    }
+    return String(value);
+  };
+
   const filteredData = data.filter((item) => {
     if (!search) return true;
     const lowerSearch = search.toLowerCase();
-    return Object.values(item).some(val => 
-      val && String(val).toLowerCase().includes(lowerSearch)
+    return Object.values(item).some((val) =>
+      searchableText(val).toLowerCase().includes(lowerSearch)
     );
   });
 
   const totalPages = Math.ceil(filteredData.length / pageSize) || 1;
-  const paginatedData = filteredData.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  const safePage = Math.min(currentPage, totalPages);
+  const paginatedData = filteredData.slice((safePage - 1) * pageSize, safePage * pageSize);
 
   return (
     <div>
@@ -57,7 +70,7 @@ export const DataTable = ({
             </thead>
             <tbody>
               {paginatedData.map((row, rIdx) => (
-                <tr key={rIdx}>
+                <tr key={(rowKey && row[rowKey]) || row.id || row.code || rIdx}>
                   {columns.map((col, cIdx) => (
                     <td key={cIdx}>
                       {col.render ? col.render(row) : row[col.accessor]}
@@ -73,7 +86,7 @@ export const DataTable = ({
       {totalPages > 1 && (
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '16px', fontSize: '0.85rem' }}>
           <span style={{ color: '#666' }}>
-            Showing {((currentPage - 1) * pageSize) + 1} to {Math.min(currentPage * pageSize, filteredData.length)} of {filteredData.length} entries
+            Showing {((safePage - 1) * pageSize) + 1} to {Math.min(safePage * pageSize, filteredData.length)} of {filteredData.length} entries
           </span>
           <div style={{ display: 'flex', gap: '8px' }}>
             <button
@@ -84,7 +97,7 @@ export const DataTable = ({
               <ChevronLeft size={16} />
             </button>
             <span style={{ padding: '6px 12px', fontWeight: 600 }}>
-              {currentPage} / {totalPages}
+              {safePage} / {totalPages}
             </span>
             <button
               onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}

@@ -22,6 +22,28 @@ An e-commerce storefront and admin panel for a high-end mushroom products brand 
 
 ---
 
+## Backend (optional — demo runs without it)
+
+The site runs fully client-side (localStorage) when no env keys are set.
+To enable real backend (Supabase DB + auth + Razorpay test payments), create `.env` from `.env.example`:
+
+```bash
+cp .env.example .env
+```
+
+1. **Supabase** — create a project at https://supabase.com, then:
+   - Copy Project URL → `VITE_SUPABASE_URL`, anon key → `VITE_SUPABASE_ANON_KEY`.
+   - SQL Editor → run `supabase/migrations/0001_init.sql`, then `supabase/migrations/0002_seed.sql`.
+   - Create your admin user in **Authentication → Users**, then run `supabase/promote_admin.sql` to grant admin role.
+2. **Razorpay (test mode)** — https://dashboard.razorpay.com → Settings → API Keys:
+   - Key ID → `VITE_RAZORPAY_KEY_ID`; Key Secret → `RAZORPAY_KEY_SECRET` (server only).
+   - For local API testing: `npx vercel dev` (needs `SUPABASE_SERVICE_ROLE_KEY` too, server only).
+3. Restart `npm run dev`. Payments show up on Checkout only when both Supabase and Razorpay keys are set; otherwise the original demo flow applies.
+
+Courier integration is mocked in `src/lib/shipments.js` (Shiprocket-ready interface, no API key yet).
+
+---
+
 ## Admin Portal Login
 
 - **URL:** `/admin/login` (or `/admin`)

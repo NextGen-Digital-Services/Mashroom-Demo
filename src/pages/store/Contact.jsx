@@ -6,7 +6,7 @@ import { Button } from '../../components/common/Button';
 import { Phone, Mail, MapPin, Send } from 'lucide-react';
 
 export const Contact = () => {
-  useDocumentTitle('Concierge & Contact Us');
+  useDocumentTitle('Contact Us');
   const { config, messages, setMessages, addToast } = useStore();
 
   const [name, setName] = useState('');
@@ -34,7 +34,7 @@ export const Contact = () => {
     };
 
     setMessages([newMsg, ...messages]);
-    addToast('Message delivered! Our estate concierge will reply shortly.');
+    addToast('Message delivered! Our farm team will reply shortly.');
     setName('');
     setEmail('');
     setPhone('');
@@ -47,9 +47,9 @@ export const Contact = () => {
       <div className="container">
         
         <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-          <span className="eyebrow">Estate Concierge</span>
+          <span className="eyebrow">Farm Concierge</span>
           <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-4xl)' }}>
-            Connect With Our Estate
+            Connect With Our Farm
           </h1>
         </div>
 
@@ -58,7 +58,7 @@ export const Contact = () => {
           {/* Info Card */}
           <div style={{ background: 'var(--olive-deep)', color: 'var(--ivory)', padding: '40px', borderRadius: 'var(--radius-lg)' }}>
             <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.8rem', color: 'var(--gold)', marginBottom: '16px' }}>
-              Valdarno Estate HQ
+              Farm Headquarters
             </h3>
             <p style={{ color: '#C8D1BE', marginBottom: '32px' }}>
               We welcome wholesale inquiries, restaurant partnerships, and farm visit reservations.

@@ -23,7 +23,7 @@ export const ProductCard = ({ product }) => {
             className="product-card-img"
             loading="lazy"
             onError={(e) => {
-              e.target.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 400 400'><rect width='400' height='400' fill='%23EFE6D2'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%234B5A34' font-family='serif' font-size='20'>[BRAND_NAME]</text></svg>";
+              e.target.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 400 400'><rect width='400' height='400' fill='%23EFE6D2'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%234B5A34' font-family='serif' font-size='20'>MANASI</text></svg>";
             }}
           />
         </Link>

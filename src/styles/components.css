@@ -290,3 +290,202 @@
   gap: 12px;
   box-shadow: var(--shadow-md);
 }
+
+/* ── Background visual treatment ────────────────────────────────
+   Sections that carry decoration get .rel-section so the botanical
+   layer and paper grain sit behind content, never over text. */
+.rel-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.rel-section > .container {
+  position: relative;
+  z-index: 1;
+}
+
+.botanical-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.botanical-layer svg {
+  display: block;
+}
+
+/* Subtle paper grain over flat colour bands */
+.paper-grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.6;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 0.3 0 0 0 0 0.25 0 0 0 0 0.18 0 0 0 0.055 0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Hero: trust line + readable title on small screens */
+.hero-trustline {
+  margin-top: 28px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--olive-deep);
+}
+
+.hero-trustline span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hero-trustline span + span::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--gold);
+  margin-right: 4px;
+}
+
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: clamp(2.2rem, 9vw, 3rem);
+  }
+}
+
+/* Category tiles: gradient scrim keeps labels legible on any photo */
+.category-tile {
+  position: relative;
+}
+
+.category-tile img {
+  filter: brightness(0.78);
+  transition: transform 0.5s ease;
+}
+
+.category-tile::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(42, 33, 26, 0) 32%, rgba(42, 33, 26, 0.8) 100%);
+  pointer-events: none;
+}
+
+.category-tile:hover img {
+  transform: scale(1.06);
+}
+
+/* ── Long-form content sections (About / Farm) ── */
+.content-lead {
+  font-size: clamp(1.02rem, 1.6vw, 1.15rem);
+  line-height: 1.75;
+  color: #444;
+  max-width: 72ch;
+}
+
+.content-section {
+  margin-bottom: var(--space-6);
+}
+
+.content-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.4rem, 2.6vw, 1.9rem);
+  color: var(--espresso);
+  margin: var(--space-6) 0 var(--space-3);
+}
+
+.content-section p {
+  color: #444;
+  line-height: 1.75;
+  font-size: 1rem;
+  margin-bottom: 14px;
+  max-width: 72ch;
+}
+
+.content-highlight {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: clamp(1.05rem, 2.2vw, 1.4rem);
+  letter-spacing: 0.08em;
+  text-align: center;
+  color: var(--olive-deep);
+  background: var(--parchment);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 22px 24px;
+  margin: var(--space-5) auto;
+  max-width: 640px;
+}
+
+.product-list-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+  gap: 14px;
+  margin-top: var(--space-4);
+}
+
+.product-list-item {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 16px 18px;
+}
+
+.product-list-item h4 {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  color: var(--olive-deep);
+  margin-bottom: 6px;
+}
+
+.product-list-item p {
+  font-size: 0.85rem;
+  color: #555;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.farm-location {
+  background: var(--parchment);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  text-align: center;
+  max-width: 620px;
+  margin: 0 auto var(--space-6);
+}
+
+.farm-statement {
+  text-align: center;
+  background: var(--olive-deep);
+  color: var(--ivory);
+  border-radius: var(--radius-lg);
+  padding: clamp(32px, 5vw, 48px) 24px;
+  margin-top: var(--space-7);
+}
+
+.farm-statement h2 {
+  font-family: var(--font-heading);
+  font-size: clamp(1.3rem, 3vw, 2rem);
+  line-height: 1.35;
+  color: var(--ivory);
+  max-width: 760px;
+  margin: 0 auto var(--space-4);
+}
+
+.farm-statement p {
+  color: #C8D1BE;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 4px 0;
+}

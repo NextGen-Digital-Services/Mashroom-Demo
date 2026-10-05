@@ -5,7 +5,7 @@ import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 import { ArrowRight } from 'lucide-react';
 
 export const Recipes = () => {
-  useDocumentTitle('Italian Culinary Journal & Recipes');
+  useDocumentTitle('Mushroom Journal & Recipes');
   const { blogs } = useStore();
 
   return (
@@ -13,7 +13,7 @@ export const Recipes = () => {
       <div className="container">
         
         <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-          <span className="eyebrow">Artisan Culinary Guides</span>
+          <span className="eyebrow">Recipes &amp; Kitchen Notes</span>
           <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-4xl)' }}>
             The Fungi Culinary Journal
           </h1>

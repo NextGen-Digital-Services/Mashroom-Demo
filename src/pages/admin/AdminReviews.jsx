@@ -3,6 +3,7 @@ import { useStore } from '../../context/StoreContext';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 import { DataTable } from '../../components/common/DataTable';
 import { Star, CheckCircle, XCircle, Trash2 } from 'lucide-react';
+import { statusSlug } from '../../utils/formatters';
 
 export const AdminReviews = () => {
   useDocumentTitle('Customer Reviews Moderation');
@@ -20,6 +21,20 @@ export const AdminReviews = () => {
     }
   };
 
+  const renderStars = (rating) => (
+    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '2px' }}>
+      {[1, 2, 3, 4, 5].map((i) => (
+        <Star
+          key={i}
+          size={14}
+          color={i <= rating ? 'var(--gold)' : '#D8D2C4'}
+          fill={i <= rating ? 'var(--gold)' : 'none'}
+        />
+      ))}
+      <span style={{ fontSize: '0.75rem', color: '#777', marginLeft: '6px' }}>{rating}</span>
+    </span>
+  );
+
   const columns = [
     {
       header: 'Product',
@@ -29,17 +44,13 @@ export const AdminReviews = () => {
     { header: 'Author', accessor: 'author' },
     {
       header: 'Rating',
-      render: (row) => (
-        <span style={{ color: 'var(--gold)', fontWeight: 700 }}>
-          {row.rating} ★
-        </span>
-      )
+      render: (row) => renderStars(row.rating)
     },
     { header: 'Title & Comment', render: (row) => <div><div style={{ fontWeight: 600 }}>{row.title}</div><div style={{ fontSize: '0.8rem', color: '#666' }}>{row.content}</div></div> },
     {
       header: 'Status',
       render: (row) => (
-        <span className={`status-pill ${row.status}`}>
+        <span className={`status-pill ${statusSlug(row.status)}`}>
           {row.status}
         </span>
       )
@@ -62,7 +73,7 @@ export const AdminReviews = () => {
         <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.8rem' }}>Review Moderation Inbox</h1>
       </div>
 
-      <DataTable columns={columns} data={reviews} searchPlaceholder="Search by product name or author..." />
+      <DataTable columns={columns} data={reviews} searchPlaceholder="Search by product name or author..." rowKey="id" />
     </div>
   );
 };

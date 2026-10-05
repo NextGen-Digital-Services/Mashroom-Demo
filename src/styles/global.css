@@ -143,3 +143,27 @@ button {
   outline: 2px solid var(--terracotta);
   outline-offset: 2px;
 }
+
+/* Invoice / packing-slip printing: hide the storefront chrome */
+@media print {
+  header,
+  footer,
+  .no-print,
+  .btn {
+    display: none !important;
+  }
+
+  body {
+    background: #fff !important;
+  }
+
+  #printable-invoice {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+
+  .section-padding {
+    padding: 0 !important;
+  }
+}

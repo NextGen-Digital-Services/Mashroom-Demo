@@ -5,6 +5,7 @@ import { Drawer } from '../common/Drawer';
 import { Button } from '../common/Button';
 import { Plus, Minus, Trash2, ArrowRight, Tag, ShoppingBag } from 'lucide-react';
 import { formatCurrency } from '../../utils/formatters';
+import { computeTotals } from '../../lib/pricing';
 
 export const CartDrawer = () => {
   const {
@@ -14,50 +15,28 @@ export const CartDrawer = () => {
     updateCartQuantity,
     removeFromCart,
     config,
-    coupons,
+    shippingTax,
+    appliedCoupon,
+    applyCoupon,
+    removeCoupon,
     addToast
   } = useStore();
 
   const navigate = useNavigate();
   const [couponInput, setCouponInput] = useState('');
-  const [appliedCoupon, setAppliedCoupon] = useState(null);
 
-  const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-
-  // Discount calculation
-  let discount = 0;
-  if (appliedCoupon) {
-    if (appliedCoupon.discountType === 'percentage') {
-      discount = Math.min((subtotal * appliedCoupon.discountValue) / 100, appliedCoupon.maxDiscount || 9999);
-    } else {
-      discount = appliedCoupon.discountValue;
-    }
-  }
-
-  const freeShippingThreshold = config.freeShippingThreshold || 999;
-  const shippingFee = subtotal >= freeShippingThreshold || subtotal === 0 ? 0 : (config.defaultShippingFee || 99);
-  const gstRate = (config.gstPercentage || 5) / 100;
-  const tax = Math.round((subtotal - discount) * gstRate);
-  const total = Math.max(0, subtotal - discount + shippingFee + tax);
+  const totals = computeTotals({ cart, config, shippingTax, coupon: appliedCoupon });
+  const { subtotal, discount, shippingFee, tax, total } = totals;
 
   const handleApplyCoupon = (e) => {
     e.preventDefault();
-    const code = couponInput.trim().toUpperCase();
-    const valid = coupons.find((c) => c.code === code && c.active);
-
-    if (!valid) {
-      addToast('Invalid or expired coupon code', 'error');
-      return;
+    const res = applyCoupon(couponInput);
+    if (res.ok) {
+      addToast(res.message);
+      setCouponInput('');
+    } else {
+      addToast(res.message, 'error');
     }
-
-    if (subtotal < valid.minOrderAmount) {
-      addToast(`Minimum order amount of ₹${valid.minOrderAmount} required for coupon ${code}`, 'error');
-      return;
-    }
-
-    setAppliedCoupon(valid);
-    addToast(`Coupon "${code}" applied successfully!`);
-    setCouponInput('');
   };
 
   const handleCheckout = () => {
@@ -65,8 +44,8 @@ export const CartDrawer = () => {
     navigate('/checkout');
   };
 
-  const remainingForFreeShipping = Math.max(0, freeShippingThreshold - subtotal);
-  const freeShippingProgress = Math.min(100, (subtotal / freeShippingThreshold) * 100);
+  const remainingForFreeShipping = Math.max(0, totals.freeShippingThreshold - subtotal);
+  const freeShippingProgress = Math.min(100, (subtotal / totals.freeShippingThreshold) * 100);
 
   return (
     <Drawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} title="Your Gourmet Basket">
@@ -164,9 +143,27 @@ export const CartDrawer = () => {
           </form>
 
           {appliedCoupon && (
-            <div style={{ background: '#E6F4EA', color: '#137333', padding: '6px 12px', borderRadius: '4px', fontSize: '0.75rem', marginBottom: '16px', display: 'flex', justifyContent: 'space-between' }}>
-              <span>Applied: <strong>{appliedCoupon.code}</strong> (-{formatCurrency(discount)})</span>
-              <button onClick={() => setAppliedCoupon(null)} style={{ border: 'none', background: 'none', cursor: 'pointer', color: '#137333', fontWeight: 700 }}>✕</button>
+            <div
+              style={{
+                background: totals.couponValid ? '#E6F4EA' : '#FDECEA',
+                color: totals.couponValid ? '#137333' : '#B3261E',
+                padding: '6px 12px',
+                borderRadius: '4px',
+                fontSize: '0.75rem',
+                marginBottom: '16px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                gap: '8px'
+              }}
+            >
+              <span>
+                {totals.couponValid ? (
+                  <>Applied: <strong>{appliedCoupon.code}</strong> (-{formatCurrency(discount)})</>
+                ) : (
+                  <strong>{totals.couponReason}</strong>
+                )}
+              </span>
+              <button onClick={removeCoupon} style={{ border: 'none', background: 'none', cursor: 'pointer', color: 'inherit', fontWeight: 700 }}>✕</button>
             </div>
           )}
 
@@ -183,7 +180,7 @@ export const CartDrawer = () => {
               </div>
             )}
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-              <span>Estimated GST ({config.gstPercentage || 5}%)</span>
+              <span>Estimated GST ({totals.gstPercentage}%)</span>
               <span>{formatCurrency(tax)}</span>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>

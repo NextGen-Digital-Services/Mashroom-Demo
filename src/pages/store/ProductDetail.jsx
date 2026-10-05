@@ -255,7 +255,7 @@ export const ProductDetail = () => {
             {activeTab === 'description' && (
               <div>
                 <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.6rem', marginBottom: '12px' }}>
-                  Artisanal Harvest Note
+                  About This Product
                 </h3>
                 <p style={{ lineHeight: 1.8, color: '#444' }}>{product.longDescription}</p>
                 <div style={{ marginTop: '20px', fontSize: '0.88rem', color: '#666' }}>

@@ -5,11 +5,12 @@ import { Search, Heart, ShoppingBag, User, Menu, X, ChevronDown } from 'lucide-r
 import { MegaMenu } from './MegaMenu';
 
 export const Header = () => {
-  const { config, cart, wishlist, setIsCartOpen, products, userAuth } = useStore();
+  const { config, cart, wishlist, setIsCartOpen, products, userAuth, adminAuth, logoutUser, authReady } = useStore();
   const [showMegaMenu, setShowMegaMenu] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [showSearchDropdown, setShowSearchDropdown] = useState(false);
+  const [showAccountMenu, setShowAccountMenu] = useState(false);
   const navigate = useNavigate();
 
   const totalCartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
@@ -49,7 +50,7 @@ export const Header = () => {
             {config.name}
           </span>
           <span style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.18em', color: 'var(--gold)', marginTop: '2px' }}>
-            {config.subtitle || "Artisan Delicacies"}
+            {config.subtitle || "Fresh Mushrooms & Mushroom Products"}
           </span>
         </Link>
 
@@ -166,9 +167,120 @@ export const Header = () => {
           </button>
 
           {/* User Account / Login */}
-          <Link to="/account" style={{ color: 'var(--espresso)' }} title={userAuth ? `Account (${userAuth.name})` : "Login / Register"}>
-            <User size={22} />
-          </Link>
+          <div style={{ position: 'relative' }}>
+            <button
+              onClick={() => setShowAccountMenu((v) => !v)}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                cursor: 'pointer',
+                color: 'var(--espresso)',
+                background: 'none',
+                border: 'none',
+                padding: '4px'
+              }}
+              title={userAuth ? `Account (${userAuth.name})` : 'Login / Register'}
+              aria-label="Account menu"
+            >
+              <User size={22} />
+              {authReady && userAuth && (
+                <span style={{ fontSize: '0.78rem', fontWeight: 700 }}>
+                  {String(userAuth.name || '').split(' ')[0]}
+                </span>
+              )}
+              {adminAuth && (
+                <span style={{ fontSize: '0.6rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em', background: 'var(--olive)', color: '#fff', padding: '2px 6px', borderRadius: 'var(--radius-full)' }}>
+                  Admin
+                </span>
+              )}
+            </button>
+
+            {showAccountMenu && (
+              <>
+                <div
+                  onClick={() => setShowAccountMenu(false)}
+                  style={{ position: 'fixed', inset: 0, zIndex: 997 }}
+                />
+                <div
+                  style={{
+                    position: 'absolute',
+                    right: 0,
+                    top: 'calc(100% + 10px)',
+                    width: '230px',
+                    background: 'var(--white)',
+                    border: '1px solid var(--line)',
+                    borderRadius: 'var(--radius-md)',
+                    boxShadow: 'var(--shadow-md)',
+                    zIndex: 999,
+                    overflow: 'hidden',
+                    fontSize: '0.85rem'
+                  }}
+                >
+                  <div style={{ padding: '14px 16px', borderBottom: '1px solid var(--line)', background: 'var(--parchment)' }}>
+                    <div style={{ fontWeight: 700, color: 'var(--espresso)' }}>
+                      {authReady && userAuth ? userAuth.name : 'Welcome'}
+                    </div>
+                    <div style={{ fontSize: '0.75rem', color: '#777' }}>
+                      {authReady && userAuth ? userAuth.email : 'Sign in to track orders & saves addresses'}
+                    </div>
+                  </div>
+
+                  <Link
+                    to="/account"
+                    onClick={() => setShowAccountMenu(false)}
+                    style={{ display: 'block', padding: '11px 16px', color: 'var(--espresso)', fontWeight: 600 }}
+                  >
+                    {userAuth ? 'My Account' : 'Sign In / Register'}
+                  </Link>
+                  <Link
+                    to="/wishlist"
+                    onClick={() => setShowAccountMenu(false)}
+                    style={{ display: 'block', padding: '11px 16px', color: 'var(--espresso)', fontWeight: 600 }}
+                  >
+                    My Wishlist
+                  </Link>
+                  <Link
+                    to="/track-order"
+                    onClick={() => setShowAccountMenu(false)}
+                    style={{ display: 'block', padding: '11px 16px', color: 'var(--espresso)', fontWeight: 600 }}
+                  >
+                    Track Order
+                  </Link>
+                  <Link
+                    to={adminAuth ? '/admin' : '/admin/login'}
+                    onClick={() => setShowAccountMenu(false)}
+                    style={{ display: 'block', padding: '11px 16px', color: 'var(--gold)', fontWeight: 700, borderTop: '1px solid var(--line)' }}
+                  >
+                    Admin Portal →
+                  </Link>
+                  {userAuth && (
+                    <button
+                      onClick={() => {
+                        setShowAccountMenu(false);
+                        logoutUser();
+                      }}
+                      style={{
+                        display: 'block',
+                        width: '100%',
+                        textAlign: 'left',
+                        padding: '11px 16px',
+                        border: 'none',
+                        borderTop: '1px solid var(--line)',
+                        background: 'none',
+                        color: '#b23b2e',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        fontSize: '0.85rem'
+                      }}
+                    >
+                      Sign Out
+                    </button>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
 
@@ -183,7 +295,7 @@ export const Header = () => {
             <Link to="/about" onClick={() => setMobileMenuOpen(false)}>About Us</Link>
             <Link to="/contact" onClick={() => setMobileMenuOpen(false)}>Contact</Link>
             <Link to="/track-order" onClick={() => setMobileMenuOpen(false)} style={{ color: 'var(--terracotta)', fontWeight: 700 }}>Track Order</Link>
-            <Link to="/admin/login" onClick={() => setMobileMenuOpen(false)} style={{ color: 'var(--gold)', fontWeight: 600 }}>Admin Portal →</Link>
+            <Link to={adminAuth ? '/admin' : '/admin/login'} onClick={() => setMobileMenuOpen(false)} style={{ color: 'var(--gold)', fontWeight: 600 }}>Admin Portal →</Link>
           </nav>
         </div>
       )}

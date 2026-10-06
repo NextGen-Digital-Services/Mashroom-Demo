@@ -158,6 +158,9 @@ button {
   .page-hero {
     padding-top: 40px !important;
     padding-bottom: 44px !important;
+    /* portrait phones: center crop of a landscape art ends up on the plain middle —
+       anchor left so the mushroom/leaf artwork stays visible */
+    background-position: left center;
   }
 }
 

@@ -12,7 +12,7 @@ import { ArrowRight, ShieldCheck, Sun, Award, Truck } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const Home = () => {
-  const { config, products, categories, blogs } = useStore();
+  const { config, products, blogs } = useStore();
   useDocumentTitle('Fresh Mushrooms, Spawn & Mushroom Products');
 
   const bestsellers = products.filter(p => p.tags && p.tags.includes('Bestseller')).slice(0, 4);
@@ -102,52 +102,7 @@ export const Home = () => {
         </div>
       </section>
 
-      {/* 3. CATEGORY TILES */}
-      <section className="section-padding rel-section">
-        <BotanicalBackdrop variant="light" />
-        <div className="container">
-          <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-            <span className="eyebrow">Explore By Pantry Type</span>
-            <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-4xl)' }}>
-              Our Product Range
-            </h2>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '24px' }}>
-            {categories.map((cat) => (
-              <Link
-                key={cat.id}
-                to={`/category/${cat.slug}`}
-                className="category-tile"
-                style={{
-                  height: '280px',
-                  borderRadius: 'var(--radius-md)',
-                  overflow: 'hidden',
-                  border: '1px solid var(--line)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'flex-end',
-                  padding: '20px'
-                }}
-              >
-                <img
-                  src={cat.image}
-                  alt={cat.name}
-                  style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
-                />
-                <div style={{ position: 'relative', zIndex: 2, color: 'var(--white)' }}>
-                  <h4 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.4rem', color: 'var(--ivory)', marginBottom: '4px' }}>
-                    {cat.name}
-                  </h4>
-                  <p style={{ fontSize: '0.8rem', color: '#E0E0E0' }}>{cat.description}</p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 4. BESTSELLERS CAROUSEL / GRID */}
+      {/* 3. BESTSELLERS CAROUSEL / GRID */}
       <section className="section-padding" style={{ backgroundColor: 'var(--parchment)', borderTop: '1px solid var(--line)', borderBottom: '1px solid var(--line)' }}>
         <div className="container">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '12px', marginBottom: '40px' }}>

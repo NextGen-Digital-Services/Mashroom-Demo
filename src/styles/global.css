@@ -144,6 +144,23 @@ button {
   outline-offset: 2px;
 }
 
+/* Mobile-first responsive layer */
+@media (max-width: 768px) {
+  h1 { font-size: clamp(1.8rem, 7vw, 2.6rem); }
+  h2 { font-size: clamp(1.5rem, 5.5vw, 2rem); }
+  h3 { font-size: clamp(1.3rem, 4.8vw, 1.7rem); }
+
+  .container {
+    padding: 0 16px;
+  }
+
+  /* shared page hero: inline padding is overridden so mobile doesn't get desktop spacing */
+  .page-hero {
+    padding-top: 40px !important;
+    padding-bottom: 44px !important;
+  }
+}
+
 /* Invoice / packing-slip printing: hide the storefront chrome */
 @media print {
   header,

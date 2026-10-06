@@ -39,7 +39,7 @@ export const GalleryZoom = ({ images = [] }) => {
           style={{
             width: '100%',
             height: '100%',
-            objectFit: 'cover',
+            objectFit: 'contain',
             transformOrigin: `${mousePos.x}% ${mousePos.y}%`,
             transform: isZoomed ? 'scale(1.8)' : 'scale(1)',
             transition: isZoomed ? 'none' : 'transform 0.3s ease'
@@ -65,7 +65,7 @@ export const GalleryZoom = ({ images = [] }) => {
                 background: 'var(--parchment)'
               }}
             >
-              <img src={img} alt={`Thumbnail ${idx + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src={img} alt={`Thumbnail ${idx + 1}`} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
             </button>
           ))}
         </div>

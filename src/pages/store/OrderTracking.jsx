@@ -119,7 +119,7 @@ export const OrderTracking = () => {
             </div>
 
             {/* Visual Timeline Bar */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '12px', textAlign: 'center', position: 'relative', marginBottom: '32px' }}>
+            <div className="track-steps" style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '12px', textAlign: 'center', position: 'relative', marginBottom: '32px' }}>
               {steps.map((step, idx) => {
                 const isCompleted = getStepStatus(trackedOrder, step);
                 return (
@@ -171,6 +171,10 @@ export const OrderTracking = () => {
       <style>{`
         @media (max-width: 650px) {
           .track-form-grid { grid-template-columns: 1fr !important; }
+        }
+        @media (max-width: 560px) {
+          .track-steps { gap: 4px !important; }
+          .track-steps > div > div:last-child { font-size: 0.62rem !important; line-height: 1.25 !important; word-break: break-word; }
         }
       `}</style>
     </div>

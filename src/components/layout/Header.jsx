@@ -69,10 +69,10 @@ export const Header = () => {
 
         {/* Brand Wordmark Logo */}
         <Link to="/" style={{ display: 'flex', flexDirection: 'column' }}>
-          <span style={{ fontFamily: 'var(--font-heading)', fontSize: '1.8rem', fontWeight: 700, letterSpacing: '0.05em', color: 'var(--espresso)', lineHeight: 1 }}>
+          <span className="brand-name" style={{ fontFamily: 'var(--font-heading)', fontSize: '1.8rem', fontWeight: 700, letterSpacing: '0.05em', color: 'var(--espresso)', lineHeight: 1 }}>
             {config.name}
           </span>
-          <span style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.18em', color: 'var(--gold)', marginTop: '2px' }}>
+          <span className="brand-sub" style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.18em', color: 'var(--gold)', marginTop: '2px' }}>
             {config.subtitle || "Fresh Mushrooms & Mushroom Products"}
           </span>
         </Link>
@@ -97,7 +97,7 @@ export const Header = () => {
         </nav>
 
         {/* Actions (Search, Wishlist, Cart, User) */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
+        <div className="header-actions" style={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
 
           {/* Search — hover/tap the icon to pop a small search bar below */}
           <div
@@ -181,7 +181,7 @@ export const Header = () => {
                         onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--parchment)'; }}
                         onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
                       >
-                        <img src={item.images[0]} alt={item.name} style={{ width: '30px', height: '30px', objectFit: 'cover', borderRadius: '4px' }} />
+                        <img src={item.images[0]} alt={item.name} style={{ width: '30px', height: '30px', objectFit: 'contain', borderRadius: '4px', background: 'var(--parchment)' }} />
                         <div style={{ minWidth: 0 }}>
                           <div style={{ fontWeight: 600, color: 'var(--espresso)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.name}</div>
                           <div style={{ fontSize: '0.72rem', color: 'var(--gold)' }}>₹{item.price}</div>
@@ -364,6 +364,12 @@ export const Header = () => {
         @media (max-width: 900px) {
           .desktop-nav { display: none !important; }
           .mobile-hamburger { display: block !important; }
+        }
+        @media (max-width: 560px) {
+          .brand-name { font-size: 1.2rem !important; letter-spacing: 0.03em !important; }
+          .brand-sub { display: none !important; }
+          .header-actions { gap: 8px !important; }
+          .mobile-hamburger { margin-right: 4px; }
         }
       `}</style>
     </header>

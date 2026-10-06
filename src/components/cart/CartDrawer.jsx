@@ -93,7 +93,7 @@ export const CartDrawer = () => {
                 <img
                   src={item.image}
                   alt={item.name}
-                  style={{ width: '70px', height: '70px', objectFit: 'cover', borderRadius: 'var(--radius-sm)', background: 'var(--parchment)' }}
+                  style={{ width: '70px', height: '70px', objectFit: 'contain', borderRadius: 'var(--radius-sm)', background: 'var(--parchment)' }}
                 />
                 <div style={{ flexGrow: 1 }}>
                   <h5 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.05rem', lineHeight: 1.2, marginBottom: '2px' }}>

@@ -222,7 +222,7 @@ export const CheckoutPage = () => {
                 1. Shipping Address
               </h3>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+              <div className="checkout-2col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                 <FormField label="Full Name *" value={name} onChange={(e) => setName(e.target.value)} required />
                 <FormField label="Email Address *" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
               </div>
@@ -230,7 +230,7 @@ export const CheckoutPage = () => {
               <FormField label="Phone Number *" type="tel" placeholder="+91 98765 43210" value={phone} onChange={(e) => setPhone(e.target.value)} required />
               <FormField label="Street Address / Flat No *" value={street} onChange={(e) => setStreet(e.target.value)} required />
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
+              <div className="checkout-3col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
                 <FormField label="City *" value={city} onChange={(e) => setCity(e.target.value)} required />
                 <FormField label="State *" value={state} onChange={(e) => setState(e.target.value)} required />
                 <FormField label="Pincode *" value={pincode} onChange={(e) => setPincode(e.target.value)} maxLength={6} required />
@@ -374,6 +374,12 @@ export const CheckoutPage = () => {
       <style>{`
         @media (max-width: 850px) {
           .checkout-grid { grid-template-columns: 1fr !important; }
+        }
+        @media (max-width: 640px) {
+          .checkout-3col { grid-template-columns: 1fr !important; }
+        }
+        @media (max-width: 430px) {
+          .checkout-2col { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </div>

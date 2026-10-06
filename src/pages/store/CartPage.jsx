@@ -78,7 +78,7 @@ export const CartPage = () => {
 
             {cart.map((item) => (
               <div key={item.cartItemId} style={{ display: 'flex', gap: '20px', paddingBottom: '20px', marginBottom: '20px', borderBottom: '1px solid var(--line)' }}>
-                <img src={item.image} alt={item.name} style={{ width: '90px', height: '90px', objectFit: 'cover', borderRadius: 'var(--radius-sm)', background: 'var(--parchment)' }} />
+                <img src={item.image} alt={item.name} style={{ width: '90px', height: '90px', objectFit: 'contain', borderRadius: 'var(--radius-sm)', background: 'var(--parchment)' }} />
                 <div style={{ flexGrow: 1 }}>
                   <h4 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.2rem', marginBottom: '4px' }}>{item.name}</h4>
                   <span style={{ fontSize: '0.8rem', color: 'var(--gold)', fontWeight: 600, display: 'block', marginBottom: '12px' }}>{item.variant}</span>

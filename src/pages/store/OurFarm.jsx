@@ -64,7 +64,7 @@ export const OurFarm = () => {
         </div>
 
         {/* Farm Images Gallery */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))', gap: '24px' }}>
           {images.farm.map((img, idx) => (
             <img key={idx} src={img} alt={`Farm scene ${idx + 1}`} style={{ width: '100%', height: '280px', objectFit: 'cover', borderRadius: 'var(--radius-md)' }} />
           ))}

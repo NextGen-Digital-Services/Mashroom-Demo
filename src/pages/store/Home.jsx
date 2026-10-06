@@ -34,11 +34,11 @@ export const Home = () => {
           borderBottom: '1px solid var(--line)'
         }}
       >
-        <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '48px', alignItems: 'center' }}>
+        <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '48px', alignItems: 'center' }}>
           
           <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}>
             <span className="eyebrow">Fresh Mushrooms · Healthy Life</span>
-            <h1 className="hero-title" style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-5xl)', lineHeight: 1.1, marginBottom: '20px', color: 'var(--espresso)' }}>
+            <h1 className="hero-title" style={{ fontFamily: 'var(--font-heading)', lineHeight: 1.1, marginBottom: '20px', color: 'var(--espresso)' }}>
               From Our Farm in Odisha to Tables Across India.
             </h1>
             <p style={{ fontSize: 'var(--text-lg)', color: '#555', marginBottom: '32px', maxWidth: '520px', lineHeight: 1.6 }}>
@@ -150,7 +150,7 @@ export const Home = () => {
       {/* 4. BESTSELLERS CAROUSEL / GRID */}
       <section className="section-padding" style={{ backgroundColor: 'var(--parchment)', borderTop: '1px solid var(--line)', borderBottom: '1px solid var(--line)' }}>
         <div className="container">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '40px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '12px', marginBottom: '40px' }}>
             <div>
               <span className="eyebrow">Most Cherished Harvests</span>
               <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-4xl)' }}>
@@ -173,7 +173,7 @@ export const Home = () => {
       {/* 5. FARM TO TABLE STORY & STATS COUNTER */}
       <section className="section-padding rel-section">
         <BotanicalBackdrop variant="corner" />
-        <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '48px', alignItems: 'center' }}>
+        <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '48px', alignItems: 'center' }}>
           <div>
             <span className="eyebrow">From Our Roots In Odisha</span>
             <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-4xl)', marginBottom: '20px' }}>
@@ -228,7 +228,7 @@ export const Home = () => {
               borderRadius: 'var(--radius-lg)',
               padding: '48px',
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))',
               gap: '32px',
               alignItems: 'center'
             }}
@@ -265,7 +265,7 @@ export const Home = () => {
             </h2>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '28px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))', gap: '28px' }}>
             {featuredBlogs.map((blog) => (
               <div key={blog.id} style={{ background: 'var(--white)', border: '1px solid var(--line)', borderRadius: 'var(--radius-md)', overflow: 'hidden' }}>
                 <img src={blog.image} alt={blog.title} style={{ width: '100%', height: '200px', objectFit: 'cover' }} />

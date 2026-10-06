@@ -70,7 +70,7 @@ export const ProductDetail = () => {
         </div>
 
         {/* Product Stage Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '48px', marginBottom: '64px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(340px, 100%), 1fr))', gap: '48px', marginBottom: '64px' }}>
           
           {/* Gallery with zoom */}
           <div>

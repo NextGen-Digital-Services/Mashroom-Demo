@@ -27,7 +27,7 @@ export const RecipeDetail = () => {
 
         <img src={blog.image} alt={blog.title} style={{ width: '100%', height: '400px', objectFit: 'cover', borderRadius: 'var(--radius-md)', marginBottom: '32px' }} />
 
-        <div style={{ background: 'var(--white)', padding: '32px', borderRadius: 'var(--radius-md)', border: '1px solid var(--line)', lineHeight: 1.8 }} dangerouslySetInnerHTML={{ __html: blog.content }} />
+        <div data-reveal className="journal-body" style={{ background: 'var(--white)', padding: '32px', borderRadius: 'var(--radius-md)', border: '1px solid var(--line)', lineHeight: 1.8 }} dangerouslySetInnerHTML={{ __html: blog.content }} />
       </div>
     </div>
   );

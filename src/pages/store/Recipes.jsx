@@ -13,13 +13,13 @@ export const Recipes = () => {
       <div className="container">
         
       <div className="page-hero page-hero-card" style={{ textAlign: 'center', marginBottom: '48px' }}>
-        <span className="eyebrow">Recipes &amp; Kitchen Notes</span>
+        <span className="eyebrow">Our Story · Farm &amp; Field · Kitchen Notes</span>
           <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-4xl)' }}>
             The Fungi Culinary Journal
           </h1>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '32px' }}>
+        <div data-reveal-stagger style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '32px' }}>
           {blogs.map((blog) => (
             <div key={blog.id} style={{ background: 'var(--white)', borderRadius: 'var(--radius-md)', border: '1px solid var(--line)', overflow: 'hidden' }}>
               <img src={blog.image} alt={blog.title} style={{ width: '100%', height: '220px', objectFit: 'cover' }} />

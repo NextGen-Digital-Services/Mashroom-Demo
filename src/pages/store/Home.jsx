@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useStore } from '../../context/StoreContext';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
@@ -10,6 +10,7 @@ import { images } from '../../data/images';
 import { BotanicalBackdrop } from '../../components/common/BotanicalBackdrop';
 import { ArrowRight, ShieldCheck, Sun, Award, Truck } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { gsap, reducedMotion } from '../../lib/motion';
 
 export const Home = () => {
   const { config, products, blogs } = useStore();
@@ -22,6 +23,25 @@ export const Home = () => {
   const experienceCount = useCounter(15, 2500);
   const productCount = useCounter(products.length, 2500);
   const registeredCount = useCounter(2026, 2500);
+
+  useEffect(() => {
+    if (reducedMotion()) return;
+    const ctx = gsap.context(() => {
+      gsap.utils.toArray('.hero-parallax').forEach((el) => {
+        gsap.to(el, {
+          yPercent: 8,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true
+          }
+        });
+      });
+    });
+    return () => ctx.revert();
+  }, []);
 
   return (
     <div style={{ overflow: 'hidden' }}>
@@ -59,7 +79,7 @@ export const Home = () => {
           </motion.div>
 
           <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, delay: 0.2 }}>
-            <ArchMaskImage src={images.hero[0]} alt="Fresh Mushrooms" height="520px" />
+            <ArchMaskImage src={images.hero[0]} alt="Fresh Mushrooms" height="520px" className="hero-parallax" />
           </motion.div>
 
         </div>
@@ -102,10 +122,25 @@ export const Home = () => {
         </div>
       </section>
 
+      {/* 2b. BRAND MARQUEE */}
+      <section className="brand-marquee" aria-hidden="true">
+        <div className="brand-marquee-track">
+          {[0, 1].map((dup) => (
+            <React.Fragment key={dup}>
+              <span>Supplying Across India With Trust</span>
+              <span>Guaranteed Freshness &amp; Quality</span>
+              <span>15 Years of Experience</span>
+              <span>From Our Farm In Odisha</span>
+              <span>Grown With Care</span>
+            </React.Fragment>
+          ))}
+        </div>
+      </section>
+
       {/* 3. BESTSELLERS CAROUSEL / GRID */}
       <section className="section-padding" style={{ backgroundColor: 'var(--parchment)', borderTop: '1px solid var(--line)', borderBottom: '1px solid var(--line)' }}>
         <div className="container">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '12px', marginBottom: '40px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '12px', marginBottom: '40px' }} data-reveal>
             <div>
               <span className="eyebrow">Most Cherished Harvests</span>
               <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-4xl)' }}>
@@ -117,7 +152,7 @@ export const Home = () => {
             </Link>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '24px' }}>
+          <div data-reveal-stagger style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '24px' }}>
             {bestsellers.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
@@ -177,6 +212,7 @@ export const Home = () => {
       <section style={{ padding: '40px 0' }}>
         <div className="container">
           <div
+            data-reveal
             style={{
               backgroundColor: 'var(--olive-deep)',
               color: 'var(--ivory)',
@@ -213,14 +249,14 @@ export const Home = () => {
       {/* 7. JOURNAL PREVIEW */}
       <section className="section-padding">
         <div className="container">
-          <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '40px' }} data-reveal>
             <span className="eyebrow">Cultivation &amp; Kitchen Notes</span>
             <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-4xl)' }}>
               From Our Culinary Journal
             </h2>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))', gap: '28px' }}>
+          <div data-reveal-stagger style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))', gap: '28px' }}>
             {featuredBlogs.map((blog) => (
               <div key={blog.id} style={{ background: 'var(--white)', border: '1px solid var(--line)', borderRadius: 'var(--radius-md)', overflow: 'hidden' }}>
                 <img src={blog.image} alt={blog.title} style={{ width: '100%', height: '200px', objectFit: 'cover' }} />
@@ -245,14 +281,14 @@ export const Home = () => {
       {/* 8. INSTAGRAM GALLERY GRID */}
       <section className="section-padding" style={{ backgroundColor: 'var(--parchment)', borderTop: '1px solid var(--line)' }}>
         <div className="container">
-          <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '32px' }} data-reveal>
             <span className="eyebrow">@{config.logoText}</span>
             <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-3xl)' }}>
               From Our Farm To Your Feed
             </h3>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '16px' }}>
+          <div data-reveal-stagger style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '16px' }}>
             {images.instagram.map((imgUrl, i) => (
               <a key={i} href={config.socials?.instagram} target="_blank" rel="noreferrer" style={{ borderRadius: 'var(--radius-md)', overflow: 'hidden', height: '180px' }}>
                 <img src={imgUrl} alt={`Instagram ${i + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.3s ease' }} />

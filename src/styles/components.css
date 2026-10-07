@@ -327,6 +327,80 @@
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 0.3 0 0 0 0 0.25 0 0 0 0 0.18 0 0 0 0.055 0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
+/* ── Journal article body ── */
+.journal-body h3 {
+  font-family: var(--font-heading);
+  font-size: clamp(1.35rem, 2.4vw, 1.7rem);
+  color: var(--olive-deep);
+  margin: 34px 0 10px;
+}
+
+.journal-body p {
+  font-size: 1.02rem;
+  color: #3f3a33;
+  margin-bottom: 16px;
+}
+
+.journal-body blockquote {
+  margin: 30px 0 6px;
+  padding: 22px 26px;
+  background: var(--parchment);
+  border-left: 3px solid var(--gold);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: var(--olive-deep);
+}
+
+.journal-body strong {
+  color: var(--espresso);
+}
+
+/* ── Brand marquee strip ── */
+.brand-marquee {
+  overflow: hidden;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background-color: var(--ivory);
+  padding: 13px 0;
+}
+
+.brand-marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 56px;
+  animation: marquee-scroll 34s linear infinite;
+}
+
+.brand-marquee-track span {
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--olive-deep);
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 56px;
+}
+
+.brand-marquee-track span::after {
+  content: '✦';
+  color: var(--gold);
+  font-size: 0.7rem;
+}
+
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-marquee-track { animation: none; }
+}
+
 /* Shared botanical hero background (every page) */
 .page-hero {
   background-image: linear-gradient(rgba(247, 243, 232, 0.25), rgba(247, 243, 232, 0.25)), url('/images/hero-bg.webp');

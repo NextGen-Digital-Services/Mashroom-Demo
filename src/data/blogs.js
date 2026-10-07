@@ -4,58 +4,173 @@ export const initialBlogs = [
   {
     id: "blog-1",
     slug: "15-years-of-experience-one-passion",
-    title: "15 Years of Experience. One Passion.",
-    excerpt: "The story of MANASI MUSHROOM & SPAWN PVT. LTD. — how Mrs. Manasi Pattanayak's hands-on work in mushroom cultivation became a growing company.",
-    category: "Our Journey",
+    title: "15 Years of Experience. One Passion. One Woman's Dream.",
+    excerpt: "The inspiring journey of Mrs. Manasi Pattanayak — from a housewife with a passion for mushroom cultivation to the founder of MANASI MUSHROOM & SPAWN PVT. LTD.",
+    category: "Our Story",
     author: "Team MANASI",
     date: "Sep 18, 2026",
-    readTime: "5 min read",
+    readTime: "8 min read",
     image: images.recipes[0],
     featured: true,
     content: `
-      <p>The story of MANASI MUSHROOM &amp; SPAWN PVT. LTD. began with Mrs. Manasi Pattanayak, the founder behind our journey. With 15 years of experience in mushroom cultivation and the mushroom industry, she has developed valuable practical knowledge through years of working directly with mushrooms — cultivation, production, handling, and mushroom-based products.</p>
-      <h3>From Cultivation to a Structured Business</h3>
-      <p>What started as a journey in mushroom cultivation gradually developed into a larger vision. Years of experience, learning, experimentation, and dedication created the foundation for building a professionally structured mushroom business.</p>
-      <h3>A New Chapter in 2026</h3>
-      <p>In 2026, this journey took an important step forward when the business was officially registered as MANASI MUSHROOM &amp; SPAWN PVT. LTD. This new chapter represents the combination of years of practical experience with a growing vision for the future — serving customers across India with trust.</p>
+      <p>Behind every dream, there is a beginning. Sometimes, that beginning is not found in a large office, a business school, or a corporate environment. Sometimes it begins quietly at home — between household responsibilities, cooking, taking care of the family, and managing everyday life.</p>
+      <p>For Mrs. Manasi Pattanayak, it was exactly that kind of journey. She was a housewife, living her everyday life and taking care of her home and family. But alongside those responsibilities, she carried something of her own — a passion for mushroom cultivation. What started as an interest gradually became a journey of learning, practical experience and dedication that continued for nearly 15 years.</p>
+      <p>Today, that dream has taken the shape of MANASI MUSHROOM &amp; SPAWN PVT. LTD.</p>
+
+      <h3>A Dream That Grew Alongside Everyday Life</h3>
+      <p>Mrs. Manasi Pattanayak's story is special because her entrepreneurial journey did not begin by stepping away from her responsibilities. She continued to manage her household, cook, look after her family and take care of the everyday responsibilities of a housewife. But she also continued to nurture her passion.</p>
+      <p>For her, the journey was not about choosing between family and a dream. It was about finding a way to grow her dream alongside her life. Year after year, her involvement with mushroom cultivation gave her practical knowledge and experience. She learned through observation, practice, patience and continuous involvement. The years spent working with mushrooms slowly built something valuable — confidence in her own ability.</p>
+
+      <h3>From Housewife to Entrepreneur</h3>
+      <p>The word housewife often describes a woman's role within her home. But it does not describe the limits of her dreams. A woman can manage her household, cook for her family, care for her loved ones — and still have ambitions, skills, ideas and dreams of her own.</p>
+      <p>Her story shows that entrepreneurship can begin at any stage of life and from any background. She did not need to begin with a large business setup. She began with passion. She continued with experience. She grew through dedication. And eventually, she turned that experience into a business vision.</p>
+      <p>Her journey is therefore not only about mushroom cultivation. It is also about women's confidence, independence, determination and empowerment.</p>
+
+      <h3>15 Years of Experience</h3>
+      <p>For nearly 15 years, Mrs. Manasi Pattanayak has been connected with mushroom cultivation and the mushroom industry. During this journey, she developed practical knowledge through direct involvement in cultivation, production, handling and mushroom-based products.</p>
+      <p>Fifteen years is not simply a number. It represents years of patience. Years of learning. Years of trying. Years of understanding what works. And years of staying connected with something she was passionate about. That experience became the foundation on which the company was eventually built.</p>
+
+      <h3>When Passion Becomes Purpose</h3>
+      <p>There is a difference between doing something and truly being passionate about it. For Mrs. Manasi Pattanayak, mushroom cultivation gradually became a part of her identity and her vision for the future. The passion that developed over the years created a desire to do something larger — to build a company that could bring together her experience and a wider range of mushroom products.</p>
+      <p>The company was officially registered in 2026, marking a new chapter in her journey — the moment when years of personal experience and passion began transforming into a professionally structured business.</p>
+
+      <h3>A Story of Women Empowerment</h3>
+      <p>Mrs. Manasi Pattanayak's journey represents an important message: a woman's dreams do not have to stop at the boundaries of her home. Being a housewife and managing a family is itself a responsibility that requires dedication and hard work. But women can also build something of their own. They can learn. They can create. They can lead. They can become entrepreneurs.</p>
+      <p>Mrs. Manasi Pattanayak's story is a reminder that women's empowerment can begin with self-belief. Sometimes empowerment does not begin with a big investment or a big organization. Sometimes it begins with one simple thought: <em>"I can do something of my own."</em> That thought, when supported by years of dedication and experience, can become a dream. And a dream, when pursued with determination, can become a business.</p>
+
+      <h3>From a Personal Passion to a Company</h3>
+      <p>MANASI MUSHROOM &amp; SPAWN PVT. LTD. represents the transformation of a personal passion into a larger entrepreneurial vision. The company focuses on mushroom cultivation, mushroom spawn production and mushroom-based products, with a product vision that includes fresh mushrooms, spawn, sun-dried mushrooms, mushroom powder, mushroom pickle, soup mix, chutney, home-growing kits and combination products. Each product represents another step in the company's journey. But behind all of them is the same foundation: Experience. Passion. Quality. Dedication.</p>
+
+      <h3>From a House in Odisha to a Vision Across India</h3>
+      <p>The company's roots are in Pedagadi, Udala, Mayurbhanj, Odisha. The journey began locally, but the dream is much larger. The vision is to develop into a trusted mushroom company serving customers across India — this is why the company's message is: <strong>SUPPLYING ACROSS INDIA WITH TRUST.</strong> The aim is to grow without losing the values that created the foundation in the first place.</p>
+
+      <h3>Her Dream, Her Passion, Her Journey</h3>
+      <p>The story of Mrs. Manasi Pattanayak is ultimately a story about a woman who refused to let an ordinary routine define the limits of her future. She was a housewife. She cooked. She managed her household. She took care of her family. And alongside all of that, she continued to nurture her passion for mushrooms. For 15 years, that passion grew. And now, that passion has become a company.</p>
+      <p>Her journey proves that a dream does not always need a perfect beginning. It simply needs someone who believes in it enough to keep going.</p>
+
+      <blockquote>15 Years of Experience. One Passion. One Woman's Dream. From managing a home to building a business. From passion to purpose. From experience to entrepreneurship. This is the journey of Mrs. Manasi Pattanayak — and the story behind MANASI MUSHROOM &amp; SPAWN PVT. LTD.</blockquote>
     `
   },
   {
     id: "blog-2",
     slug: "how-our-farm-works",
-    title: "From Our Farm: How Cultivation, Care & Products Come Together",
-    excerpt: "A look at our farm in Pedagadi, Udala, Mayurbhanj, Odisha — where every cultivation cycle begins with attention and proper care.",
+    title: "Farm & Field: How Cultivation, Care & Products Come Together",
+    excerpt: "Every product has a beginning. Before it reaches a kitchen, a market, or a customer's table, it begins much closer to the soil — with a place, a process, and the people who care for it.",
     category: "Farm & Field",
     author: "Team MANASI",
     date: "Sep 10, 2026",
-    readTime: "6 min read",
+    readTime: "9 min read",
     image: images.recipes[1],
     featured: true,
     content: `
-      <p>Our farm is the heart of MANASI MUSHROOM &amp; SPAWN PVT. LTD. Located in Pedagadi, Udala, Mayurbhanj, Odisha, it is where our journey with mushrooms comes to life and where every cultivation cycle requires attention and proper care.</p>
-      <h3>Care at Every Stage</h3>
-      <p>Every cycle follows the same disciplined path: preparing the growing environment, monitoring mushroom growth, and carefully handling the final produce. Good products begin with proper cultivation and careful handling at the farm level.</p>
-      <h3>From Farm to Products</h3>
-      <p>From cultivation to processing, our farm is the starting point of many of our mushroom products. Fresh mushrooms, mushroom spawn, and other mushroom-based products are all connected to the knowledge and experience developed through our work in cultivation.</p>
+      <p>Every product has a beginning. Before it reaches a kitchen, a market, or a customer's table, it begins somewhere much closer to the soil — with a place, a process, and the people who care for it. For us, that beginning is our farm and cultivation environment in Pedagadi, Udala, Mayurbhanj, Odisha. This is where our connection with mushrooms comes alive.</p>
+      <p>A farm is not simply a piece of land. It is a living environment where every cultivation cycle requires attention, patience, observation, and care. In mushroom cultivation, the journey from preparation to cultivation and finally to harvesting depends on maintaining the right approach at every stage.</p>
+
+      <h3>Where the Journey Begins</h3>
+      <p>Our farm is rooted in Pedagadi, Udala, Mayurbhanj, Odisha. The surroundings of the farm are closely connected with the agricultural character of the region, providing the setting from which our cultivation journey continues.</p>
+      <p>For us, the farm is more than a production space. It is where we observe. It is where we cultivate. It is where we learn. It is where every cycle begins again. Each cultivation cycle brings its own requirements and its own lessons. The field teaches patience. The cultivation process teaches discipline. And every harvest reminds us of the importance of proper care.</p>
+
+      <h3>The Farm Is the Foundation</h3>
+      <p>When we talk about mushroom products, it is easy to focus only on what finally reaches the customer. But behind every product is a longer journey, and that journey begins with cultivation. The quality and condition of the final product are connected to the care given throughout the process — from preparation and cultivation to handling and harvesting.</p>
+      <p>Good cultivation begins with good care. And good care begins with attention.</p>
+
+      <h3>Cultivation Is a Process of Patience</h3>
+      <p>Mushroom cultivation is not simply about waiting for mushrooms to grow. It is a process that requires continuous attention. Every cultivation cycle requires observation and proper care. The growing environment needs to be looked after throughout the cycle, and the cultivation process needs consistency.</p>
+      <p>There is no shortcut to replacing experience. The more one works with cultivation, the more one learns to observe the small details that can influence the process. This practical understanding is an important part of our connection with the farm.</p>
+
+      <h3>From Cultivation to Harvest</h3>
+      <p>The most rewarding moment of any cultivation cycle is the harvest. After the work, waiting and care that goes into cultivation, the crop becomes ready to move into the next stage of its journey. Harvesting is not the end — it is the point where cultivation connects with the product.</p>
+      <p>From here, mushrooms can begin their journey toward customers in different forms — fresh mushrooms or further processing into value-added mushroom products. What begins in cultivation can eventually become part of someone's meal.</p>
+
+      <h3>Care Beyond the Field</h3>
+      <p>The farm may be where the journey begins, but our responsibility does not end at cultivation. Once mushrooms are harvested, careful handling becomes important. The journey from farm to customer requires attention at every stage:</p>
+      <p><strong>Cultivation → Harvest → Handling → Processing → Product → Customer</strong></p>
+      <p>Each stage connects with the next. This is how farming and products come together.</p>
+
+      <h3>The Field Behind the Food</h3>
+      <p>When customers see a mushroom product, they may only see the finished product. But behind it is an entire cultivation story. There is preparation. There is care. There is observation. There is waiting. There is harvesting. And there is the responsibility of turning that harvest into something useful for the customer.</p>
+      <p>That is why we believe it is important to remember where food begins. Before the product reaches the table, there is a farm behind it.</p>
+
+      <h3>Our Connection With the Land</h3>
+      <p>Being connected with farming means understanding that agriculture is a continuous relationship between people, cultivation and the environment. Our roots in Pedagadi keep us connected with this agricultural foundation. Every cycle brings new observations. Every season brings its own conditions. Every harvest provides an opportunity to learn.</p>
+
+      <h3>The People Behind the Cultivation</h3>
+      <p>A farm does not work by itself. Behind every cultivation cycle are people who give their time, attention and effort. Machines and systems can support cultivation, but care, observation and responsibility remain essential. That human connection is something we value.</p>
+
+      <h3>Tradition Meets a Growing Vision</h3>
+      <p>Our farm represents the traditional foundation of cultivation, while our product vision looks toward new possibilities. Fresh mushrooms can reach kitchens. Dried mushrooms can offer another format. Mushroom powder can become a convenient ingredient. Pickle, chutney and soup mixes can introduce mushrooms in different ways. Home-growing solutions can allow people to experience cultivation themselves.</p>
+
+      <h3>Why Farm &amp; Field Matters</h3>
+      <p>In a world where customers often see only finished products, we believe there is value in showing the story behind them. The farm represents: Cultivation. Care. Patience. Experience. Harvest. Possibility. And ultimately, connection — a connection between the land and the product, between cultivation and food, between the farm and the customer.</p>
+
+      <h3>Every Cultivation Cycle Has a Story</h3>
+      <p>No two cultivation cycles feel exactly the same. Each one brings another opportunity to learn, to improve, to understand cultivation more deeply. The field changes. The conditions change. The crop develops. And the farmer continues to observe. This is why farming is never simply repetitive work — it is a continuous learning process.</p>
+
+      <h3>Our Farm, Our Foundation</h3>
+      <p>The farm is where our mushroom journey begins. It represents the practical side of our work — the side that requires patience, consistency and hands-on attention. It reminds us that every product has a source, every harvest has a process, and every process deserves care. As we continue to grow, our goal is to remain connected to this foundation. Because no matter how far the business travels, the story will always begin at the farm.</p>
+
+      <blockquote>From our farm to your table. Where cultivation meets care, and care becomes something you can experience. Our roots remain in Pedagadi, Odisha — our work begins with cultivation, and our products carry that journey forward.</blockquote>
     `
   },
   {
     id: "blog-3",
     slug: "mushrooms-in-everyday-cooking",
-    title: "Mushrooms in Everyday Cooking: Powder, Pickle, Soup Mix & More",
-    excerpt: "Different ways to enjoy mushrooms at home — from fresh cooking to convenient mushroom-based products for everyday use.",
+    title: "Kitchen Notes: Mushrooms in Everyday Cooking — Powder, Pickle, Soup Mix & More",
+    excerpt: "Mushrooms aren't just one ingredient. They're a world of possibilities. Fresh. Dried. Powdered. Pickled. Blended. Cooked — from our cultivation to your kitchen.",
     category: "Kitchen Notes",
     author: "Team MANASI",
     date: "Aug 28, 2026",
-    readTime: "4 min read",
+    readTime: "7 min read",
     image: images.recipes[2],
-    featured: false,
+    featured: true,
     content: `
-      <p>Mushrooms are a versatile ingredient for homes, restaurants, and food businesses. Our product range is designed to provide different ways to enjoy and explore mushrooms in everyday cooking.</p>
-      <h3>Many Forms, One Ingredient</h3>
-      <p>Fresh mushrooms can be used in a wide variety of dishes. Sun-dried mushrooms can be stored and used across different types of cooking, while mushroom powder adds mushroom flavour to soups, gravies, and doughs with a simple spoonful.</p>
-      <h3>Convenient, Value-Added Products</h3>
-      <p>Mushroom pickle and mushroom chutney bring mushrooms into familiar, flavourful formats to serve alongside meals. Our mushroom soup mix offers an easy way to prepare mushroom soup at home — convenient food options that bring the flavour of mushrooms to the table.</p>
+      <p>Mushrooms have a special place in the kitchen. They can be enjoyed fresh, cooked into everyday meals, or transformed into convenient products that make it easier to bring their flavour into different kinds of food. Their versatility allows them to fit into simple home cooking as well as more creative recipes.</p>
+      <p>At MANASI MUSHROOM &amp; SPAWN PVT. LTD., our journey with mushrooms goes beyond cultivation. We are interested in the many ways mushrooms can become part of everyday food. This is what Kitchen Notes is about: making mushrooms a part of everyday kitchens, in different forms and in different ways.</p>
+
+      <h3>Fresh Mushrooms: The Starting Point</h3>
+      <p>The simplest way to enjoy mushrooms is often the freshest way. Fresh mushrooms can become part of everyday cooking and can be prepared in many different styles — as a simple dish, added to vegetables, incorporated into meals, or used as an ingredient in recipes. A handful of mushrooms can become part of a quick meal: sliced, cooked and combined with other ingredients according to personal taste.</p>
+
+      <h3>Mushroom Powder: A Convenient Kitchen Ingredient</h3>
+      <p>Mushroom powder offers a completely different way to bring mushrooms into everyday cooking. Instead of using whole mushrooms, powder provides a convenient format that can be incorporated into different foods and recipes — anywhere a mushroom flavour is desired. For busy households, convenient ingredients can make everyday cooking easier, and powder inspires home cooks to explore new recipes and combinations.</p>
+
+      <h3>Mushroom Pickle: A Different Kind of Mushroom Experience</h3>
+      <p>Pickles have a familiar place in many Indian kitchens. Mushroom pickle brings mushrooms into this familiar format — instead of experiencing mushrooms only as a cooked vegetable or fresh ingredient, customers can enjoy them as a value-added product with meals. Traditional kitchen ideas can create new possibilities when combined with mushrooms.</p>
+
+      <h3>Mushroom Soup Mix: Simple &amp; Convenient</h3>
+      <p>Soup is often associated with comfort and simplicity. A mushroom soup mix provides a convenient way to prepare a mushroom-based soup without making the entire preparation process complicated. It demonstrates how mushroom products can be developed for modern lifestyles — convenient food solutions without moving completely away from familiar flavours.</p>
+
+      <h3>Mushroom Chutney: Mushrooms With a Familiar Twist</h3>
+      <p>Chutney is another familiar part of Indian food culture. Mushroom chutney brings mushrooms into this format, providing another way to experience mushrooms without relying only on traditional mushroom dishes. For those who enjoy experimenting in the kitchen, it can add variety to the dining table.</p>
+
+      <h3>Sun-Dried Mushrooms: Another Way to Enjoy Them</h3>
+      <p>Mushrooms do not always have to be enjoyed fresh. Sun-dried mushrooms offer another form in which mushrooms can be used in cooking. Drying creates a different way to store and use mushrooms, allowing them to become part of recipes beyond their fresh form. Fresh mushrooms for immediate cooking. Dried mushrooms for another style of preparation. Mushroom powder for convenience. And value-added products for completely different eating experiences.</p>
+
+      <h3>From One Ingredient, Many Possibilities</h3>
+      <p><strong>Fresh Mushroom</strong> — for everyday cooking.<br/>
+      <strong>Sun-Dried Mushroom</strong> — for another convenient format.<br/>
+      <strong>Mushroom Powder</strong> — for incorporating mushroom flavour into different recipes.<br/>
+      <strong>Mushroom Pickle</strong> — for enjoying mushrooms alongside meals.<br/>
+      <strong>Mushroom Soup Mix</strong> — for a convenient mushroom-based soup option.<br/>
+      <strong>Mushroom Chutney</strong> — for a familiar accompaniment with a mushroom twist.</p>
+      <p>Each product offers a different experience. And together, they show how mushrooms can move beyond a single type of dish.</p>
+
+      <h3>Making Mushrooms Part of Everyday Life</h3>
+      <p>The idea behind our kitchen-focused products is not to make mushrooms complicated. It is the opposite. We want to explore ways in which mushrooms can become simple, convenient and enjoyable parts of everyday food. A customer may choose fresh mushrooms for today's meal. Another person may prefer mushroom powder. Someone else may enjoy mushroom pickle with lunch. Different people have different preferences — and that is exactly what makes food interesting.</p>
+
+      <h3>A Kitchen Full of Possibilities</h3>
+      <p>Every kitchen has its own style. Some people enjoy traditional food. Some like experimenting with new ingredients. Some prefer quick meals. Some enjoy spending time preparing elaborate dishes. Mushrooms can fit into all of these approaches — cooked simply or incorporated into creative recipes, used fresh or enjoyed in processed and convenient forms.</p>
+
+      <h3>From Farm to Kitchen</h3>
+      <p>Every mushroom-based product begins with a connection to cultivation. The journey starts with mushrooms and eventually reaches the kitchen. Between these two points are different stages of handling, preparation and product development. The purpose of developing different mushroom products is to make that journey accessible in more than one way:</p>
+      <p><strong>Farm → Mushroom → Product → Kitchen → Meal</strong></p>
+
+      <h3>Everyday Cooking, the Mushroom Way</h3>
+      <p>Sometimes the best meals come from simple ingredients and simple ideas. A quick meal after a busy day. A family lunch. A simple dinner. A new recipe being tried for the first time. These ordinary moments are where food becomes personal — and that is where mushrooms belong: not only in special dishes, but also in everyday kitchens.</p>
+
+      <h3>The Idea Behind Kitchen Notes</h3>
+      <p>Kitchen Notes is our way of exploring the relationship between mushrooms and everyday food. It is about looking beyond the mushroom itself and asking: How can we enjoy it? How can we use it differently? How can one ingredient become many products? And most importantly — how can mushrooms become a natural part of everyday cooking?</p>
+
+      <blockquote>Mushrooms aren't just one ingredient. They're a world of possibilities. Fresh. Dried. Powdered. Pickled. Blended. Cooked. Different forms. Different flavours. Different kitchens. From our cultivation to your kitchen — discover mushrooms your way.</blockquote>
     `
   }
 ];

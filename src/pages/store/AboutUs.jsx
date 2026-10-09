@@ -72,7 +72,7 @@ export const AboutUs = () => {
       <section className="page-hero rel-section" style={{ padding: '72px 0 80px', borderBottom: '1px solid var(--line)' }}>
         <div className="container" style={{ maxWidth: '980px', textAlign: 'center' }}>
           <span className="eyebrow">About Us</span>
-          <h1 data-reveal style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--text-5xl)', lineHeight: 1.08, marginBottom: '18px', color: 'var(--espresso)' }}>
+          <h1 data-reveal className="hero-title" style={{ fontFamily: 'var(--font-heading)', lineHeight: 1.08, marginBottom: '18px', color: 'var(--espresso)' }}>
             15 Years Of Experience.<br />One Passion.
           </h1>
           <p data-reveal style={{ fontSize: '1.2rem', color: '#4a4438', fontStyle: 'italic', fontFamily: 'var(--font-heading)', maxWidth: '640px', margin: '0 auto 40px' }}>

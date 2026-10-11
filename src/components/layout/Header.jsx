@@ -110,6 +110,7 @@ export const Header = () => {
               onClick={() => { setSearchOpen((v) => !v); setShowSearchDropdown(false); setMobileMenuOpen(false); }}
               style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
+                height: '30px',
                 cursor: 'pointer', color: 'var(--espresso)', background: 'none',
                 border: 'none', padding: '4px'
               }}
@@ -196,7 +197,7 @@ export const Header = () => {
           </div>
 
           {/* Wishlist Icon */}
-          <Link to="/wishlist" style={{ position: 'relative', color: 'var(--espresso)' }} title="Wishlist">
+          <Link to="/wishlist" style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', height: '30px', color: 'var(--espresso)' }} title="Wishlist">
             <Heart size={22} />
             {wishlist.length > 0 && (
               <span style={{ position: 'absolute', top: '-6px', right: '-8px', background: 'var(--terracotta)', color: '#fff', fontSize: '0.65rem', borderRadius: '50%', width: '16px', height: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700 }}>
@@ -208,7 +209,7 @@ export const Header = () => {
           {/* Cart Icon Trigger */}
           <button
             onClick={() => setIsCartOpen(true)}
-            style={{ position: 'relative', cursor: 'pointer', color: 'var(--espresso)' }}
+            style={{ position: 'relative', display: 'flex', alignItems: 'center', height: '30px', padding: 0, cursor: 'pointer', color: 'var(--espresso)' }}
             title="Cart"
           >
             <ShoppingBag size={22} />
@@ -226,6 +227,7 @@ export const Header = () => {
               style={{
                 display: 'flex',
                 alignItems: 'center',
+                height: '30px',
                 gap: '6px',
                 cursor: 'pointer',
                 color: 'var(--espresso)',

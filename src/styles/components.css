@@ -401,22 +401,13 @@
   .brand-marquee-track { animation: none; }
 }
 
-/* Shared botanical hero background (every page) */
+/* Shared botanical hero background (every page, every viewport — the vertical
+   brand mushroom art supplied for mobile, applied site-wide) */
 .page-hero {
-  background-image: linear-gradient(rgba(247, 243, 232, 0.25), rgba(247, 243, 232, 0.25)), url('/images/hero-bg.webp');
+  background-image: linear-gradient(rgba(247, 243, 232, 0.3), rgba(247, 243, 232, 0.3)), url('/images/hero-bg-mobile.webp');
   background-size: cover;
   background-position: center;
   background-color: var(--parchment);
-}
-
-/* Phones: swap in the vertical botanical mushroom art (components.css loads
-   after global.css, so the mobile override must live here to win) */
-@media (max-width: 768px) {
-  .page-hero {
-    background-image: linear-gradient(rgba(247, 243, 232, 0.3), rgba(247, 243, 232, 0.3)), url('/images/hero-bg-mobile.webp');
-    background-size: cover;
-    background-position: center;
-  }
 }
 
 .page-hero-card {

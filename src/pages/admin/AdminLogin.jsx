@@ -21,7 +21,7 @@ export const AdminLogin = () => {
   // Session still restoring — don't flash the form at a signed-in admin
   if (!authReady) {
     return (
-      <div style={{ minHeight: '100vh', backgroundColor: 'var(--olive-deep)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
+      <div className="admin-login-bg" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
         Restoring session…
       </div>
     );
@@ -49,7 +49,7 @@ export const AdminLogin = () => {
   };
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: 'var(--olive-deep)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+    <div className="admin-login-bg" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
       <div style={{ background: 'var(--white)', padding: '40px', borderRadius: 'var(--radius-lg)', maxWidth: '440px', width: '100%', boxShadow: '0 20px 40px rgba(0,0,0,0.3)' }}>
 
         <div style={{ textAlign: 'center', marginBottom: '28px' }}>

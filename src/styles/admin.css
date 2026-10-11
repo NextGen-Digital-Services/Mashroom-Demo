@@ -8,12 +8,24 @@
 .admin-sidebar {
   width: 260px;
   background-color: var(--olive-deep);
+  /* brand botanical art under a dark olive veil — desktop + mobile drawer */
+  background-image: linear-gradient(rgba(47, 58, 32, 0.88), rgba(47, 58, 32, 0.88)), url('/images/hero-bg-mobile.webp');
+  background-size: cover;
+  background-position: center;
   color: var(--ivory);
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
   transition: width 0.3s ease;
   border-right: 1px solid rgba(220, 207, 180, 0.2);
+}
+
+/* Admin login: full-bleed brand art behind the card */
+.admin-login-bg {
+  background-color: var(--olive-deep);
+  background-image: linear-gradient(rgba(47, 58, 32, 0.8), rgba(47, 58, 32, 0.8)), url('/images/hero-bg-mobile.webp');
+  background-size: cover;
+  background-position: center;
 }
 
 .admin-sidebar.collapsed {

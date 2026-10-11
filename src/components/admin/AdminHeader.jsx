@@ -93,7 +93,7 @@ export const AdminHeader = ({ setMobileOpen }) => {
       </div>
 
       <style>{`
-        @media (max-width: 768px) {
+        @media (max-width: 1024px) {
           .admin-hamburger { display: block !important; }
         }
       `}</style>

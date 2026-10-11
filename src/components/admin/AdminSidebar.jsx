@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useStore } from '../../context/StoreContext';
 import {
@@ -23,6 +23,17 @@ import {
 export const AdminSidebar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpen }) => {
   const { config, logoutAdmin } = useStore();
 
+  // On tablet/phone the sidebar is an overlay drawer — always show labels there,
+  // regardless of the desktop collapse state
+  const [isNarrow, setIsNarrow] = useState(typeof window !== 'undefined' && window.matchMedia('(max-width: 1024px)').matches);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 1024px)');
+    const onChange = (e) => setIsNarrow(e.matches);
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
+  const hideLabels = collapsed && !isNarrow;
+
   const navItems = [
     { label: 'Dashboard', path: '/admin', icon: LayoutDashboard },
     { label: 'Products', path: '/admin/products', icon: Package },
@@ -40,18 +51,20 @@ export const AdminSidebar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpe
   ];
 
   return (
-    <aside className={`admin-sidebar ${collapsed ? 'collapsed' : ''} ${mobileOpen ? 'open' : ''}`}>
+    <aside className={`admin-sidebar ${hideLabels ? 'collapsed' : ''} ${mobileOpen ? 'open' : ''}`}>
       <div className="admin-sidebar-header">
-        {!collapsed && (
+        {!hideLabels && (
           <span className="admin-sidebar-brand">{config.name} Admin</span>
         )}
-        <button
-          onClick={() => setCollapsed(!collapsed)}
-          style={{ color: 'var(--gold)', cursor: 'pointer', padding: '4px' }}
-          title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-        >
-          {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
-        </button>
+        {!isNarrow && (
+          <button
+            onClick={() => setCollapsed(!collapsed)}
+            style={{ color: 'var(--gold)', cursor: 'pointer', padding: '4px' }}
+            title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          >
+            {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
+          </button>
+        )}
       </div>
 
       <nav className="admin-nav">
@@ -64,10 +77,10 @@ export const AdminSidebar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpe
               end={item.path === '/admin'}
               className={({ isActive }) => `admin-nav-item ${isActive ? 'active' : ''}`}
               onClick={() => setMobileOpen(false)}
-              title={collapsed ? item.label : undefined}
+              title={hideLabels ? item.label : undefined}
             >
               <Icon size={18} />
-              {!collapsed && <span>{item.label}</span>}
+              {!hideLabels && <span>{item.label}</span>}
             </NavLink>
           );
         })}
@@ -78,10 +91,10 @@ export const AdminSidebar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpe
           onClick={logoutAdmin}
           className="admin-nav-item"
           style={{ width: '100%', border: 'none', background: 'none', cursor: 'pointer', color: 'var(--terracotta)' }}
-          title={collapsed ? "Logout" : undefined}
+          title={hideLabels ? "Logout" : undefined}
         >
           <LogOut size={18} />
-          {!collapsed && <span>Exit Portal</span>}
+          {!hideLabels && <span>Exit Portal</span>}
         </button>
       </div>
     </aside>

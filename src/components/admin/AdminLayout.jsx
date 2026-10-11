@@ -45,6 +45,10 @@ export const AdminLayout = () => {
         </main>
       </div>
 
+      {mobileOpen && (
+        <div className="admin-sidebar-backdrop" onClick={() => setMobileOpen(false)} />
+      )}
+
       <ToastContainer />
     </div>
   );

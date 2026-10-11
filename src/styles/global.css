@@ -154,13 +154,19 @@ button {
     padding: 0 16px;
   }
 
-  /* shared page hero: inline padding is overridden so mobile doesn't get desktop spacing */
+  /* shared page hero: on phones show the LEFT artwork strip of the original
+     background (cropped asset) so the decoration is actually visible */
   .page-hero {
     padding-top: 40px !important;
     padding-bottom: 44px !important;
-    /* portrait phones: center crop of a landscape art ends up on the plain middle —
-       anchor left so the mushroom/leaf artwork stays visible */
+    background-image: linear-gradient(rgba(247, 243, 232, 0.25), rgba(247, 243, 232, 0.25)), url('/images/hero-bg-mobile.webp');
+    background-size: cover;
     background-position: left center;
+  }
+
+  /* cleaner phone layout: drop long secondary paragraphs */
+  .hide-mobile {
+    display: none !important;
   }
 }
 

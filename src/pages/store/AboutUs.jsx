@@ -130,7 +130,7 @@ export const AboutUs = () => {
                 the importance of patience, observation, consistency and care throughout every
                 cultivation cycle.
               </p>
-              <p style={{ color: '#444', lineHeight: 1.75, marginBottom: '20px' }}>
+              <p className="hide-mobile" style={{ color: '#444', lineHeight: 1.75, marginBottom: '20px' }}>
                 What began as experience in cultivation gradually became a larger vision: a
                 professionally organized mushroom business bringing together cultivation, spawn
                 production, fresh mushrooms, processing, value-added products and growing solutions.
@@ -198,7 +198,7 @@ export const AboutUs = () => {
                 begins with attention, care, proper handling and consistency throughout the entire
                 process.
               </p>
-              <p style={{ color: '#444', lineHeight: 1.75, marginBottom: '20px' }}>
+              <p className="hide-mobile" style={{ color: '#444', lineHeight: 1.75, marginBottom: '20px' }}>
                 Experience gained from the ground level has tremendous value. It helps us understand the
                 real challenges of cultivation and approach our products with greater awareness. Our
                 objective is not simply to become a larger business — it is to develop a trusted

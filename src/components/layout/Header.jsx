@@ -22,10 +22,11 @@ export const Header = () => {
       if (searchWrapRef.current && !searchWrapRef.current.contains(e.target)) {
         setSearchOpen(false);
         setShowSearchDropdown(false);
+        setSearchQuery('');
       }
     };
     const onEsc = (e) => {
-      if (e.key === 'Escape') { setSearchOpen(false); setShowSearchDropdown(false); }
+      if (e.key === 'Escape') { setSearchOpen(false); setShowSearchDropdown(false); setSearchQuery(''); }
     };
     document.addEventListener('mousedown', onDocDown);
     document.addEventListener('keydown', onEsc);
@@ -99,15 +100,14 @@ export const Header = () => {
         {/* Actions (Search, Wishlist, Cart, User) */}
         <div className="header-actions" style={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
 
-          {/* Search — hover/tap the icon to pop a small search bar below */}
+          {/* Search — tap/click the icon to open a search bar (click-only: hover
+              open/close double-toggles on touch devices and breaks mobile) */}
           <div
             ref={searchWrapRef}
-            onMouseEnter={() => setSearchOpen(true)}
-            onMouseLeave={() => { setSearchOpen(false); setShowSearchDropdown(false); }}
             style={{ position: 'relative' }}
           >
             <button
-              onClick={() => { setSearchOpen((v) => !v); setShowSearchDropdown(false); }}
+              onClick={() => { setSearchOpen((v) => !v); setShowSearchDropdown(false); setMobileMenuOpen(false); }}
               style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 cursor: 'pointer', color: 'var(--espresso)', background: 'none',
@@ -122,6 +122,7 @@ export const Header = () => {
 
             {searchOpen && (
               <div
+                className="search-pop"
                 style={{
                   position: 'absolute',
                   top: 'calc(100% + 10px)',
@@ -299,13 +300,6 @@ export const Header = () => {
                   >
                     Track Order
                   </Link>
-                  <Link
-                    to={adminAuth ? '/admin' : '/admin/login'}
-                    onClick={() => setShowAccountMenu(false)}
-                    style={{ display: 'block', padding: '11px 16px', color: 'var(--gold)', fontWeight: 700, borderTop: '1px solid var(--line)' }}
-                  >
-                    Admin Portal →
-                  </Link>
                   {userAuth && (
                     <button
                       onClick={() => {
@@ -336,20 +330,48 @@ export const Header = () => {
         </div>
       </div>
 
-      {/* Mobile Drawer Menu */}
+      {/* Mobile Drawer Menu — full-height overlay, doesn't push the page */}
       {mobileMenuOpen && (
-        <div style={{ padding: '20px', background: 'var(--ivory)', borderTop: '1px solid var(--line)' }}>
-          <nav style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-            <Link to="/" onClick={() => setMobileMenuOpen(false)}>Home</Link>
-            <Link to="/shop" onClick={() => setMobileMenuOpen(false)}>Shop All Products</Link>
-            <Link to="/our-farm" onClick={() => setMobileMenuOpen(false)}>Our Farm</Link>
-            <Link to="/recipes" onClick={() => setMobileMenuOpen(false)}>Culinary Journal</Link>
-            <Link to="/about" onClick={() => setMobileMenuOpen(false)}>About Us</Link>
-            <Link to="/contact" onClick={() => setMobileMenuOpen(false)}>Contact</Link>
-            <Link to="/track-order" onClick={() => setMobileMenuOpen(false)} style={{ color: 'var(--terracotta)', fontWeight: 700 }}>Track Order</Link>
-            <Link to={adminAuth ? '/admin' : '/admin/login'} onClick={() => setMobileMenuOpen(false)} style={{ color: 'var(--gold)', fontWeight: 600 }}>Admin Portal →</Link>
+        <>
+          <div
+            className="mobile-menu-backdrop"
+            onClick={() => setMobileMenuOpen(false)}
+          />
+          <nav className="mobile-menu-panel">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+              <span className="eyebrow" style={{ marginBottom: 0 }}>Menu</span>
+              <button onClick={() => setMobileMenuOpen(false)} aria-label="Close menu" style={{ color: 'var(--espresso)' }}>
+                <X size={22} />
+              </button>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+              {[
+                ['/', 'Home'],
+                ['/shop', 'Shop All Products'],
+                ['/our-farm', 'Our Farm'],
+                ['/recipes', 'Culinary Journal'],
+                ['/about', 'About Us'],
+                ['/contact', 'Contact']
+              ].map(([to, label]) => (
+                <Link
+                  key={to}
+                  to={to}
+                  onClick={() => setMobileMenuOpen(false)}
+                  style={{ padding: '13px 4px', fontWeight: 600, borderBottom: '1px solid var(--line)' }}
+                >
+                  {label}
+                </Link>
+              ))}
+              <Link
+                to="/track-order"
+                onClick={() => setMobileMenuOpen(false)}
+                style={{ padding: '13px 4px', color: 'var(--terracotta)', fontWeight: 700, borderBottom: '1px solid var(--line)' }}
+              >
+                Track Order
+              </Link>
+            </div>
           </nav>
-        </div>
+        </>
       )}
 
       {/* Desktop Mega Menu */}
@@ -364,12 +386,44 @@ export const Header = () => {
         @media (max-width: 900px) {
           .desktop-nav { display: none !important; }
           .mobile-hamburger { display: block !important; }
+
+          /* hamburger menu: full-height overlay panel, page stays put behind it */
+          .mobile-menu-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(42, 33, 26, 0.45);
+            z-index: 960;
+          }
+          .mobile-menu-panel {
+            position: fixed;
+            top: var(--header-height);
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--ivory);
+            z-index: 970;
+            overflow-y: auto;
+            padding: 22px 20px 40px;
+            box-shadow: var(--shadow-lg);
+          }
         }
         @media (max-width: 560px) {
           .brand-name { font-size: 1.2rem !important; letter-spacing: 0.03em !important; }
           .brand-sub { display: none !important; }
           .header-actions { gap: 8px !important; }
           .mobile-hamburger { margin-right: 4px; }
+
+          /* search: full-width sheet on phones so it can't clip at the edge */
+          .search-pop {
+            position: fixed !important;
+            inset: var(--header-height) 0 auto 0 !important;
+            width: auto !important;
+            border-radius: 0 0 var(--radius-md) var(--radius-md) !important;
+            border-left: none !important;
+            border-right: none !important;
+            padding: 14px 14px 16px !important;
+            z-index: 1100 !important;
+          }
         }
       `}</style>
     </header>

@@ -5,7 +5,7 @@ import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 import { ProductGrid } from '../../components/product/ProductGrid';
 import { ProductFilter } from '../../components/product/ProductFilter';
 import { ProductSort } from '../../components/product/ProductSort';
-import { X } from 'lucide-react';
+import { X, SlidersHorizontal } from 'lucide-react';
 
 export const Shop = () => {
   useDocumentTitle('All Gourmet Fungi Products & Preserves');
@@ -19,6 +19,7 @@ export const Shop = () => {
   const [inStockOnly, setInStockOnly] = useState(searchParams.get('stock') === 'true');
   const [sortBy, setSortBy] = useState(searchParams.get('sort') || 'featured');
   const [layout, setLayout] = useState('grid');
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   // Sync state to URL params
   useEffect(() => {
@@ -30,6 +31,12 @@ export const Shop = () => {
     if (sortBy !== 'featured') params.sort = sortBy;
     setSearchParams(params, { replace: true });
   }, [selectedCategory, priceRange, selectedTag, inStockOnly, sortBy]);
+
+  // Lock body scroll while the mobile filter drawer is open
+  useEffect(() => {
+    document.body.style.overflow = filtersOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [filtersOpen]);
 
   // Filtering Logic
   let filteredProducts = products.filter((prod) => {
@@ -55,6 +62,19 @@ export const Shop = () => {
     setSelectedTag('');
     setInStockOnly(false);
     setSortBy('featured');
+  };
+
+  const filterProps = {
+    categories,
+    selectedCategory,
+    onCategoryChange: setSelectedCategory,
+    priceRange,
+    onPriceChange: setPriceRange,
+    selectedTag,
+    onTagChange: setSelectedTag,
+    inStockOnly,
+    onInStockChange: setInStockOnly,
+    onReset: handleResetFilters
   };
 
   return (
@@ -94,22 +114,32 @@ export const Shop = () => {
           </div>
         )}
 
+        {/* Mobile: edge tab opens the filter drawer; products show directly otherwise */}
+        <button className="shop-filter-edge" onClick={() => setFiltersOpen(true)} aria-label="Open filters">
+          <SlidersHorizontal size={14} />
+          Filter
+        </button>
+
+        {filtersOpen && (
+          <>
+            <div className="filter-drawer-backdrop" onClick={() => setFiltersOpen(false)} />
+            <aside className="filter-drawer">
+              <div className="filter-drawer-head">
+                <span className="eyebrow" style={{ marginBottom: 0 }}>Refine</span>
+                <button onClick={() => setFiltersOpen(false)} aria-label="Close filters" style={{ color: 'var(--espresso)' }}>
+                  <X size={22} />
+                </button>
+              </div>
+              <ProductFilter {...filterProps} />
+            </aside>
+          </>
+        )}
+
         <div style={{ display: 'grid', gridTemplateColumns: '260px 1fr', gap: '32px' }} className="shop-grid">
           
-          {/* Sidebar Filters */}
-          <aside>
-            <ProductFilter
-              categories={categories}
-              selectedCategory={selectedCategory}
-              onCategoryChange={setSelectedCategory}
-              priceRange={priceRange}
-              onPriceChange={setPriceRange}
-              selectedTag={selectedTag}
-              onTagChange={setSelectedTag}
-              inStockOnly={inStockOnly}
-              onInStockChange={setInStockOnly}
-              onReset={handleResetFilters}
-            />
+          {/* Sidebar Filters (desktop only) */}
+          <aside className="shop-sidebar">
+            <ProductFilter {...filterProps} />
           </aside>
 
           {/* Main Product Grid Stage */}
@@ -129,8 +159,72 @@ export const Shop = () => {
       </div>
 
       <style>{`
+        .shop-filter-edge { display: none; }
+        .filter-drawer-backdrop { display: none; }
+        .filter-drawer { display: none; }
+
         @media (max-width: 850px) {
           .shop-grid { grid-template-columns: 1fr !important; }
+          .shop-sidebar { display: none !important; }
+
+          /* edge tab — only visible on the shop page, phone viewports */
+          .shop-filter-edge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            position: fixed;
+            left: 0;
+            top: 42%;
+            transform: translateY(-50%);
+            z-index: 850;
+            background: var(--olive-deep);
+            color: var(--ivory);
+            padding: 16px 9px;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            writing-mode: vertical-rl;
+            transform: translateY(-50%) rotate(180deg);
+            font-size: 0.68rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            box-shadow: var(--shadow-md);
+          }
+
+          .filter-drawer-backdrop {
+            display: block;
+            position: fixed;
+            inset: 0;
+            background: rgba(42, 33, 26, 0.45);
+            z-index: 1000;
+          }
+          .filter-drawer {
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: min(320px, 86vw);
+            background: var(--ivory);
+            z-index: 1001;
+            overflow-y: auto;
+            padding: 20px 16px 40px;
+            box-shadow: var(--shadow-lg);
+            animation: filter-drawer-in 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+          }
+          .filter-drawer-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+          }
+        }
+        @keyframes filter-drawer-in {
+          from { transform: translateX(-100%); }
+          to { transform: translateX(0); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .filter-drawer { animation: none; }
         }
       `}</style>
     </div>

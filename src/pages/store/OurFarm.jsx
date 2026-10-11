@@ -104,7 +104,7 @@ export const OurFarm = () => {
                 It is where we observe. It is where we cultivate. It is where we learn. It is where
                 every cycle begins again.
               </p>
-              <p style={{ color: '#444', lineHeight: 1.75, marginBottom: '20px' }}>
+              <p className="hide-mobile" style={{ color: '#444', lineHeight: 1.75, marginBottom: '20px' }}>
                 Each cultivation cycle brings its own requirements and its own lessons, making farming
                 a continuous process rather than something that simply happens once. Every harvest
                 reminds us of the importance of proper care.
@@ -155,8 +155,8 @@ export const OurFarm = () => {
               <div key={p.title} className="about-value" style={{ gridColumn: 'span 1' }}>
                 <p.icon size={24} strokeWidth={1.7} />
                 <h4>{p.title}</h4>
-                {p.paras.map((para) => (
-                  <p key={para.slice(0, 24)} style={{ marginBottom: '8px' }}>{para}</p>
+                {p.paras.map((para, pi) => (
+                  <p key={para.slice(0, 24)} className={pi > 0 ? 'hide-mobile' : ''} style={{ marginBottom: '8px' }}>{para}</p>
                 ))}
                 <p className="about-value-quote">{p.quote}</p>
               </div>
@@ -179,7 +179,7 @@ export const OurFarm = () => {
                 behind it is preparation, care, observation, waiting, harvesting — and the
                 responsibility of turning that harvest into something useful for the customer.
               </p>
-              <p style={{ color: '#C8D1BE', lineHeight: 1.75 }}>
+              <p className="hide-mobile" style={{ color: '#C8D1BE', lineHeight: 1.75 }}>
                 That is why we believe it is important to remember where food begins. Before the
                 product reaches the table, there is a farm behind it.
               </p>

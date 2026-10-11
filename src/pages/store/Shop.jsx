@@ -116,7 +116,7 @@ export const Shop = () => {
 
         {/* Mobile: edge tab opens the filter drawer; products show directly otherwise */}
         <button className="shop-filter-edge" onClick={() => setFiltersOpen(true)} aria-label="Open filters">
-          <SlidersHorizontal size={14} />
+          <SlidersHorizontal size={12} />
           Filter
         </button>
 
@@ -167,12 +167,12 @@ export const Shop = () => {
           .shop-grid { grid-template-columns: 1fr !important; }
           .shop-sidebar { display: none !important; }
 
-          /* edge tab — only visible on the shop page, phone viewports */
+          /* edge tab — slim, hugging the phone edge so it barely takes space */
           .shop-filter-edge {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 8px;
+            gap: 5px;
             position: fixed;
             left: 0;
             top: 42%;
@@ -180,15 +180,15 @@ export const Shop = () => {
             z-index: 850;
             background: var(--olive-deep);
             color: var(--ivory);
-            padding: 16px 9px;
-            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            padding: 11px 5px;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
             writing-mode: vertical-rl;
             transform: translateY(-50%) rotate(180deg);
-            font-size: 0.68rem;
-            font-weight: 800;
-            letter-spacing: 0.14em;
+            font-size: 0.56rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
             text-transform: uppercase;
-            box-shadow: var(--shadow-md);
+            box-shadow: var(--shadow-sm);
           }
 
           .filter-drawer-backdrop {

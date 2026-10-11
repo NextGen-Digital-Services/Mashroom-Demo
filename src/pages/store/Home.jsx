@@ -54,14 +54,14 @@ export const Home = () => {
           borderBottom: '1px solid var(--line)'
         }}
       >
-        <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '48px', alignItems: 'center' }}>
-          
+        <div className="container hero-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '48px', alignItems: 'center' }}>
+
           <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}>
             <span className="eyebrow">Fresh Mushrooms · Healthy Life</span>
             <h1 className="hero-title" style={{ fontFamily: 'var(--font-heading)', lineHeight: 1.1, marginBottom: '20px', color: 'var(--espresso)' }}>
               From Our Farm in Odisha to Tables Across India.
             </h1>
-            <p style={{ fontSize: 'var(--text-lg)', color: '#555', marginBottom: '32px', maxWidth: '520px', lineHeight: 1.6 }}>
+            <p className="hide-mobile" style={{ fontSize: 'var(--text-lg)', color: '#555', marginBottom: '32px', maxWidth: '520px', lineHeight: 1.6 }}>
               {config.farmStory}
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
@@ -72,14 +72,14 @@ export const Home = () => {
                 Our Cultivation Story
               </Link>
             </div>
-            <div className="hero-trustline">
+            <div className="hero-trustline hide-mobile">
               <span>Supplying Across India With Trust</span>
               <span>Guaranteed Freshness &amp; Quality</span>
             </div>
           </motion.div>
 
           <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, delay: 0.2 }}>
-            <ArchMaskImage src={images.hero[0]} alt="Fresh Mushrooms" height="520px" className="hero-parallax" />
+            <ArchMaskImage src={images.hero[0]} alt="Fresh Mushrooms" height="520px" className="hero-arch hero-parallax" />
           </motion.div>
 
         </div>

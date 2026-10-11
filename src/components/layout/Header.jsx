@@ -242,11 +242,6 @@ export const Header = () => {
                   {String(userAuth.name || '').split(' ')[0]}
                 </span>
               )}
-              {adminAuth && (
-                <span style={{ fontSize: '0.6rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em', background: 'var(--olive)', color: '#fff', padding: '2px 6px', borderRadius: 'var(--radius-full)' }}>
-                  Admin
-                </span>
-              )}
             </button>
 
             {showAccountMenu && (

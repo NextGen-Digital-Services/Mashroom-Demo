@@ -409,6 +409,16 @@
   background-color: var(--parchment);
 }
 
+/* Phones: swap in the vertical botanical mushroom art (components.css loads
+   after global.css, so the mobile override must live here to win) */
+@media (max-width: 768px) {
+  .page-hero {
+    background-image: linear-gradient(rgba(247, 243, 232, 0.3), rgba(247, 243, 232, 0.3)), url('/images/hero-bg-mobile.webp');
+    background-size: cover;
+    background-position: center;
+  }
+}
+
 .page-hero-card {
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);

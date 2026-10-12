@@ -97,7 +97,7 @@ export const AdminProducts = () => {
     }
 
     const catObj = categories.find(c => c.slug === categorySlug);
-    const finalImage = imagePreview || imageUrl || "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?q=80&w=800&auto=format&fit=crop";
+    const finalImage = imagePreview || imageUrl || "https://images.unsplash.com/photo-1552825897-bb5efa86eab1?q=80&w=800&auto=format&fit=crop";
 
     if (editingId) {
       const updated = products.map((p) => {

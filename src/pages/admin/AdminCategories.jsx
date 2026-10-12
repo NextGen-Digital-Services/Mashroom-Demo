@@ -56,7 +56,7 @@ export const AdminCategories = () => {
         name: trimmed,
         slug,
         description,
-        image: image || "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?q=80&w=800&auto=format&fit=crop",
+        image: image || "https://images.unsplash.com/photo-1552825897-bb5efa86eab1?q=80&w=800&auto=format&fit=crop",
         featured: false,
         itemCount: products.filter((p) => p.categorySlug === slug || p.category === trimmed).length
       };

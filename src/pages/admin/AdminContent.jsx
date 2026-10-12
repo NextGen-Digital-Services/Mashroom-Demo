@@ -145,7 +145,7 @@ export const AdminContent = () => {
       id: `ban-${Date.now()}`,
       title: bannerForm.title.trim(),
       subtitle: bannerForm.subtitle,
-      image: bannerForm.image || 'https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?q=80&w=800&auto=format&fit=crop',
+      image: bannerForm.image || 'https://images.unsplash.com/photo-1552825897-bb5efa86eab1?q=80&w=800&auto=format&fit=crop',
       ctaText: bannerForm.ctaText,
       ctaLink: bannerForm.ctaLink,
       position: bannerForm.position,

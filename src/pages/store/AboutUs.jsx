@@ -116,7 +116,7 @@ export const AboutUs = () => {
         <div className="container">
           <div className="about-split">
             <div data-reveal>
-              <ArchMaskImage src={images.hero[0]} alt="Mrs. Manasi Pattanayak — Founder" height="460px" />
+              <ArchMaskImage src={images.farm[0]} alt="Mrs. Manasi Pattanayak — Founder" height="460px" />
             </div>
             <div data-reveal>
               <span className="eyebrow">The Woman Behind The Journey</span>
@@ -209,7 +209,7 @@ export const AboutUs = () => {
               </div>
             </div>
             <div data-reveal>
-              <ArchMaskImage src={images.farm[0]} alt="Our Farm In Odisha" height="440px" />
+              <ArchMaskImage src={images.farm[1]} alt="Our Farm In Odisha" height="440px" />
             </div>
           </div>
         </div>

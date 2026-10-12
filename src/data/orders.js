@@ -18,7 +18,7 @@ export const initialOrders = [
         variant: "100g Pouch",
         price: 449,
         quantity: 2,
-        image: "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?q=80&w=800&auto=format&fit=crop"
+        image: "https://images.unsplash.com/photo-1509358271058-acd22cc93898?q=80&w=800&auto=format&fit=crop"
       },
       {
         id: "prod-106",
@@ -26,7 +26,7 @@ export const initialOrders = [
         variant: "250g Jar",
         price: 349,
         quantity: 1,
-        image: "https://images.unsplash.com/photo-1534483509719-3feaee7c30da?q=80&w=800&auto=format&fit=crop"
+        image: "https://images.pexels.com/photos/8599631/pexels-photo-8599631.jpeg?auto=compress&cs=tinysrgb&w=800"
       }
     ],
     subtotal: 1247,
@@ -66,7 +66,7 @@ export const initialOrders = [
         variant: "Single Grow Kit",
         price: 699,
         quantity: 1,
-        image: "https://images.unsplash.com/photo-1518977676601-b53f82aba655?q=80&w=800&auto=format&fit=crop"
+        image: "https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?q=80&w=800&auto=format&fit=crop"
       }
     ],
     subtotal: 699,
@@ -106,7 +106,7 @@ export const initialOrders = [
         variant: "100g Pouch",
         price: 499,
         quantity: 1,
-        image: "https://images.unsplash.com/photo-1504544750208-dc0358e63f7f?q=80&w=800&auto=format&fit=crop"
+        image: "https://images.pexels.com/photos/12809556/pexels-photo-12809556.jpeg?auto=compress&cs=tinysrgb&w=800"
       }
     ],
     subtotal: 499,

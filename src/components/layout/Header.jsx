@@ -110,6 +110,7 @@ export const Header = () => {
               open/close double-toggles on touch devices and breaks mobile) */}
           <div
             ref={searchWrapRef}
+            className="header-search-wrap"
             style={{ position: 'relative' }}
           >
             <button
@@ -203,7 +204,7 @@ export const Header = () => {
           </div>
 
           {/* Wishlist Icon */}
-          <Link to="/wishlist" style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', height: '30px', color: 'var(--espresso)' }} title="Wishlist">
+          <Link to="/wishlist" className="header-wishlist" style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', height: '30px', color: 'var(--espresso)' }} title="Wishlist">
             <Heart size={22} />
             {wishlist.length > 0 && (
               <span style={{ position: 'absolute', top: '-6px', right: '-8px', background: 'var(--terracotta)', color: '#fff', fontSize: '0.65rem', borderRadius: '50%', width: '16px', height: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700 }}>
@@ -331,6 +332,54 @@ export const Header = () => {
             )}
           </div>
         </div>
+      </div>
+
+      {/* Sticky search row — Amazon-style, always visible on mobile */}
+      <div className="mobile-search-row">
+        <form className="mobile-search-form" onSubmit={handleSearchSubmit} role="search">
+          <Search size={17} />
+          <input
+            type="search"
+            placeholder="Search mushrooms, pickles, kits…"
+            value={searchQuery}
+            onChange={(e) => { setSearchQuery(e.target.value); setShowSearchDropdown(true); }}
+            onFocus={() => setShowSearchDropdown(true)}
+            aria-label="Search products"
+          />
+          {searchQuery && (
+            <button
+              type="button"
+              className="mobile-search-clear"
+              aria-label="Clear search"
+              onClick={() => { setSearchQuery(''); setShowSearchDropdown(false); }}
+            >
+              <X size={16} />
+            </button>
+          )}
+        </form>
+
+        {showSearchDropdown && searchResults.length > 0 && (
+          <div className="mobile-search-drop">
+            {searchResults.map((item) => (
+              <Link
+                key={item.id}
+                to={`/product/${item.slug}`}
+                onClick={() => { setShowSearchDropdown(false); setSearchQuery(''); }}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: '10px',
+                  padding: '9px 10px', borderRadius: 'var(--radius-sm, 6px)',
+                  fontSize: '0.85rem', color: 'var(--espresso)'
+                }}
+              >
+                <img src={item.images[0]} alt="" loading="lazy" style={{ width: '34px', height: '34px', objectFit: 'contain', borderRadius: '4px', background: 'var(--parchment)' }} />
+                <div style={{ minWidth: 0 }}>
+                  <div style={{ fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.name}</div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--gold)' }}>₹{item.price}</div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Mobile Drawer Menu — full-height overlay, doesn't push the page */}

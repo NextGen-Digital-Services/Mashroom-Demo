@@ -905,3 +905,221 @@
   .about-gallery img:hover { transform: none; }
   .btn:hover { filter: brightness(0.94); }
 }
+
+/* ── Amazon/Flipkart-style mobile commerce layout ── */
+
+/* hidden by default; revealed in the mobile media blocks below */
+.mobile-search-row { display: none; }
+.cat-rail { display: none; }
+.home-cat-wrap { display: none; }
+.shop-cat-wrap { display: none; }
+.mobile-bottom-nav { display: none; }
+
+@media (max-width: 768px) {
+  /* fixed bottom nav must never cover footer content */
+  footer { padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important; }
+
+  /* desktop search icon is replaced by the always-visible search row */
+  .header-search-wrap { display: none !important; }
+
+  /* taller (2-row) header: anchor the menu panel below the search row */
+  .mobile-menu-panel { top: calc(var(--header-height) + 54px); }
+
+  /* 1. Sticky search row — Amazon-style pill, always visible */
+  .mobile-search-row {
+    display: block;
+    position: relative;
+    padding: 0 12px 10px;
+    background: var(--ivory);
+  }
+  .mobile-search-form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 44px;
+    padding: 0 6px 0 14px;
+    background: var(--white);
+    border: 1.5px solid var(--gold);
+    border-radius: 999px;
+    color: var(--gold);
+    box-shadow: 0 1px 3px rgba(42, 33, 26, 0.06);
+  }
+  .mobile-search-form:focus-within {
+    border-color: var(--olive);
+    box-shadow: 0 0 0 3px rgba(75, 90, 52, 0.15);
+  }
+  .mobile-search-form input {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 16px;
+    color: var(--espresso);
+  }
+  .mobile-search-form input::placeholder { color: #9a9a9a; }
+  .mobile-search-clear {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    border: none;
+    background: none;
+    color: #777;
+    cursor: pointer;
+  }
+  .mobile-search-drop {
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    top: 100%;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    max-height: 62vh;
+    overflow-y: auto;
+    z-index: 1200;
+    padding: 6px;
+  }
+
+  /* 2. Category rail — horizontal scroll circles (Flipkart-style) */
+  .home-cat-wrap {
+    display: block;
+    padding: 14px 0 12px;
+    background: var(--white);
+    border-bottom: 1px solid var(--line);
+  }
+  .shop-cat-wrap { display: block; margin-bottom: 14px; min-width: 0; max-width: 100%; }
+  .shop-cat-wrap .cat-rail { min-width: 0; max-width: 100%; }
+  .cat-rail {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    padding: 2px 0 4px;
+  }
+  .cat-rail::-webkit-scrollbar { display: none; }
+  .cat-rail-item {
+    flex: 0 0 auto;
+    width: 74px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    text-decoration: none;
+    color: var(--espresso);
+    text-align: center;
+  }
+  .cat-rail-ico {
+    width: 66px;
+    height: 66px;
+    border-radius: 50%;
+    background: var(--white);
+    border: 1px solid var(--line);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s ease;
+  }
+  .cat-rail-item:active .cat-rail-ico { transform: scale(0.94); }
+  .cat-rail-ico img { width: 100%; height: 100%; object-fit: cover; }
+  .cat-rail-label { font-size: 0.66rem; font-weight: 600; line-height: 1.25; }
+
+  /* 3. Bottom tab bar — Home / Shop / Cart / Account */
+  .mobile-bottom-nav {
+    display: flex;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--white);
+    border-top: 1px solid var(--line);
+    z-index: 940;
+    padding-bottom: env(safe-area-inset-bottom);
+    box-shadow: 0 -2px 12px rgba(42, 33, 26, 0.08);
+  }
+  .mbn-tab {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding: 7px 0 6px;
+    min-height: 54px;
+    color: #6f6f6f;
+    text-decoration: none;
+    font-size: 0.66rem;
+    font-weight: 700;
+  }
+  .mbn-tab.active { color: var(--olive-deep); }
+  .mbn-ico { position: relative; display: flex; }
+  .mbn-badge {
+    position: absolute;
+    top: -7px;
+    right: -10px;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    background: var(--terracotta);
+    color: #fff;
+    font-size: 0.6rem;
+    font-weight: 800;
+    border-radius: 999px;
+    border: 1.5px solid var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 560px) {
+  /* declutter the top row: wishlist lives in the account menu */
+  .header-wishlist { display: none !important; }
+
+  /* dense 2-up product grid (Flipkart-style) */
+  .prod-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  .product-card-category { display: none; }
+  .pdc-desc { display: none; }
+  .product-card-content { padding: 10px 10px 12px; }
+  .product-card-title {
+    font-size: 0.85rem;
+    line-height: 1.3;
+    margin-bottom: 6px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .pdc-rating {
+    align-self: flex-start;
+    background: #edf4e7 !important;
+    color: var(--olive-deep) !important;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 0.68rem !important;
+    margin-bottom: 8px !important;
+  }
+  .pdc-rating span { color: var(--olive-deep) !important; }
+  .price-current { font-size: 0.98rem; }
+  .price-compare { font-size: 0.72rem; }
+  .pdc-off { color: #1b8e3f; font-weight: 800; font-size: 0.75rem; }
+  .product-card-price { flex-wrap: wrap; align-items: center; row-gap: 6px; }
+  .pdc-atc {
+    width: 100%;
+    margin-left: 0 !important;
+    justify-content: center;
+  }
+}

@@ -26,6 +26,7 @@ export const ProductGrid = ({ products, loading = false, layout = 'grid' }) => {
   return (
     <div
       data-reveal-stagger
+      className={layout === 'list' ? undefined : 'prod-grid'}
       style={{
         display: 'grid',
         gridTemplateColumns: layout === 'list' ? '1fr' : 'repeat(auto-fill, minmax(270px, 1fr))',

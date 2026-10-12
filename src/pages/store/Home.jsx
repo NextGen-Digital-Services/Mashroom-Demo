@@ -5,6 +5,7 @@ import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 import { useCounter } from '../../hooks/useCounter';
 import { Button } from '../../components/common/Button';
 import { ProductCard } from '../../components/product/ProductCard';
+import { CategoryRail } from '../../components/product/CategoryRail';
 import { ArchMaskImage } from '../../components/common/ArchMaskImage';
 import { images } from '../../data/images';
 import { BotanicalBackdrop } from '../../components/common/BotanicalBackdrop';
@@ -85,6 +86,13 @@ export const Home = () => {
         </div>
       </section>
 
+      {/* 1b. MOBILE CATEGORY RAIL — Amazon/Flipkart-style circles (mobile only) */}
+      <section className="home-cat-wrap">
+        <div className="container">
+          <CategoryRail />
+        </div>
+      </section>
+
       {/* 2. BENEFITS STRIP */}
       <section style={{ backgroundColor: 'var(--olive-deep)', color: 'var(--ivory)', padding: '32px 0' }}>
         <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '24px', textAlign: 'center' }}>
@@ -152,7 +160,7 @@ export const Home = () => {
             </Link>
           </div>
 
-          <div data-reveal-stagger style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '24px' }}>
+          <div className="prod-grid" data-reveal-stagger style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '24px' }}>
             {bestsellers.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}

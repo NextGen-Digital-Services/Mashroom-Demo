@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { AnnouncementBar } from './AnnouncementBar';
 import { Header } from './Header';
 import { Footer } from './Footer';
+import { MobileBottomNav } from './MobileBottomNav';
 import { CartDrawer } from '../cart/CartDrawer';
 import { ToastContainer } from '../common/ToastContainer';
 import { ScrollProgress } from '../common/ScrollProgress';
@@ -21,12 +22,15 @@ export const StoreLayout = ({ children }) => {
   useReveal(location);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+    <div className="store-root" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <ScrollProgress />
       <AnnouncementBar />
       <Header />
       <main style={{ flexGrow: 1 }}>{children}</main>
       <Footer />
+
+      {/* Mobile commerce bottom tab bar (Amazon/Flipkart-style) */}
+      <MobileBottomNav />
 
       {/* Cart Drawer */}
       <CartDrawer />

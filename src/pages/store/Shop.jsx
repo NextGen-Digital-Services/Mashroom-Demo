@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { useStore } from '../../context/StoreContext';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 import { ProductGrid } from '../../components/product/ProductGrid';
+import { CategoryRail } from '../../components/product/CategoryRail';
 import { ProductFilter } from '../../components/product/ProductFilter';
 import { ProductSort } from '../../components/product/ProductSort';
 import { X, SlidersHorizontal } from 'lucide-react';
@@ -144,6 +145,10 @@ export const Shop = () => {
 
           {/* Main Product Grid Stage */}
           <main>
+            <div className="shop-cat-wrap">
+              <CategoryRail />
+            </div>
+
             <ProductSort
               sortBy={sortBy}
               onSortChange={setSortBy}
@@ -164,7 +169,7 @@ export const Shop = () => {
         .filter-drawer { display: none; }
 
         @media (max-width: 850px) {
-          .shop-grid { grid-template-columns: 1fr !important; }
+          .shop-grid { grid-template-columns: minmax(0, 1fr) !important; }
           .shop-sidebar { display: none !important; }
 
           /* edge tab — slim, hugging the phone edge so it barely takes space */

@@ -313,7 +313,7 @@ export const ProductDetail = () => {
                 You May Also Enjoy
               </h2>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '24px' }}>
+            <div className="prod-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '24px' }}>
               {relatedProducts.map((p) => (
                 <ProductCard key={p.id} product={p} />
               ))}
@@ -342,13 +342,14 @@ export const ProductDetail = () => {
           justifyContent: 'space-between'
         }}
       >
-        <div>
-          <div style={{ fontSize: '0.8rem', fontWeight: 600 }}>{product.name}</div>
-          <div style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--olive-deep)' }}>{formatCurrency(currentPrice)}</div>
+        <div style={{ display: 'flex', gap: '10px', width: '100%' }}>
+          <Button onClick={handleAddToCart} variant="secondary" style={{ flex: 1, minHeight: '46px' }}>
+            <ShoppingBag size={15} /> Add to Cart
+          </Button>
+          <Button onClick={handleBuyNow} variant="accent" style={{ flex: 1, minHeight: '46px' }}>
+            Buy Now
+          </Button>
         </div>
-        <Button onClick={handleAddToCart} size="sm" variant="primary">
-          <ShoppingBag size={14} /> Add
-        </Button>
       </div>
 
       <style>{`

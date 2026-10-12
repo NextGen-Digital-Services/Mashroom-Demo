@@ -66,12 +66,12 @@ export const ProductCard = ({ product }) => {
         <Link to={`/product/${product.slug}`}>
           <h4 className="product-card-title">{product.name}</h4>
         </Link>
-        <p style={{ fontSize: '0.8rem', color: '#666', margin: '4px 0 10px', lineClamp: 2, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+        <p className="pdc-desc" style={{ fontSize: '0.8rem', color: '#666', margin: '4px 0 10px', lineClamp: 2, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
           {product.shortDescription}
         </p>
 
         {/* Rating stars */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.8rem', color: 'var(--gold)', marginBottom: '12px' }}>
+        <div className="pdc-rating" style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.8rem', color: 'var(--gold)', marginBottom: '12px' }}>
           <Star size={14} fill="var(--gold)" color="var(--gold)" />
           <span style={{ fontWeight: 700, color: 'var(--espresso)' }}>{product.rating}</span>
           <span style={{ color: '#888' }}>({product.reviewCount})</span>
@@ -83,10 +83,13 @@ export const ProductCard = ({ product }) => {
             {product.compareAtPrice && product.compareAtPrice > product.price && (
               <span className="price-compare">{formatCurrency(product.compareAtPrice)}</span>
             )}
+            {product.compareAtPrice && product.compareAtPrice > product.price && (
+              <span className="pdc-off"> {Math.round((1 - product.price / product.compareAtPrice) * 100)}% off</span>
+            )}
           </div>
           <button
             onClick={() => addToCart(product)}
-            className="btn btn-primary btn-sm"
+            className="btn btn-primary btn-sm pdc-atc"
             style={{ marginLeft: 'auto', padding: '10px 14px', minHeight: '40px' }}
             title="Add to cart"
             aria-label={`Add ${product.name} to cart`}

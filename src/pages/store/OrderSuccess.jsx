@@ -88,7 +88,7 @@ export const OrderSuccess = () => {
           </div>
 
           {/* Customer & Shipping info */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '24px', fontSize: '0.88rem' }}>
+          <div className="order-info-pair" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '24px', fontSize: '0.88rem' }}>
             <div>
               <strong style={{ color: 'var(--gold)', textTransform: 'uppercase', fontSize: '0.75rem', letterSpacing: '0.08em', display: 'block', marginBottom: '4px' }}>Customer</strong>
               <div>{customer.name}</div>
@@ -103,26 +103,28 @@ export const OrderSuccess = () => {
           </div>
 
           {/* Items table */}
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.88rem', marginBottom: '24px' }}>
-            <thead>
-              <tr style={{ background: 'var(--parchment)', textAlign: 'left', borderBottom: '1px solid var(--line)' }}>
-                <th style={{ padding: '8px 12px' }}>Item</th>
-                <th style={{ padding: '8px 12px' }}>Variant</th>
-                <th style={{ padding: '8px 12px' }}>Qty</th>
-                <th style={{ padding: '8px 12px', textAlign: 'right' }}>Price</th>
-              </tr>
-            </thead>
-            <tbody>
-              {order.items.map((item, idx) => (
-                <tr key={idx} style={{ borderBottom: '1px solid var(--line)' }}>
-                  <td style={{ padding: '10px 12px', fontWeight: 600 }}>{item.name}</td>
-                  <td style={{ padding: '10px 12px', color: '#666' }}>{item.variant}</td>
-                  <td style={{ padding: '10px 12px' }}>{item.quantity}</td>
-                  <td style={{ padding: '10px 12px', textAlign: 'right', fontWeight: 700 }}>{formatCurrency(item.price * item.quantity)}</td>
+          <div style={{ overflowX: 'auto', marginBottom: '24px' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.88rem', minWidth: '460px' }}>
+              <thead>
+                <tr style={{ background: 'var(--parchment)', textAlign: 'left', borderBottom: '1px solid var(--line)' }}>
+                  <th style={{ padding: '8px 12px' }}>Item</th>
+                  <th style={{ padding: '8px 12px' }}>Variant</th>
+                  <th style={{ padding: '8px 12px' }}>Qty</th>
+                  <th style={{ padding: '8px 12px', textAlign: 'right' }}>Price</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {order.items.map((item, idx) => (
+                  <tr key={idx} style={{ borderBottom: '1px solid var(--line)' }}>
+                    <td style={{ padding: '10px 12px', fontWeight: 600 }}>{item.name}</td>
+                    <td style={{ padding: '10px 12px', color: '#666' }}>{item.variant}</td>
+                    <td style={{ padding: '10px 12px' }}>{item.quantity}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', fontWeight: 700 }}>{formatCurrency(item.price * item.quantity)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
           {/* Financial summary */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', fontSize: '0.9rem', gap: '6px' }}>
@@ -139,6 +141,12 @@ export const OrderSuccess = () => {
             </div>
           </div>
         </div>
+
+        <style>{`
+          @media (max-width: 560px) {
+            .order-info-pair { grid-template-columns: 1fr !important; gap: 16px !important; }
+          }
+        `}</style>
 
       </div>
     </div>

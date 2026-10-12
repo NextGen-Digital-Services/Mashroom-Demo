@@ -174,7 +174,7 @@ export const OrderTracking = () => {
         }
         @media (max-width: 560px) {
           .track-steps { gap: 4px !important; }
-          .track-steps > div > div:last-child { font-size: 0.62rem !important; line-height: 1.25 !important; word-break: break-word; }
+          .track-steps > div > div:last-child { font-size: 0.7rem !important; line-height: 1.3 !important; word-break: break-word; }
         }
       `}</style>
     </div>

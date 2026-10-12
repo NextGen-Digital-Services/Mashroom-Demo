@@ -38,6 +38,12 @@ export const Header = () => {
 
   const totalCartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
+  // Lock body scroll while the mobile menu is open (same as the shop filter drawer)
+  useEffect(() => {
+    document.body.style.overflow = mobileMenuOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [mobileMenuOpen]);
+
   const searchResults = searchQuery.trim().length > 1
     ? products.filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase()) || p.category.toLowerCase().includes(searchQuery.toLowerCase())).slice(0, 5)
     : [];
@@ -183,7 +189,7 @@ export const Header = () => {
                         onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--parchment)'; }}
                         onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
                       >
-                        <img src={item.images[0]} alt={item.name} style={{ width: '30px', height: '30px', objectFit: 'contain', borderRadius: '4px', background: 'var(--parchment)' }} />
+                        <img src={item.images[0]} alt={item.name} loading="lazy" style={{ width: '30px', height: '30px', objectFit: 'contain', borderRadius: '4px', background: 'var(--parchment)' }} />
                         <div style={{ minWidth: 0 }}>
                           <div style={{ fontWeight: 600, color: 'var(--espresso)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.name}</div>
                           <div style={{ fontSize: '0.72rem', color: 'var(--gold)' }}>₹{item.price}</div>
@@ -337,7 +343,7 @@ export const Header = () => {
           <nav className="mobile-menu-panel">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
               <span className="eyebrow" style={{ marginBottom: 0 }}>Menu</span>
-              <button onClick={() => setMobileMenuOpen(false)} aria-label="Close menu" style={{ color: 'var(--espresso)' }}>
+              <button onClick={() => setMobileMenuOpen(false)} aria-label="Close menu" style={{ color: 'var(--espresso)', width: '44px', height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: '-10px' }}>
                 <X size={22} />
               </button>
             </div>
@@ -382,7 +388,21 @@ export const Header = () => {
       <style>{`
         @media (max-width: 900px) {
           .desktop-nav { display: none !important; }
-          .mobile-hamburger { display: block !important; }
+          .mobile-hamburger {
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            min-width: 44px;
+            min-height: 44px;
+            margin-left: -10px;
+          }
+          /* every header icon becomes a 44px touch target */
+          .header-actions button,
+          .header-actions a {
+            min-width: 44px;
+            min-height: 44px;
+            justify-content: center;
+          }
 
           /* hamburger menu: full-height overlay panel, page stays put behind it */
           .mobile-menu-backdrop {
@@ -400,7 +420,7 @@ export const Header = () => {
             background: var(--ivory);
             z-index: 970;
             overflow-y: auto;
-            padding: 22px 20px 40px;
+            padding: 22px 20px calc(40px + env(safe-area-inset-bottom));
             box-shadow: var(--shadow-lg);
           }
         }
@@ -408,7 +428,7 @@ export const Header = () => {
           .brand-name { font-size: 1.2rem !important; letter-spacing: 0.03em !important; }
           .brand-sub { display: none !important; }
           .header-actions { gap: 8px !important; }
-          .mobile-hamburger { margin-right: 4px; }
+          .mobile-hamburger { margin-right: 4px; margin-left: -10px; }
 
           /* search: full-width sheet on phones so it can't clip at the edge */
           .search-pop {
@@ -420,6 +440,10 @@ export const Header = () => {
             border-right: none !important;
             padding: 14px 14px 16px !important;
             z-index: 1100 !important;
+          }
+          .search-pop button[type="submit"] {
+            width: 44px !important;
+            height: 44px !important;
           }
         }
       `}</style>

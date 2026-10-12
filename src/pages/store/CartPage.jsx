@@ -78,16 +78,16 @@ export const CartPage = () => {
 
             {cart.map((item) => (
               <div key={item.cartItemId} style={{ display: 'flex', gap: '20px', paddingBottom: '20px', marginBottom: '20px', borderBottom: '1px solid var(--line)' }}>
-                <img src={item.image} alt={item.name} style={{ width: '90px', height: '90px', objectFit: 'contain', borderRadius: 'var(--radius-sm)', background: 'var(--parchment)' }} />
+                <img src={item.image} alt={item.name} loading="lazy" style={{ width: '90px', height: '90px', objectFit: 'contain', borderRadius: 'var(--radius-sm)', background: 'var(--parchment)' }} />
                 <div style={{ flexGrow: 1 }}>
                   <h4 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.2rem', marginBottom: '4px' }}>{item.name}</h4>
                   <span style={{ fontSize: '0.8rem', color: 'var(--gold)', fontWeight: 600, display: 'block', marginBottom: '12px' }}>{item.variant}</span>
                   
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <div style={{ display: 'flex', alignItems: 'center', border: '1px solid var(--line)', borderRadius: 'var(--radius-full)' }}>
-                      <button onClick={() => updateCartQuantity(item.cartItemId, -1)} style={{ padding: '6px 12px', cursor: 'pointer' }}><Minus size={12} /></button>
+                      <button onClick={() => updateCartQuantity(item.cartItemId, -1)} aria-label="Decrease quantity" style={{ width: '44px', height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}><Minus size={14} /></button>
                       <span style={{ padding: '0 12px', fontWeight: 700, fontSize: '0.85rem' }}>{item.quantity}</span>
-                      <button onClick={() => updateCartQuantity(item.cartItemId, 1)} style={{ padding: '6px 12px', cursor: 'pointer' }}><Plus size={12} /></button>
+                      <button onClick={() => updateCartQuantity(item.cartItemId, 1)} aria-label="Increase quantity" style={{ width: '44px', height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}><Plus size={14} /></button>
                     </div>
 
                     <div style={{ textAlign: 'right' }}>
@@ -121,7 +121,7 @@ export const CartPage = () => {
                 value={couponInput}
                 onChange={(e) => setCouponInput(e.target.value)}
                 className="form-input"
-                style={{ textTransform: 'uppercase', fontSize: '0.8rem' }}
+                style={{ textTransform: 'uppercase' }}
               />
               <Button type="submit" size="sm" variant="secondary">
                 <Tag size={12} /> Apply

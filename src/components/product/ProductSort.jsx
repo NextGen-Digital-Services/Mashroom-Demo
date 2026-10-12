@@ -15,7 +15,7 @@ export const ProductSort = ({ sortBy, onSortChange, layout, onLayoutChange, tota
             value={sortBy}
             onChange={(e) => onSortChange(e.target.value)}
             className="form-select"
-            style={{ width: 'auto', padding: '4px 10px', fontSize: '0.8rem' }}
+            style={{ width: 'auto', padding: '8px 10px' }}
           >
             <option value="featured">Featured Harvests</option>
             <option value="price-low">Price: Low to High</option>
@@ -28,15 +28,17 @@ export const ProductSort = ({ sortBy, onSortChange, layout, onLayoutChange, tota
         <div style={{ display: 'flex', border: '1px solid var(--line)', borderRadius: '4px', overflow: 'hidden' }}>
           <button
             onClick={() => onLayoutChange('grid')}
-            style={{ padding: '6px 10px', background: layout === 'grid' ? 'var(--parchment)' : 'var(--white)', cursor: 'pointer' }}
+            style={{ padding: '9px 12px', minHeight: '40px', background: layout === 'grid' ? 'var(--parchment)' : 'var(--white)', cursor: 'pointer' }}
             title="Grid view"
+            aria-label="Grid view"
           >
             <LayoutGrid size={16} color="var(--espresso)" />
           </button>
           <button
             onClick={() => onLayoutChange('list')}
-            style={{ padding: '6px 10px', background: layout === 'list' ? 'var(--parchment)' : 'var(--white)', cursor: 'pointer' }}
+            style={{ padding: '9px 12px', minHeight: '40px', background: layout === 'list' ? 'var(--parchment)' : 'var(--white)', cursor: 'pointer' }}
             title="List view"
+            aria-label="List view"
           >
             <List size={16} color="var(--espresso)" />
           </button>

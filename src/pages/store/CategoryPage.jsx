@@ -36,6 +36,7 @@ export const CategoryPage = () => {
             <img
               src={category.image}
               alt={category.name}
+              loading="lazy"
               style={{ width: '160px', height: '120px', objectFit: 'cover', borderRadius: 'var(--radius-md)', border: '1px solid var(--line)' }}
             />
           )}

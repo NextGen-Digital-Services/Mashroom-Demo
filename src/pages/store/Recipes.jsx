@@ -22,7 +22,7 @@ export const Recipes = () => {
         <div data-reveal-stagger style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '32px' }}>
           {blogs.map((blog) => (
             <div key={blog.id} style={{ background: 'var(--white)', borderRadius: 'var(--radius-md)', border: '1px solid var(--line)', overflow: 'hidden' }}>
-              <img src={blog.image} alt={blog.title} style={{ width: '100%', height: '220px', objectFit: 'cover' }} />
+              <img src={blog.image} alt={blog.title} loading="lazy" style={{ width: '100%', height: '220px', objectFit: 'cover' }} />
               <div style={{ padding: '24px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--gold)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '8px' }}>
                   <span>{blog.category}</span>

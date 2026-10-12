@@ -73,9 +73,10 @@ export const ProductFilter = ({
               key={tag}
               onClick={() => onTagChange(selectedTag === tag ? '' : tag)}
               style={{
-                padding: '4px 10px',
+                padding: '10px 16px',
+                minHeight: '40px',
                 borderRadius: 'var(--radius-full)',
-                fontSize: '0.75rem',
+                fontSize: '0.8rem',
                 border: '1px solid var(--line)',
                 background: selectedTag === tag ? 'var(--olive)' : 'var(--parchment)',
                 color: selectedTag === tag ? 'var(--ivory)' : 'var(--espresso)',

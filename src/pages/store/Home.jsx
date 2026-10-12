@@ -79,7 +79,7 @@ export const Home = () => {
           </motion.div>
 
           <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, delay: 0.2 }}>
-            <ArchMaskImage src={images.hero[0]} alt="Fresh Mushrooms" height="520px" className="hero-arch hero-parallax" />
+            <ArchMaskImage src={images.hero[0]} alt="Fresh Mushrooms" height="520px" className="hero-arch hero-parallax" eager />
           </motion.div>
 
         </div>
@@ -176,28 +176,28 @@ export const Home = () => {
             </p>
 
             {/* Counter stats */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', borderTop: '1px solid var(--line)', paddingTop: '24px' }}>
+            <div className="home-stats" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', borderTop: '1px solid var(--line)', paddingTop: '24px' }}>
               <div>
-                <div style={{ fontFamily: 'var(--font-heading)', fontSize: '2.2rem', fontWeight: 700, color: 'var(--olive-deep)' }}>
+                <div className="stat-num" style={{ fontFamily: 'var(--font-heading)', fontSize: '2.2rem', fontWeight: 700, color: 'var(--olive-deep)' }}>
                   {experienceCount}+
                 </div>
-                <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--gold)', fontWeight: 700 }}>
+                <div className="stat-label" style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--gold)', fontWeight: 700 }}>
                   Years Of Experience
                 </div>
               </div>
               <div>
-                <div style={{ fontFamily: 'var(--font-heading)', fontSize: '2.2rem', fontWeight: 700, color: 'var(--olive-deep)' }}>
+                <div className="stat-num" style={{ fontFamily: 'var(--font-heading)', fontSize: '2.2rem', fontWeight: 700, color: 'var(--olive-deep)' }}>
                   {productCount}
                 </div>
-                <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--gold)', fontWeight: 700 }}>
+                <div className="stat-label" style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--gold)', fontWeight: 700 }}>
                   Products In Range
                 </div>
               </div>
               <div>
-                <div style={{ fontFamily: 'var(--font-heading)', fontSize: '2.2rem', fontWeight: 700, color: 'var(--olive-deep)' }}>
+                <div className="stat-num" style={{ fontFamily: 'var(--font-heading)', fontSize: '2.2rem', fontWeight: 700, color: 'var(--olive-deep)' }}>
                   {registeredCount}
                 </div>
-                <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--gold)', fontWeight: 700 }}>
+                <div className="stat-label" style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--gold)', fontWeight: 700 }}>
                   Registered Pvt. Ltd.
                 </div>
               </div>
@@ -213,6 +213,7 @@ export const Home = () => {
         <div className="container">
           <div
             data-reveal
+            className="combo-box"
             style={{
               backgroundColor: 'var(--olive-deep)',
               color: 'var(--ivory)',
@@ -240,6 +241,8 @@ export const Home = () => {
             <img
               src={images.products.comboMaster[0]}
               alt="Farm Combo Pack"
+              loading="lazy"
+              className="combo-img"
               style={{ width: '100%', height: '300px', objectFit: 'cover', borderRadius: 'var(--radius-md)' }}
             />
           </div>
@@ -259,7 +262,7 @@ export const Home = () => {
           <div data-reveal-stagger style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))', gap: '28px' }}>
             {featuredBlogs.map((blog) => (
               <div key={blog.id} style={{ background: 'var(--white)', border: '1px solid var(--line)', borderRadius: 'var(--radius-md)', overflow: 'hidden' }}>
-                <img src={blog.image} alt={blog.title} style={{ width: '100%', height: '200px', objectFit: 'cover' }} />
+                <img src={blog.image} alt={blog.title} loading="lazy" style={{ width: '100%', height: '200px', objectFit: 'cover' }} />
                 <div style={{ padding: '20px' }}>
                   <span style={{ fontSize: '0.75rem', color: 'var(--gold)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                     {blog.category}
@@ -290,13 +293,26 @@ export const Home = () => {
 
           <div data-reveal-stagger style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '16px' }}>
             {images.instagram.map((imgUrl, i) => (
-              <a key={i} href={config.socials?.instagram} target="_blank" rel="noreferrer" style={{ borderRadius: 'var(--radius-md)', overflow: 'hidden', height: '180px' }}>
-                <img src={imgUrl} alt={`Instagram ${i + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.3s ease' }} />
+              <a key={i} href={config.socials?.instagram} target="_blank" rel="noreferrer" className="ig-tile" style={{ borderRadius: 'var(--radius-md)', overflow: 'hidden', height: '180px' }}>
+                <img src={imgUrl} alt={`Instagram ${i + 1}`} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.3s ease' }} />
               </a>
             ))}
           </div>
         </div>
       </section>
+
+      <style>{`
+        @media (max-width: 640px) {
+          .combo-box { padding: 32px 20px !important; gap: 24px !important; }
+          .combo-img { height: 220px !important; }
+        }
+        @media (max-width: 480px) {
+          .stat-num { font-size: 1.7rem !important; }
+          .stat-label { font-size: 0.65rem !important; letter-spacing: 0.04em !important; }
+          .home-stats { gap: 10px !important; }
+        }
+        .ig-tile:active img { transform: scale(1.06); }
+      `}</style>
     </div>
   );
 };

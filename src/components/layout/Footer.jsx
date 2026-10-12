@@ -34,10 +34,10 @@ export const Footer = () => {
             <p style={{ fontSize: '0.85rem', color: '#C8D1BE', lineHeight: 1.6, marginBottom: '20px' }}>
               {config.aboutShort}
             </p>
-            <div style={{ display: 'flex', gap: '14px', color: 'var(--gold)' }}>
-              <a href={config.socials?.instagram} target="_blank" rel="noreferrer"><Instagram size={18} /></a>
-              <a href={config.socials?.facebook} target="_blank" rel="noreferrer"><Facebook size={18} /></a>
-              <a href={config.socials?.youtube} target="_blank" rel="noreferrer"><Youtube size={18} /></a>
+            <div style={{ display: 'flex', gap: '6px', color: 'var(--gold)', marginLeft: '-10px' }}>
+              <a href={config.socials?.instagram} target="_blank" rel="noreferrer" aria-label="Instagram" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '44px', height: '44px' }}><Instagram size={20} /></a>
+              <a href={config.socials?.facebook} target="_blank" rel="noreferrer" aria-label="Facebook" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '44px', height: '44px' }}><Facebook size={20} /></a>
+              <a href={config.socials?.youtube} target="_blank" rel="noreferrer" aria-label="YouTube" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '44px', height: '44px' }}><Youtube size={20} /></a>
             </div>
           </div>
 

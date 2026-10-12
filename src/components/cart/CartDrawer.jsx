@@ -73,7 +73,7 @@ export const CartDrawer = () => {
               </p>
             )}
             <div style={{ height: '6px', background: 'var(--line)', borderRadius: '3px', overflow: 'hidden' }}>
-              <div style={{ height: '100%', background: 'var(--olive)', width: `${freeShippingProgress}%`, transition: 'width 0.3s ease' }} />
+              <div style={{ height: '100%', background: 'var(--olive)', width: '100%', transform: `scaleX(${Math.max(0, Math.min(100, freeShippingProgress)) / 100})`, transformOrigin: 'left', transition: 'transform 0.3s ease' }} />
             </div>
           </div>
 
@@ -93,6 +93,7 @@ export const CartDrawer = () => {
                 <img
                   src={item.image}
                   alt={item.name}
+                  loading="lazy"
                   style={{ width: '70px', height: '70px', objectFit: 'contain', borderRadius: 'var(--radius-sm)', background: 'var(--parchment)' }}
                 />
                 <div style={{ flexGrow: 1 }}>
@@ -105,12 +106,12 @@ export const CartDrawer = () => {
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     {/* Quantity controls */}
                     <div style={{ display: 'flex', alignItems: 'center', border: '1px solid var(--line)', borderRadius: 'var(--radius-full)', background: 'var(--white)' }}>
-                      <button onClick={() => updateCartQuantity(item.cartItemId, -1)} style={{ padding: '4px 8px', cursor: 'pointer' }}>
-                        <Minus size={12} />
+                      <button onClick={() => updateCartQuantity(item.cartItemId, -1)} aria-label="Decrease quantity" style={{ width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                        <Minus size={14} />
                       </button>
                       <span style={{ fontSize: '0.8rem', fontWeight: 600, padding: '0 8px' }}>{item.quantity}</span>
-                      <button onClick={() => updateCartQuantity(item.cartItemId, 1)} style={{ padding: '4px 8px', cursor: 'pointer' }}>
-                        <Plus size={12} />
+                      <button onClick={() => updateCartQuantity(item.cartItemId, 1)} aria-label="Increase quantity" style={{ width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                        <Plus size={14} />
                       </button>
                     </div>
 
@@ -120,7 +121,7 @@ export const CartDrawer = () => {
                   </div>
                 </div>
 
-                <button onClick={() => removeFromCart(item.cartItemId)} style={{ cursor: 'pointer', color: '#999', alignSelf: 'flex-start', padding: '4px' }}>
+                <button onClick={() => removeFromCart(item.cartItemId)} aria-label={`Remove ${item.name}`} style={{ cursor: 'pointer', color: '#999', alignSelf: 'flex-start', width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <Trash2 size={16} />
                 </button>
               </div>
@@ -135,7 +136,7 @@ export const CartDrawer = () => {
               value={couponInput}
               onChange={(e) => setCouponInput(e.target.value)}
               className="form-input"
-              style={{ textTransform: 'uppercase', fontSize: '0.8rem' }}
+              style={{ textTransform: 'uppercase' }}
             />
             <Button type="submit" size="sm" variant="secondary">
               <Tag size={12} /> Apply

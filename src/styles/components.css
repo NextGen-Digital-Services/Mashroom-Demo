@@ -198,6 +198,7 @@
   max-width: 550px;
   width: 90%;
   max-height: 90vh;
+  max-height: 90dvh;
   overflow-y: auto;
   position: relative;
   box-shadow: var(--shadow-md);
@@ -436,7 +437,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px 24px;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -860,4 +861,47 @@
   .farm-chain { flex-direction: column; align-items: stretch; }
   .farm-chain-step { flex-direction: row; justify-content: flex-start; gap: 12px; min-width: 0; }
   .farm-chain-arrow { transform: rotate(90deg); margin: 0 auto; }
+}
+
+/* ── Touch / production layer (phones & tablets) ── */
+@media (max-width: 768px) {
+  /* iOS auto-zooms any input under 16px on focus */
+  .form-input, .form-select, .form-textarea {
+    font-size: 16px;
+  }
+
+  /* every button is a real touch target */
+  .btn {
+    min-height: 44px;
+  }
+  .btn-sm {
+    min-height: 40px;
+  }
+
+  /* fixed chrome clears the iPhone home indicator */
+  .toast-container {
+    bottom: calc(16px + env(safe-area-inset-bottom)) !important;
+    left: 16px;
+    right: 16px;
+  }
+  .toast { justify-content: center; }
+}
+
+/* devices without hover: replace hover lifts with press feedback */
+@media (hover: none) {
+  .product-card:hover,
+  .about-product:hover,
+  .about-value:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  .product-card:hover .product-card-img {
+    transform: none;
+  }
+  .product-card:active,
+  .about-product:active {
+    transform: scale(0.985);
+  }
+  .about-gallery img:hover { transform: none; }
+  .btn:hover { filter: brightness(0.94); }
 }

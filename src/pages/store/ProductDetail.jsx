@@ -61,7 +61,7 @@ export const ProductDetail = () => {
     .slice(0, 3);
 
   return (
-    <div className="section-padding">
+    <div className="section-padding pdp-page">
       <div className="container">
         
         {/* Breadcrumb */}
@@ -129,7 +129,8 @@ export const ProductDetail = () => {
                       key={idx}
                       onClick={() => setSelectedVariant(v)}
                       style={{
-                        padding: '10px 18px',
+                        padding: '12px 18px',
+                        minHeight: '44px',
                         borderRadius: 'var(--radius-md)',
                         border: selectedVariant?.name === v.name ? '2px solid var(--olive)' : '1px solid var(--line)',
                         background: selectedVariant?.name === v.name ? 'var(--parchment)' : 'var(--white)',
@@ -149,11 +150,11 @@ export const ProductDetail = () => {
             <div style={{ marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '16px' }}>
               <label className="eyebrow" style={{ margin: 0 }}>Quantity</label>
               <div style={{ display: 'flex', alignItems: 'center', border: '1px solid var(--line)', borderRadius: 'var(--radius-full)', background: 'var(--white)' }}>
-                <button onClick={() => setQuantity((q) => Math.max(1, q - 1))} style={{ padding: '8px 12px', cursor: 'pointer' }}>
+                <button onClick={() => setQuantity((q) => Math.max(1, q - 1))} style={{ width: '44px', height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                   <Minus size={14} />
                 </button>
                 <span style={{ padding: '0 12px', fontWeight: 700, fontSize: '0.9rem' }}>{quantity}</span>
-                <button onClick={() => setQuantity((q) => Math.min(currentStock || 10, q + 1))} style={{ padding: '8px 12px', cursor: 'pointer' }}>
+                <button onClick={() => setQuantity((q) => Math.min(currentStock || 10, q + 1))} style={{ width: '44px', height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                   <Plus size={14} />
                 </button>
               </div>
@@ -163,7 +164,7 @@ export const ProductDetail = () => {
             </div>
 
             {/* Actions: Add to Cart & Buy Now */}
-            <div style={{ display: 'flex', gap: '12px', marginBottom: '32px' }}>
+            <div className="pdp-actions" style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', marginBottom: '32px' }}>
               <Button onClick={handleAddToCart} variant="primary" size="lg" style={{ flex: 1 }}>
                 <ShoppingBag size={18} /> Add to Basket
               </Button>
@@ -175,6 +176,7 @@ export const ProductDetail = () => {
                 style={{
                   width: '54px',
                   height: '54px',
+                  flexShrink: 0,
                   borderRadius: 'var(--radius-full)',
                   border: '1px solid var(--line)',
                   background: 'var(--white)',
@@ -202,7 +204,6 @@ export const ProductDetail = () => {
                   onChange={(e) => setPincode(e.target.value)}
                   maxLength={6}
                   className="form-input"
-                  style={{ fontSize: '0.85rem' }}
                 />
                 <Button type="submit" size="sm" variant="secondary">Check</Button>
               </form>
@@ -333,6 +334,7 @@ export const ProductDetail = () => {
           right: 0,
           background: 'var(--white)',
           padding: '12px 20px',
+          paddingBottom: 'calc(12px + env(safe-area-inset-bottom))',
           borderTop: '1px solid var(--line)',
           boxShadow: '0 -4px 15px rgba(0,0,0,0.1)',
           zIndex: 900,
@@ -352,6 +354,11 @@ export const ProductDetail = () => {
       <style>{`
         @media (max-width: 768px) {
           .mobile-sticky-cart { display: flex !important; }
+          /* clear the sticky bar so the footer stays reachable */
+          .pdp-page { padding-bottom: 110px !important; }
+        }
+        @media (max-width: 480px) {
+          .pdp-actions > .btn:first-child { flex-basis: 100%; }
         }
       `}</style>
     </div>

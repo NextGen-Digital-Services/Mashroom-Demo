@@ -126,7 +126,7 @@ export const Shop = () => {
             <aside className="filter-drawer">
               <div className="filter-drawer-head">
                 <span className="eyebrow" style={{ marginBottom: 0 }}>Refine</span>
-                <button onClick={() => setFiltersOpen(false)} aria-label="Close filters" style={{ color: 'var(--espresso)' }}>
+                <button onClick={() => setFiltersOpen(false)} aria-label="Close filters" style={{ color: 'var(--espresso)', width: '44px', height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: '-10px' }}>
                   <X size={22} />
                 </button>
               </div>
@@ -172,7 +172,7 @@ export const Shop = () => {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
             position: fixed;
             left: 0;
             top: 42%;
@@ -180,15 +180,16 @@ export const Shop = () => {
             z-index: 850;
             background: var(--olive-deep);
             color: var(--ivory);
-            padding: 11px 5px;
+            padding: 16px 7px;
+            min-width: 44px;
             border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
             writing-mode: vertical-rl;
             transform: translateY(-50%) rotate(180deg);
-            font-size: 0.56rem;
+            font-size: 0.64rem;
             font-weight: 700;
             letter-spacing: 0.1em;
             text-transform: uppercase;
-            box-shadow: var(--shadow-sm);
+            box-shadow: var(--shadow-md);
           }
 
           .filter-drawer-backdrop {

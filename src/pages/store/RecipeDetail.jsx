@@ -25,7 +25,7 @@ export const RecipeDetail = () => {
           <div style={{ fontSize: '0.85rem', color: '#777' }}>By {blog.author} • {blog.date}</div>
         </div>
 
-        <img src={blog.image} alt={blog.title} style={{ width: '100%', height: '400px', objectFit: 'cover', borderRadius: 'var(--radius-md)', marginBottom: '32px' }} />
+        <img src={blog.image} alt={blog.title} loading="lazy" style={{ width: '100%', height: '400px', objectFit: 'cover', borderRadius: 'var(--radius-md)', marginBottom: '32px' }} />
 
         <div data-reveal className="journal-body" style={{ background: 'var(--white)', padding: '32px', borderRadius: 'var(--radius-md)', border: '1px solid var(--line)', lineHeight: 1.8 }} dangerouslySetInnerHTML={{ __html: blog.content }} />
       </div>

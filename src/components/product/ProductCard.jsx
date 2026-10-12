@@ -36,26 +36,27 @@ export const ProductCard = ({ product }) => {
         )}
 
         {/* Quick Wishlist Button */}
-        <button
-          onClick={() => toggleWishlist(product)}
-          style={{
-            position: 'absolute',
-            top: '12px',
-            right: '12px',
-            background: 'var(--white)',
-            border: 'none',
-            borderRadius: '50%',
-            width: '36px',
-            height: '36px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-            zIndex: 10
-          }}
-          title={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
-        >
+          <button
+            onClick={() => toggleWishlist(product)}
+            style={{
+              position: 'absolute',
+              top: '10px',
+              right: '10px',
+              background: 'var(--white)',
+              border: 'none',
+              borderRadius: '50%',
+              width: '40px',
+              height: '40px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+              zIndex: 10
+            }}
+            title={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
+            aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
+          >
           <Heart size={18} fill={wishlisted ? "var(--terracotta)" : "none"} color={wishlisted ? "var(--terracotta)" : "var(--espresso)"} />
         </button>
       </div>
@@ -86,8 +87,9 @@ export const ProductCard = ({ product }) => {
           <button
             onClick={() => addToCart(product)}
             className="btn btn-primary btn-sm"
-            style={{ marginLeft: 'auto', padding: '8px 12px' }}
+            style={{ marginLeft: 'auto', padding: '10px 14px', minHeight: '40px' }}
             title="Add to cart"
+            aria-label={`Add ${product.name} to cart`}
           >
             <ShoppingBag size={14} /> Add
           </button>

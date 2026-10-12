@@ -83,12 +83,12 @@ export const Contact = () => {
               Send Us A Message
             </h3>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+            <div className="contact-pair" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
               <FormField label="Your Name *" value={name} onChange={(e) => setName(e.target.value)} required />
               <FormField label="Email *" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+            <div className="contact-pair" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
               <FormField label="Phone" value={phone} onChange={(e) => setPhone(e.target.value)} />
               <FormField label="Subject" value={subject} onChange={(e) => setSubject(e.target.value)} />
             </div>
@@ -105,7 +105,11 @@ export const Contact = () => {
 
       <style>{`
         @media (max-width: 768px) {
-          .contact-grid { grid-template-columns: 1fr !important; }
+          .contact-grid { grid-template-columns: 1fr !important; gap: 24px !important; }
+          .contact-grid form { padding: 24px 18px !important; }
+        }
+        @media (max-width: 560px) {
+          .contact-pair { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </div>

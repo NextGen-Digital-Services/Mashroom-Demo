@@ -82,6 +82,7 @@ export const MegaMenu = ({ onClose, onMouseEnter }) => {
           <img
             src={images.products.comboMaster[0]}
             alt="Farm Combo Pack"
+            loading="lazy"
             style={{ width: '130px', height: '130px', objectFit: 'cover', borderRadius: 'var(--radius-md)', flexShrink: 0, border: '1px solid var(--line)' }}
           />
           <div style={{ flex: 1 }}>

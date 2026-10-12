@@ -7,7 +7,7 @@ const puppeteer = require('puppeteer-core');
   });
   const page = await browser.newPage();
   await page.setViewport({ width: 390, height: 844 });
-  const routes = ['/', '/about', '/our-farm', '/shop', '/cart', '/checkout', '/recipes', '/contact'];
+  const routes = ['/', '/about', '/our-farm', '/shop', '/product/fresh-oyster-mushrooms', '/cart', '/checkout', '/recipes', '/contact', '/account', '/track-order', '/faq'];
   for (const route of routes) {
     await page.goto('http://localhost:4173' + route, { waitUntil: 'networkidle0', timeout: 30000 }).catch(e => console.log(route, 'NAV FAIL', e.message));
     await new Promise(r => setTimeout(r, 1200));
